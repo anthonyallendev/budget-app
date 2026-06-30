@@ -1,4 +1,33 @@
 import { Link } from 'react-router-dom'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+
+const portfolioData = [
+  { year: '2025', conservative: 12000, moderate: 12000, aggressive: 12000 },
+  { year: '2027', conservative: 18500, moderate: 21000, aggressive: 24000 },
+  { year: '2029', conservative: 26000, moderate: 32000, aggressive: 40000 },
+  { year: '2031', conservative: 34000, moderate: 46000, aggressive: 63000 },
+  { year: '2033', conservative: 43000, moderate: 63000, aggressive: 96000 },
+  { year: '2035', conservative: 53000, moderate: 84000, aggressive: 142000 },
+  { year: '2037', conservative: 64000, moderate: 109000, aggressive: 205000 },
+  { year: '2039', conservative: 77000, moderate: 139000, aggressive: 291000 },
+  { year: '2041', conservative: 91000, moderate: 175000, aggressive: 408000 },
+  { year: '2043', conservative: 107000, moderate: 218000, aggressive: 567000 },
+  { year: '2045', conservative: 124000, moderate: 270000, aggressive: 780000 },
+]
+
+function CustomTooltip({ active, payload, label }) {
+  if (!active || !payload?.length) return null
+  return (
+    <div className="glass rounded-xl px-4 py-3 text-sm" style={{ border: '1px solid rgba(0,212,255,0.2)' }}>
+      <p className="text-slate-400 mb-2">{label}</p>
+      {payload.map(p => (
+        <p key={p.name} style={{ color: p.color }} className="font-semibold">
+          {p.name}: ${p.value.toLocaleString()}
+        </p>
+      ))}
+    </div>
+  )
+}
 
 export default function LandingPage() {
   return (
@@ -77,6 +106,49 @@ export default function LandingPage() {
           ))}
         </div>
       </main>
+
+      {/* Demo Chart */}
+      <section className="relative z-10 px-6 py-16 max-w-5xl mx-auto w-full">
+        <div className="glass rounded-3xl p-8" style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+            <div>
+              <h2 className="text-2xl font-bold mb-1">Watch your wealth grow</h2>
+              <p className="text-slate-400 text-sm">$500/mo invested · 20 year projection</p>
+            </div>
+            <div className="flex gap-4 text-xs">
+              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 rounded inline-block" style={{ background: '#00d4ff' }} />Conservative</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 rounded inline-block" style={{ background: '#7c3aed' }} />Moderate</span>
+              <span className="flex items-center gap-1.5"><span className="w-3 h-0.5 rounded inline-block" style={{ background: '#e040fb' }} />Aggressive</span>
+            </div>
+          </div>
+
+          <ResponsiveContainer width="100%" height={300}>
+            <AreaChart data={portfolioData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
+              <defs>
+                <linearGradient id="gradCyan" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#00d4ff" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#00d4ff" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="gradPurple" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#7c3aed" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#7c3aed" stopOpacity={0} />
+                </linearGradient>
+                <linearGradient id="gradPink" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#e040fb" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="#e040fb" stopOpacity={0} />
+                </linearGradient>
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <XAxis dataKey="year" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
+              <YAxis tickFormatter={v => `$${(v/1000).toFixed(0)}k`} tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
+              <Tooltip content={<CustomTooltip />} />
+              <Area type="monotone" dataKey="conservative" name="Conservative" stroke="#00d4ff" strokeWidth={2} fill="url(#gradCyan)" dot={false} />
+              <Area type="monotone" dataKey="moderate" name="Moderate" stroke="#7c3aed" strokeWidth={2} fill="url(#gradPurple)" dot={false} />
+              <Area type="monotone" dataKey="aggressive" name="Aggressive" stroke="#e040fb" strokeWidth={2} fill="url(#gradPink)" dot={false} />
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </section>
 
       {/* Features */}
       <section id="features" className="relative z-10 px-6 py-20 max-w-6xl mx-auto">
