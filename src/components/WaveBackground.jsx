@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-const SPACING   = 12   // px between dots
-const DOT_SIZE  = 1.0  // dot radius
+const SPACING   = 7    // px between dots
+const DOT_SIZE  = 0.6  // dot radius
 const WAVES = [
   { freq: 0.07, amp: 14, speed: 0.18, rowShift: 0.12 },
   { freq: 0.11, amp: 9,  speed: 0.12, rowShift: 0.08 },
