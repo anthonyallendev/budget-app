@@ -1,14 +1,14 @@
 import { useState } from 'react'
 
-const TABS = ['Expense', 'Income', 'Investments']
+const TABS = ['Expense', 'Income', 'Savings']
 
 const CATEGORIES = {
-  Expense:     ['Housing', 'Food & Dining', 'Transport', 'Shopping', 'Entertainment', 'Health', 'Utilities', 'Education', 'Other'],
-  Income:      ['Salary', 'Freelance', 'Side Hustle', 'Other'],
-  Investments: ['Stocks / ETFs', 'Superannuation', 'Crypto', 'Property', 'Bonds', 'Other'],
+  Expense: ['Housing', 'Food & Dining', 'Transport', 'Shopping', 'Entertainment', 'Health', 'Utilities', 'Education', 'Other'],
+  Income:  ['Salary', 'Freelance', 'Side Hustle', 'Other'],
+  Savings: ['Stocks / ETFs', 'Superannuation', 'Crypto', 'Property', 'Bonds', 'Other'],
 }
 
-const TAB_TYPE = { Expense: 'expense', Income: 'income', Investments: 'expense' }
+const TAB_TYPE = { Expense: 'expense', Income: 'income', Savings: 'expense' }
 
 const today = () => new Date().toISOString().split('T')[0]
 
