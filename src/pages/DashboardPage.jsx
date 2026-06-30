@@ -6,6 +6,7 @@ import TransactionList from '../components/TransactionList'
 import BudgetRatioPanel from '../components/BudgetRatioPanel'
 import RetirementPanel from '../components/RetirementPanel'
 import SpendingCharts from '../components/SpendingCharts'
+import BudgetLimitsPanel from '../components/BudgetLimitsPanel'
 
 function getMonthStats(transactions) {
   const now = new Date()
@@ -79,6 +80,9 @@ export default function DashboardPage() {
 
         {/* Charts */}
         <SpendingCharts transactions={transactions} />
+
+        {/* Budget limits */}
+        <BudgetLimitsPanel transactions={transactions} />
 
         {/* Budget ratio */}
         <BudgetRatioPanel />

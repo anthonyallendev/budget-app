@@ -13,7 +13,8 @@
       "Read(//home/anthony/.ssh/**)",
       "Bash(ssh -T git@github.com)",
       "Bash(ssh-keyscan github.com)",
-      "Bash(ssh -o StrictHostKeyChecking=no -T git@github.com)"
+      "Bash(ssh -o StrictHostKeyChecking=no -T git@github.com)",
+      "Bash(npx vercel *)"
     ]
   }
 }
