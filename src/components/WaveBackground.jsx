@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-const SPACING   = 22   // px between dots
-const DOT_SIZE  = 1.2  // dot radius
+const SPACING   = 12   // px between dots
+const DOT_SIZE  = 1.0  // dot radius
 const WAVES = [
   { freq: 0.07, amp: 14, speed: 0.18, rowShift: 0.12 },
   { freq: 0.11, amp: 9,  speed: 0.12, rowShift: 0.08 },
@@ -53,7 +53,7 @@ export default function WaveBackground() {
 
           // Brightness peaks at wave crests
           const intensity = (Math.sin(col * 0.09 + t * 0.15) + 1) / 2
-          const alpha = 0.12 + intensity * 0.28
+          const alpha = 0.15 + intensity * 0.5
 
           ctx.beginPath()
           ctx.arc(x, y, DOT_SIZE, 0, Math.PI * 2)
