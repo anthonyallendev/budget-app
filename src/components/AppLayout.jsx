@@ -20,14 +20,6 @@ export default function AppLayout({ children }) {
 
   return (
     <div className="min-h-screen bg-space-900 text-white">
-      {/* Background glow */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-0 right-[20%] w-[500px] h-[300px] rounded-full opacity-10"
-          style={{ background: 'radial-gradient(circle, #00d4ff, transparent 70%)' }} />
-        <div className="absolute bottom-0 left-[10%] w-[400px] h-[400px] rounded-full opacity-10"
-          style={{ background: 'radial-gradient(circle, #7c3aed, transparent 70%)' }} />
-      </div>
-
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 glass border-b border-cyan-glow/10">
         <span className="text-lg font-bold text-gradient">BudgetApp</span>
