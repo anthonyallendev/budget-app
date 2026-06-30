@@ -50,7 +50,7 @@ export default function LoginPage() {
       <div className="relative z-10 w-full max-w-sm flex flex-col gap-6">
         {/* Logo */}
         <div className="text-center">
-          <Link to="/" className="text-2xl font-bold text-gradient">BudgetApp</Link>
+          <Link to="/" className="text-2xl font-bold text-gradient">Retirely.money</Link>
           <h1 className="text-white text-2xl font-semibold mt-5">
             {mode === 'login' ? 'Welcome back' : 'Create your account'}
           </h1>

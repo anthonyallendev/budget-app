@@ -44,7 +44,7 @@ export default function LandingPage() {
 
       {/* Nav */}
       <header className="relative z-10 flex items-center justify-between px-8 py-5 glass border-b border-cyan-glow/10">
-        <span className="text-xl font-bold text-gradient">BudgetApp</span>
+        <span className="text-xl font-bold text-gradient">Retirely.money</span>
         <nav className="hidden md:flex items-center gap-8 text-slate-400 text-sm">
           <a href="#features" className="hover:text-white transition-colors">Features</a>
           <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
@@ -222,7 +222,7 @@ export default function LandingPage() {
             <span className="text-gradient">control?</span>
           </h2>
           <p className="text-slate-400 mb-8">
-            Join thousands already using BudgetApp to reach financial freedom.
+            Join thousands already using Retirely.money to reach financial freedom.
           </p>
           <Link
             to="/login"
@@ -235,7 +235,7 @@ export default function LandingPage() {
       </section>
 
       <footer className="relative z-10 text-center text-slate-600 text-sm py-8 border-t border-white/5">
-        © {new Date().getFullYear()} BudgetApp — All rights reserved
+        © {new Date().getFullYear()} Retirely.money — All rights reserved
       </footer>
     </div>
   )
