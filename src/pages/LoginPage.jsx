@@ -19,11 +19,11 @@ export default function LoginPage() {
 
     if (mode === 'login') {
       const { error } = await supabase.auth.signInWithPassword({ email, password })
-      if (error) setError(error.message)
+      if (error) setError(error.message || error.code || JSON.stringify(error))
       else navigate('/dashboard')
     } else {
       const { error } = await supabase.auth.signUp({ email, password })
-      if (error) setError(error.message)
+      if (error) setError(error.message || error.code || JSON.stringify(error))
       else setMessage('Check your email to confirm your account, then log in.')
     }
 
