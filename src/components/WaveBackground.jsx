@@ -81,6 +81,8 @@ export default function WaveBackground() {
         inset: 0,
         zIndex: 0,
         pointerEvents: 'none',
+        transform: 'rotate(45deg) scale(1.5)',
+        transformOrigin: 'center center',
       }}
     />
   )
