@@ -4,6 +4,7 @@ import { useTransactions } from '../hooks/useTransactions'
 import TransactionForm from '../components/TransactionForm'
 import TransactionList from '../components/TransactionList'
 import BudgetRatioPanel from '../components/BudgetRatioPanel'
+import RetirementPanel from '../components/RetirementPanel'
 
 function getMonthStats(transactions) {
   const now = new Date()
@@ -77,6 +78,9 @@ export default function DashboardPage() {
 
         {/* Budget ratio */}
         <BudgetRatioPanel />
+
+        {/* Retirement estimate */}
+        <RetirementPanel transactions={transactions} />
 
         {/* Form + List */}
         <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6 items-start">
