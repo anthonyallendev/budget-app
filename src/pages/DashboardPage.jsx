@@ -1,19 +1,32 @@
-import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useTransactions } from '../hooks/useTransactions'
+import TransactionForm from '../components/TransactionForm'
+import TransactionList from '../components/TransactionList'
+
+function getMonthStats(transactions) {
+  const now = new Date()
+  const thisMonth = transactions.filter(tx => {
+    const d = new Date(tx.date)
+    return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear()
+  })
+  const spent   = thisMonth.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0)
+  const earned  = thisMonth.filter(t => t.type === 'income').reduce((s, t) => s + parseFloat(t.amount), 0)
+  const savings = earned - spent
+  return { spent, earned, savings }
+}
 
 export default function DashboardPage() {
   const navigate = useNavigate()
-  const [user, setUser] = useState(null)
-
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user))
-  }, [])
+  const { transactions, loading, addTransaction, deleteTransaction } = useTransactions()
+  const { spent, earned, savings } = getMonthStats(transactions)
 
   async function handleLogout() {
     await supabase.auth.signOut()
     navigate('/')
   }
+
+  const fmt = n => `$${Math.abs(n).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 
   return (
     <div className="min-h-screen bg-space-900 text-white flex flex-col">
@@ -28,57 +41,43 @@ export default function DashboardPage() {
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between px-8 py-4 glass border-b border-cyan-glow/10">
         <span className="text-lg font-bold text-gradient">BudgetApp</span>
-        <div className="flex items-center gap-4">
-          <span className="text-slate-400 text-sm hidden sm:block">{user?.email}</span>
-          <button
-            onClick={handleLogout}
-            className="text-sm px-4 py-1.5 rounded-lg text-slate-400 hover:text-white transition-colors"
-            style={{ border: '1px solid rgba(255,255,255,0.08)' }}
-          >
-            Log out
-          </button>
-        </div>
+        <button
+          onClick={handleLogout}
+          className="text-sm px-4 py-1.5 rounded-lg text-slate-400 hover:text-white transition-colors"
+          style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+        >
+          Log out
+        </button>
       </header>
 
       {/* Main */}
-      <main className="relative z-10 flex-1 p-8 max-w-6xl mx-auto w-full">
-        <h1 className="text-3xl font-bold mb-1">
-          Good morning 👋
-        </h1>
-        <p className="text-slate-400 mb-8 text-sm">
-          Here's your financial overview for today.
-        </p>
+      <main className="relative z-10 flex-1 p-6 md:p-8 max-w-6xl mx-auto w-full">
+        <h1 className="text-3xl font-bold mb-1">Dashboard</h1>
+        <p className="text-slate-400 mb-8 text-sm">Your financial overview for {new Date().toLocaleString('en-AU', { month: 'long', year: 'numeric' })}</p>
 
-        {/* Placeholder stat cards */}
+        {/* Stat cards */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           {[
-            { label: 'Monthly spending', value: '$0.00', accent: '#00d4ff' },
-            { label: 'Budget remaining', value: '$0.00', accent: '#7c3aed' },
-            { label: 'Net savings', value: '$0.00', accent: '#e040fb' },
+            { label: 'Spent this month',  value: fmt(spent),   accent: '#e040fb', prefix: '-' },
+            { label: 'Earned this month', value: fmt(earned),  accent: '#00d4ff', prefix: '+' },
+            { label: 'Net savings',       value: fmt(savings), accent: savings >= 0 ? '#00d4ff' : '#e040fb', prefix: savings >= 0 ? '+' : '-' },
           ].map(card => (
-            <div
-              key={card.label}
-              className="glass rounded-2xl p-6"
-              style={{ borderColor: `${card.accent}20` }}
-            >
+            <div key={card.label} className="glass rounded-2xl p-6" style={{ borderColor: `${card.accent}20` }}>
               <p className="text-slate-500 text-xs uppercase tracking-widest mb-2">{card.label}</p>
-              <p
-                className="text-3xl font-bold"
-                style={{ color: card.accent, textShadow: `0 0 20px ${card.accent}50` }}
-              >
-                {card.value}
-              </p>
+              {loading
+                ? <div className="h-8 w-24 rounded bg-white/5 animate-pulse" />
+                : <p className="text-3xl font-bold" style={{ color: card.accent, textShadow: `0 0 20px ${card.accent}50` }}>
+                    {card.prefix}{card.value}
+                  </p>
+              }
             </div>
           ))}
         </div>
 
-        {/* Coming soon area */}
-        <div className="glass rounded-2xl p-10 text-center" style={{ borderColor: 'rgba(124,58,237,0.2)' }}>
-          <div className="text-4xl mb-4">🚀</div>
-          <h2 className="text-xl font-semibold mb-2">Dashboard coming soon</h2>
-          <p className="text-slate-400 text-sm">
-            Connect your bank and your spending charts will appear here.
-          </p>
+        {/* Form + List */}
+        <div className="grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-6 items-start">
+          <TransactionForm onAdd={addTransaction} />
+          <TransactionList transactions={transactions} onDelete={deleteTransaction} />
         </div>
       </main>
     </div>
