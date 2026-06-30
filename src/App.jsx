@@ -2,7 +2,14 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import LandingPage from './pages/LandingPage'
 import LoginPage from './pages/LoginPage'
 import DashboardPage from './pages/DashboardPage'
+import TransactionsPage from './pages/TransactionsPage'
+import BudgetTargetsPage from './pages/BudgetTargetsPage'
+import BudgetLimitsPage from './pages/BudgetLimitsPage'
 import PrivateRoute from './components/PrivateRoute'
+
+function Private({ children }) {
+  return <PrivateRoute>{children}</PrivateRoute>
+}
 
 export default function App() {
   return (
@@ -10,14 +17,10 @@ export default function App() {
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <DashboardPage />
-            </PrivateRoute>
-          }
-        />
+        <Route path="/dashboard"      element={<Private><DashboardPage /></Private>} />
+        <Route path="/transactions"   element={<Private><TransactionsPage /></Private>} />
+        <Route path="/budget-targets" element={<Private><BudgetTargetsPage /></Private>} />
+        <Route path="/budget-limits"  element={<Private><BudgetLimitsPage /></Private>} />
       </Routes>
     </BrowserRouter>
   )
