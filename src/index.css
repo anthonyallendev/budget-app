@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  --color-space-950: #030711;
+  --color-space-900: #060b1a;
+  --color-space-800: #0d1630;
+  --color-space-700: #111e42;
+  --color-space-600: #1a2d5a;
+  --color-cyan-glow: #00d4ff;
+  --color-purple-glow: #7c3aed;
+  --color-pink-glow: #e040fb;
+}
+
+@utility glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.35), 0 0 60px rgba(0, 212, 255, 0.1);
+}
+
+@utility glow-purple {
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.5), 0 0 60px rgba(124, 58, 237, 0.15);
+}
+
+@utility glow-pink {
+  box-shadow: 0 0 20px rgba(224, 64, 251, 0.5), 0 0 60px rgba(224, 64, 251, 0.15);
+}
+
+@utility text-gradient {
+  background: linear-gradient(135deg, #00d4ff 0%, #7c3aed 60%, #e040fb 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@utility glass {
+  background: rgba(13, 22, 48, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 212, 255, 0.15);
+}
