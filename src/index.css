@@ -31,7 +31,7 @@
 }
 
 @utility glass {
-  background: rgba(13, 22, 48, 0.7);
+  background: rgba(13, 22, 48, 0.92);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(0, 212, 255, 0.15);
