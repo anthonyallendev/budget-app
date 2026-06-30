@@ -1,24 +1,29 @@
 import { useState } from 'react'
 
+const TABS = ['Expense', 'Income', 'Investments']
+
 const CATEGORIES = {
-  expense: ['Housing', 'Food & Dining', 'Transport', 'Shopping', 'Entertainment', 'Health', 'Utilities', 'Education', 'Other'],
-  income: ['Salary', 'Freelance', 'Investment', 'Other'],
+  Expense:     ['Housing', 'Food & Dining', 'Transport', 'Shopping', 'Entertainment', 'Health', 'Utilities', 'Education', 'Other'],
+  Income:      ['Salary', 'Freelance', 'Side Hustle', 'Other'],
+  Investments: ['Stocks / ETFs', 'Superannuation', 'Crypto', 'Property', 'Bonds', 'Other'],
 }
+
+const TAB_TYPE = { Expense: 'expense', Income: 'income', Investments: 'expense' }
 
 const today = () => new Date().toISOString().split('T')[0]
 
 export default function TransactionForm({ onAdd }) {
-  const [type, setType] = useState('expense')
+  const [tab, setTab] = useState('Expense')
   const [amount, setAmount] = useState('')
-  const [category, setCategory] = useState(CATEGORIES.expense[0])
+  const [category, setCategory] = useState(CATEGORIES.Expense[0])
   const [description, setDescription] = useState('')
   const [date, setDate] = useState(today())
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  function handleTypeChange(newType) {
-    setType(newType)
-    setCategory(CATEGORIES[newType][0])
+  function handleTabChange(newTab) {
+    setTab(newTab)
+    setCategory(CATEGORIES[newTab][0])
   }
 
   async function handleSubmit(e) {
@@ -26,7 +31,7 @@ export default function TransactionForm({ onAdd }) {
     setError(null)
     setLoading(true)
     try {
-      await onAdd({ type, amount: parseFloat(amount), category, description, date })
+      await onAdd({ type: TAB_TYPE[tab], amount: parseFloat(amount), category, description, date })
       setAmount('')
       setDescription('')
       setDate(today())
@@ -55,15 +60,15 @@ export default function TransactionForm({ onAdd }) {
       )}
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        {/* Type toggle */}
+        {/* Tab toggle */}
         <div className="flex rounded-lg overflow-hidden border border-white/10">
-          {['expense', 'income'].map(t => (
+          {TABS.map(t => (
             <button
               key={t}
               type="button"
-              onClick={() => handleTypeChange(t)}
-              className="flex-1 py-2 text-sm font-semibold capitalize transition-all duration-200"
-              style={type === t
+              onClick={() => handleTabChange(t)}
+              className="flex-1 py-2 text-sm font-semibold transition-all duration-200"
+              style={tab === t
                 ? { background: 'linear-gradient(135deg, #00d4ff, #7c3aed)', color: '#fff' }
                 : { background: 'rgba(6,11,26,0.6)', color: '#64748b' }
               }
@@ -119,7 +124,7 @@ export default function TransactionForm({ onAdd }) {
             onFocus={focusGlow}
             onBlur={blurGlow}
           >
-            {CATEGORIES[type].map(c => (
+            {CATEGORIES[tab].map(c => (
               <option key={c} value={c}>{c}</option>
             ))}
           </select>
