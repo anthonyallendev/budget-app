@@ -107,7 +107,7 @@ export default function RetirementHero({ compact = false }) {
 
   if (compact) {
     return (
-      <div className="glass rounded-2xl p-6 flex flex-col justify-between" style={{ minHeight: '100%' }}>
+      <div className="glass rounded-2xl p-6 flex flex-col items-center justify-center text-center" style={{ minHeight: '100%' }}>
         <p className="text-slate-500 text-xs uppercase tracking-widest mb-2">Projected retirement age</p>
         {loading ? (
           <div className="h-10 w-20 rounded-lg bg-white/5 animate-pulse" />
@@ -121,7 +121,7 @@ export default function RetirementHero({ compact = false }) {
           </>
         ) : (
           <>
-            <div className="age-glow rounded-xl inline-block" style={{ '--glow-rgb': hexToRgb(accentColor) }}>
+            <div className="age-glow rounded-xl" style={{ '--glow-rgb': hexToRgb(accentColor) }}>
               <p className="font-black leading-none"
                 style={{
                   fontSize: '3rem',
@@ -133,7 +133,7 @@ export default function RetirementHero({ compact = false }) {
                 {displayAge ?? '—'}
               </p>
             </div>
-            <div className="mt-2 flex flex-col gap-1">
+            <div className="mt-2 flex flex-col items-center gap-1">
               <span className="text-xs font-semibold" style={{ color: accentColor }}>
                 {yearsEarly > 0
                   ? `${yearsEarly} yr${yearsEarly !== 1 ? 's' : ''} early`
