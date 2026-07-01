@@ -148,7 +148,7 @@ export default function AppLayout({ children }) {
     <div className="min-h-screen bg-space-900 text-white">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 glass border-b border-cyan-glow/10">
-        <span className="text-lg font-bold text-gradient">Retirely</span>
+        <span className="text-3xl font-bold text-gradient">Retirely</span>
         <button
           onClick={() => setOpen(true)}
           className="p-2 rounded-lg text-slate-400 hover:text-cyan-400 hover:bg-white/5 transition-colors"
@@ -177,7 +177,7 @@ export default function AppLayout({ children }) {
       >
         {/* Drawer header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-white/5">
-          <span className="text-lg font-bold text-gradient">Retirely</span>
+          <span className="text-3xl font-bold text-gradient">Retirely</span>
           <button
             onClick={() => setOpen(false)}
             className="text-slate-500 hover:text-white transition-colors text-2xl leading-none"
