@@ -216,7 +216,7 @@ export default function AppLayout({ children }) {
           {isPremium ? (
             <div className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold"
               style={{ background: 'linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08))', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff' }}>
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.3">
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="#f59e0b" stroke="#f59e0b" strokeWidth="1.3">
                 <path d="M10 2l2.5 5 5.5.8-4 3.9.9 5.5L10 14.5l-4.9 2.7.9-5.5L2 7.8l5.5-.8z" strokeLinejoin="round" />
               </svg>
               Premium
