@@ -526,7 +526,11 @@ export default function RetirementPage() {
                   <Tooltip content={<CustomTooltip />} />
                   {earlyRetireAge && earlyRetireAge < preservationAge && (
                     <ReferenceLine x={earlyRetireAge} stroke="#e040fb" strokeDasharray="4 4"
-                      label={{ value: `Retire age ${earlyRetireAge}`, fill: '#e040fb', fontSize: 11, position: 'insideTopRight' }} />
+                      label={({ viewBox }) => (
+                        <text x={viewBox.x - 10} y={viewBox.y + 16} textAnchor="end" fill="#e040fb" fontSize={11}>
+                          Age {earlyRetireAge}
+                        </text>
+                      )} />
                   )}
                   <Area type="monotone" dataKey="accumulation" name="Savings" stroke="#00d4ff" strokeWidth={2} fill="url(#gradAccum)" dot={false} connectNulls={false} />
                   <Area type="monotone" dataKey="drawdown" name="Drawdown" stroke="#e040fb" strokeWidth={2} fill="url(#gradDraw)" dot={false} connectNulls={false} />
