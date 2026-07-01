@@ -28,11 +28,22 @@ export default async function handler(req, res) {
       if (error) throw error
     }
 
+    // Read mobile from user's profile
+    const { data: profile } = await supabaseAdmin
+      .from('profiles')
+      .select('mobile')
+      .eq('id', user.id)
+      .single()
+
+    if (!profile?.mobile) {
+      return res.status(400).json({ error: 'Mobile number required for Australian bank sync. Please add it to your profile.' })
+    }
+
     // Generate a Basiq Connect URL
     const authLink = await basiq('POST', `/users/${basiqUserId}/auth_link`, {
       scope: 'CLIENT_ACCESS',
       email: user.email,
-      mobile: '+61400000000',
+      mobile: profile.mobile,
       redirectUrl: `${APP_URL}/transactions?basiq=connected`,
     })
 

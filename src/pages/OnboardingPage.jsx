@@ -40,6 +40,7 @@ export default function OnboardingPage() {
     dob_year:     '',
     country:      'Australia',
     super_balance: '',
+    mobile:       '',
   })
   const [loading, setLoading] = useState(false)
   const [error, setError]     = useState(null)
@@ -73,6 +74,7 @@ export default function OnboardingPage() {
       date_of_birth: dob,
       country:       form.country,
       super_balance: form.super_balance ? parseFloat(form.super_balance) : 0,
+      mobile:        form.mobile.trim() || null,
     })
     setLoading(false)
 
@@ -223,6 +225,27 @@ export default function OnboardingPage() {
               </div>
               <p className="text-slate-600 text-xs">
                 This is locked until your preservation age — we'll show you how to bridge the gap.
+              </p>
+            </div>
+
+            {/* Mobile — optional, needed for Australian bank sync */}
+            <div className="flex flex-col gap-1.5">
+              <label className="text-slate-400 text-sm">
+                Mobile number
+                <span className="text-slate-600 ml-2 font-normal">(optional)</span>
+              </label>
+              <input
+                type="tel"
+                placeholder="e.g. +61 400 000 000"
+                value={form.mobile}
+                onChange={e => set('mobile', e.target.value)}
+                className="rounded-lg px-4 py-2.5 text-white text-sm outline-none"
+                style={inputStyle}
+                onFocus={focusGlow}
+                onBlur={blurGlow}
+              />
+              <p className="text-slate-600 text-xs">
+                Required if you want to connect an Australian bank account.
               </p>
             </div>
 
