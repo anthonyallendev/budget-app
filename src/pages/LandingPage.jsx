@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 const portfolioData = [
@@ -47,7 +47,7 @@ export default function LandingPage() {
         <span className="text-xl font-bold text-gradient">Retirely</span>
         <nav className="hidden md:flex items-center gap-8 text-slate-400 text-sm">
           <a href="#features" className="hover:text-white transition-colors">Features</a>
-          <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+          <Link to="/about" className="hover:text-white transition-colors">About</Link>
         </nav>
         <div className="flex items-center gap-3">
           <Link

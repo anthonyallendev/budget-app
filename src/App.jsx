@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import WaveBackground from './components/WaveBackground'
 import LandingPage from './pages/LandingPage'
+import AboutPage from './pages/AboutPage'
 import LoginPage from './pages/LoginPage'
 import OnboardingPage from './pages/OnboardingPage'
 import DashboardPage from './pages/DashboardPage'
@@ -20,6 +21,7 @@ export default function App() {
       <WaveBackground />
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/onboarding"     element={<Private><OnboardingPage /></Private>} />
         <Route path="/dashboard"      element={<Private><DashboardPage /></Private>} />
