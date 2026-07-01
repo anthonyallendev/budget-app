@@ -323,6 +323,271 @@ export default function InvestmentStrategiesPage() {
           Fees, tax, and inflation are not factored in.
         </p>
 
+        {/* ── How to start investing ── */}
+        <div className="mt-12">
+          <div className="text-center mb-10">
+            <p className="text-cyan-400 text-xs uppercase tracking-widest mb-3">Getting started</p>
+            <h2 className="text-3xl font-bold mb-3">How to put your savings to work</h2>
+            <p className="text-slate-400 max-w-xl mx-auto leading-relaxed text-sm">
+              Two paths — pick the one that matches where you're at. You can always graduate from one to the next.
+            </p>
+          </div>
+
+          {/* Path 1 — Beginner */}
+          <div className="glass rounded-3xl p-8 mb-6" style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-lg"
+                style={{ background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.2)' }}>
+                🌱
+              </div>
+              <div>
+                <p className="text-white font-bold">Path 1 — Start simple</p>
+                <p className="text-slate-500 text-xs">Best for: complete beginners, or anyone not yet ready for investing</p>
+              </div>
+              <span className="ml-auto text-xs px-3 py-1 rounded-full font-medium"
+                style={{ background: 'rgba(0,212,255,0.1)', color: '#00d4ff', border: '1px solid rgba(0,212,255,0.2)' }}>
+                Beginner
+              </span>
+            </div>
+
+            <div className="flex flex-col md:flex-row items-stretch gap-0">
+              {[
+                {
+                  step: '1',
+                  icon: (
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#00d4ff" strokeWidth="1.4">
+                      <rect x="4" y="8" width="20" height="14" rx="2" />
+                      <path d="M4 12h20" strokeLinecap="round" />
+                      <path d="M9 17h4" strokeLinecap="round" />
+                    </svg>
+                  ),
+                  title: 'Open a high-interest savings account',
+                  desc: 'Look for an account with a bonus interest rate. Popular options in AU: ING Savings Maximiser, UBank, Macquarie Savings, or your own bank\'s online saver.',
+                  tip: 'Aim for 4%+ p.a. — compare at finder.com.au',
+                  color: '#00d4ff',
+                },
+                {
+                  step: '2',
+                  icon: (
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#00d4ff" strokeWidth="1.4">
+                      <circle cx="14" cy="14" r="9" />
+                      <path d="M14 9v5l3 3" strokeLinecap="round" />
+                      <path d="M5 14H3M25 14h-2M14 3V1M14 27v-2" strokeLinecap="round" strokeWidth="1" />
+                    </svg>
+                  ),
+                  title: 'Set up an automatic weekly transfer',
+                  desc: 'Decide on a fixed amount — even $25/week matters. Set a recurring transfer in your banking app so it happens automatically, every week, without thinking.',
+                  tip: 'Pay yourself first — transfer on payday before spending',
+                  color: '#00d4ff',
+                },
+                {
+                  step: '3',
+                  icon: (
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="#00d4ff" strokeWidth="1.4">
+                      <polyline points="4,20 10,13 15,16 24,7" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M18 7h6v6" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  ),
+                  title: 'Let compound interest do the work',
+                  desc: 'Every month your interest earns more interest. Check in on Retirely to see how your growing balance is moving your retirement age forward.',
+                  tip: 'Don\'t touch it — time is your biggest advantage',
+                  color: '#00d4ff',
+                },
+              ].map((s, i, arr) => (
+                <div key={i} className="flex md:flex-col items-stretch md:items-center flex-1">
+                  <div className="flex-1 rounded-2xl p-5 flex flex-col gap-3"
+                    style={{ background: 'rgba(0,212,255,0.05)', border: '1px solid rgba(0,212,255,0.12)' }}>
+                    <div className="flex items-center gap-3 md:flex-col md:text-center md:items-center">
+                      <div className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+                        style={{ background: 'rgba(0,212,255,0.08)' }}>
+                        {s.icon}
+                      </div>
+                      <div className="text-xs font-bold uppercase tracking-widest text-cyan-600">Step {s.step}</div>
+                    </div>
+                    <h3 className="text-white font-semibold text-sm leading-snug md:text-center">{s.title}</h3>
+                    <p className="text-slate-400 text-xs leading-relaxed">{s.desc}</p>
+                    <div className="mt-auto pt-2 flex items-start gap-1.5">
+                      <span className="text-cyan-500 text-xs shrink-0 mt-0.5">💡</span>
+                      <p className="text-cyan-600 text-xs italic">{s.tip}</p>
+                    </div>
+                  </div>
+                  {i < arr.length - 1 && (
+                    <div className="flex md:hidden items-center justify-center w-6 shrink-0 text-slate-700">
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+                        <path d="M8 2v12M4 10l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  )}
+                  {i < arr.length - 1 && (
+                    <div className="hidden md:flex items-center justify-center h-8 shrink-0 text-slate-700">
+                      <svg width="28" height="16" viewBox="0 0 28 16" fill="none" stroke="#00d4ff" strokeWidth="1.3" opacity="0.4">
+                        <path d="M2 8h20M18 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Path 2 — Intermediate */}
+          <div className="glass rounded-3xl p-8 mb-6" style={{ borderColor: 'rgba(168,85,247,0.2)' }}>
+            <div className="flex items-center gap-3 mb-8">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-lg"
+                style={{ background: 'rgba(168,85,247,0.1)', border: '1px solid rgba(168,85,247,0.2)' }}>
+                🚀
+              </div>
+              <div>
+                <p className="text-white font-bold">Path 2 — Open a trading account</p>
+                <p className="text-slate-500 text-xs">Best for: people ready to invest in ETFs, shares, or bonds</p>
+              </div>
+              <span className="ml-auto text-xs px-3 py-1 rounded-full font-medium"
+                style={{ background: 'rgba(168,85,247,0.1)', color: '#a855f7', border: '1px solid rgba(168,85,247,0.2)' }}>
+                Intermediate
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-5 gap-3 items-start">
+              {[
+                {
+                  step: '1',
+                  icon: '🔍',
+                  title: 'Choose a broker',
+                  desc: 'Pick a brokerage that suits you. Popular AU options: CommSec (beginner-friendly), Pearler (long-term ETF focus), Stake (low fees), SelfWealth.',
+                  color: '#a855f7',
+                },
+                {
+                  step: '2',
+                  icon: '🪪',
+                  title: 'Verify your identity',
+                  desc: 'You\'ll need a driver\'s licence or passport and your Tax File Number (TFN). Takes 5–10 minutes online.',
+                  color: '#a855f7',
+                },
+                {
+                  step: '3',
+                  icon: '💸',
+                  title: 'Deposit funds',
+                  desc: 'Transfer money from your bank to your brokerage account via BPAY or bank transfer. Most brokers require $500–$2,000 minimum.',
+                  color: '#a855f7',
+                },
+                {
+                  step: '4',
+                  icon: '🔎',
+                  title: 'Search for an investment',
+                  desc: 'Use the broker\'s search tool. Search the ticker code (e.g., VAS, VGS, NDQ) or the fund name. Read the Product Disclosure Statement (PDS).',
+                  color: '#a855f7',
+                },
+                {
+                  step: '5',
+                  icon: '✅',
+                  title: 'Place your order',
+                  desc: 'Choose a "market order" (buys at current price) or "limit order" (only buys at your target price). Review, confirm, and done.',
+                  color: '#a855f7',
+                },
+              ].map((s, i, arr) => (
+                <div key={i} className="flex sm:flex-col items-stretch sm:items-center">
+                  <div className="flex-1 rounded-2xl p-4 flex flex-col gap-2 text-center"
+                    style={{ background: 'rgba(168,85,247,0.06)', border: '1px solid rgba(168,85,247,0.15)' }}>
+                    <div className="text-2xl mx-auto">{s.icon}</div>
+                    <div className="text-xs font-bold uppercase tracking-widest text-purple-600">Step {s.step}</div>
+                    <h3 className="text-white font-semibold text-sm leading-snug">{s.title}</h3>
+                    <p className="text-slate-400 text-xs leading-relaxed">{s.desc}</p>
+                  </div>
+                  {i < arr.length - 1 && (
+                    <div className="flex sm:hidden items-center justify-center w-6 shrink-0 text-slate-700">
+                      <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#a855f7" strokeWidth="1.5" opacity="0.5">
+                        <path d="M8 2v12M4 10l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  )}
+                  {i < arr.length - 1 && (
+                    <div className="hidden sm:flex items-center justify-center h-8 text-slate-700">
+                      <svg width="24" height="14" viewBox="0 0 24 14" fill="none" stroke="#a855f7" strokeWidth="1.3" opacity="0.4">
+                        <path d="M2 7h16M14 3l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 rounded-xl px-5 py-4 flex gap-3"
+              style={{ background: 'rgba(251,191,36,0.06)', border: '1px solid rgba(251,191,36,0.2)' }}>
+              <span className="text-amber-400 text-sm shrink-0">⚠️</span>
+              <p className="text-xs leading-relaxed text-amber-500/80">
+                Before placing your first order, read the fund's Product Disclosure Statement (PDS). Understand what you're buying, the fees involved, and that investment values can go down as well as up.
+              </p>
+            </div>
+          </div>
+
+          {/* Other options */}
+          <div className="glass rounded-3xl p-8" style={{ borderColor: 'rgba(224,64,251,0.15)' }}>
+            <div className="flex items-center gap-3 mb-7">
+              <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-lg"
+                style={{ background: 'rgba(224,64,251,0.1)', border: '1px solid rgba(224,64,251,0.2)' }}>
+                🌐
+              </div>
+              <div>
+                <p className="text-white font-bold">Other ways to invest</p>
+                <p className="text-slate-500 text-xs">Beyond savings accounts and share trading</p>
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              {[
+                {
+                  emoji: '🏠',
+                  title: 'Property',
+                  desc: 'Buy residential or commercial real estate. High entry cost but historically strong returns. Consider REITs (property ETFs) for lower-cost exposure.',
+                  level: 'Advanced',
+                  color: '#e040fb',
+                },
+                {
+                  emoji: '📜',
+                  title: 'Bonds & term deposits',
+                  desc: 'Lend money to governments or corporations for a fixed return. Lower risk, lower reward. Good for capital preservation and income.',
+                  level: 'Beginner',
+                  color: '#00d4ff',
+                },
+                {
+                  emoji: '💼',
+                  title: 'Managed funds',
+                  desc: 'A professional fund manager invests on your behalf. Higher fees than ETFs but hands-off. Look for index-based options to keep costs down.',
+                  level: 'Intermediate',
+                  color: '#a855f7',
+                },
+                {
+                  emoji: '💰',
+                  title: 'Superannuation (AU)',
+                  desc: 'Voluntary super contributions can be tax-effective for long-term retirement savings. Talk to your super fund about contribution strategies.',
+                  level: 'Intermediate',
+                  color: '#a855f7',
+                },
+              ].map(o => (
+                <div key={o.title} className="rounded-2xl p-5 flex flex-col gap-3"
+                  style={{ background: `${o.color}08`, border: `1px solid ${o.color}18` }}>
+                  <div className="text-2xl">{o.emoji}</div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="text-white font-semibold text-sm">{o.title}</h3>
+                      <span className="text-xs px-1.5 py-0.5 rounded-full"
+                        style={{ background: `${o.color}15`, color: o.color, fontSize: '10px' }}>
+                        {o.level}
+                      </span>
+                    </div>
+                    <p className="text-slate-400 text-xs leading-relaxed">{o.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <p className="text-center text-slate-600 text-xs mt-8 pb-4">
+            This section is for educational purposes only and is not financial advice.
+            Product and platform names are mentioned as examples — always do your own research.
+          </p>
+        </div>
+
       </div>
     </AppLayout>
   )
