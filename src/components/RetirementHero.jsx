@@ -105,29 +105,6 @@ export default function RetirementHero() {
       className="glass rounded-2xl p-8 flex flex-col items-center justify-center text-center relative overflow-hidden"
       style={{ borderColor: 'rgba(0,212,255,0.2)', minHeight: 220 }}
     >
-      {/* Pulsing ring behind the number */}
-      {isReady && (
-        <>
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div
-              className="w-48 h-48 rounded-full opacity-10"
-              style={{
-                background: `radial-gradient(circle, ${accentColor}, transparent 70%)`,
-                animation: 'pulse 3s ease-in-out infinite',
-              }}
-            />
-          </div>
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div
-              className="w-32 h-32 rounded-full opacity-15"
-              style={{
-                background: `radial-gradient(circle, ${accentColor}, transparent 70%)`,
-                animation: 'pulse 3s ease-in-out infinite 1s',
-              }}
-            />
-          </div>
-        </>
-      )}
 
       <p className="text-slate-500 text-xs uppercase tracking-widest mb-4 relative z-10">
         Projected retirement age
@@ -159,15 +136,15 @@ export default function RetirementHero() {
         <div className="flex flex-col items-center relative z-10">
           {/* Big animated age */}
           <p
-            className="font-black leading-none"
+            className="font-black leading-none age-glow"
             style={{
+              '--glow':     accentColor,
+              '--glow-dim': `${accentColor}55`,
               fontSize: '7rem',
               lineHeight: 1,
               background: `linear-gradient(135deg, ${accentColor}, #7c3aed)`,
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
-              textShadow: 'none',
-              filter: `drop-shadow(0 0 30px ${accentColor}60)`,
             }}
           >
             {displayAge ?? '—'}
@@ -202,10 +179,18 @@ export default function RetirementHero() {
       )}
 
       <style>{`
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); opacity: 0.1; }
-          50%       { transform: scale(1.15); opacity: 0.2; }
+        @keyframes ageGlow {
+          0%, 100% {
+            filter: drop-shadow(0 0 4px var(--glow))
+                    drop-shadow(0 0 14px var(--glow-dim));
+          }
+          50% {
+            filter: drop-shadow(0 0 10px var(--glow))
+                    drop-shadow(0 0 30px var(--glow))
+                    drop-shadow(0 0 55px var(--glow-dim));
+          }
         }
+        .age-glow { animation: ageGlow 3s ease-in-out infinite; }
       `}</style>
     </div>
   )
