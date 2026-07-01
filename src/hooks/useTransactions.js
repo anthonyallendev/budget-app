@@ -39,5 +39,5 @@ export function useTransactions() {
     await fetchTransactions()
   }
 
-  return { transactions, loading, error, addTransaction, deleteTransaction }
+  return { transactions, loading, error, addTransaction, deleteTransaction, refresh: fetchTransactions }
 }
