@@ -17,6 +17,7 @@ import SavingsGoalsPage from './pages/SavingsGoalsPage'
 import NetWorthPage from './pages/NetWorthPage'
 import BillsPage from './pages/BillsPage'
 import LeaderboardPage from './pages/LeaderboardPage'
+import AuthCallbackPage from './pages/AuthCallbackPage'
 import PrivateRoute from './components/PrivateRoute'
 
 function Private({ children }) {
@@ -31,6 +32,7 @@ export default function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/auth/callback" element={<AuthCallbackPage />} />
         <Route path="/onboarding"     element={<Private><OnboardingPage /></Private>} />
         <Route path="/dashboard"      element={<Private><DashboardPage /></Private>} />
         <Route path="/transactions"   element={<Private><TransactionsPage /></Private>} />
