@@ -32,7 +32,7 @@ export default function WaveBackground() {
   return (
     <div
       ref={ref}
-      style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}
+      style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none', opacity: 0.2 }}
     />
   )
 }
