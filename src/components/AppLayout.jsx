@@ -221,7 +221,7 @@ export default function AppLayout({ children }) {
       </aside>
 
       {/* Page content */}
-      <main className="relative z-10 pt-20 p-6 md:p-8 max-w-6xl mx-auto">
+      <main className="relative z-10 pt-24 pb-8 px-6 md:px-8 max-w-6xl mx-auto">
         {children}
       </main>
     </div>
