@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
+import { useProfile } from '../hooks/useProfile'
 
 // ── HUD-style SVG icons ──────────────────────────────────────────────────────
 
@@ -125,6 +126,8 @@ const NAV = [
 export default function AppLayout({ children }) {
   const [open, setOpen] = useState(false)
   const navigate = useNavigate()
+  const { profile } = useProfile()
+  const isPremium = profile?.subscription_status === 'premium'
 
   async function handleLogout() {
     await supabase.auth.signOut()
@@ -210,20 +213,31 @@ export default function AppLayout({ children }) {
 
         {/* About + Upgrade + Logout */}
         <div className="p-4 border-t border-white/5 flex flex-col gap-1">
-          <NavLink
-            to="/upgrade"
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200"
-            style={({ isActive }) => isActive
-              ? { background: 'linear-gradient(135deg, rgba(0,212,255,0.15), rgba(124,58,237,0.15))', color: '#00d4ff' }
-              : { background: 'linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08))', color: '#a78bfa', border: '1px solid rgba(124,58,237,0.2)' }
-            }
-          >
-            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.3">
-              <path d="M10 2l2.5 5 5.5.8-4 3.9.9 5.5L10 14.5l-4.9 2.7.9-5.5L2 7.8l5.5-.8z" strokeLinejoin="round" />
-            </svg>
-            Upgrade to Premium
-          </NavLink>
+          {isPremium ? (
+            <div className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold"
+              style={{ background: 'linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08))', border: '1px solid rgba(0,212,255,0.2)', color: '#00d4ff' }}>
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.3">
+                <path d="M10 2l2.5 5 5.5.8-4 3.9.9 5.5L10 14.5l-4.9 2.7.9-5.5L2 7.8l5.5-.8z" strokeLinejoin="round" />
+              </svg>
+              Premium
+              <span className="ml-auto w-2 h-2 rounded-full bg-cyan-400" style={{ boxShadow: '0 0 6px #00d4ff' }} />
+            </div>
+          ) : (
+            <NavLink
+              to="/upgrade"
+              onClick={() => setOpen(false)}
+              className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200"
+              style={({ isActive }) => isActive
+                ? { background: 'linear-gradient(135deg, rgba(0,212,255,0.15), rgba(124,58,237,0.15))', color: '#00d4ff' }
+                : { background: 'linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.08))', color: '#a78bfa', border: '1px solid rgba(124,58,237,0.2)' }
+              }
+            >
+              <svg width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.3">
+                <path d="M10 2l2.5 5 5.5.8-4 3.9.9 5.5L10 14.5l-4.9 2.7.9-5.5L2 7.8l5.5-.8z" strokeLinejoin="round" />
+              </svg>
+              Upgrade to Premium
+            </NavLink>
+          )}
           <NavLink
             to="/about"
             onClick={() => setOpen(false)}
