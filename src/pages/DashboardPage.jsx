@@ -1,6 +1,6 @@
 import AppLayout from '../components/AppLayout'
 import SpendingCharts from '../components/SpendingCharts'
-import RetirementPanel from '../components/RetirementPanel'
+import RetirementHero from '../components/RetirementHero'
 import { useTransactions } from '../hooks/useTransactions'
 
 function getMonthStats(transactions) {
@@ -45,11 +45,13 @@ export default function DashboardPage() {
         ))}
       </div>
 
+      {/* Retirement hero — the big number */}
+      <div className="mb-6">
+        <RetirementHero />
+      </div>
+
       {/* Charts */}
       <SpendingCharts transactions={transactions} />
-
-      {/* Retirement */}
-      <RetirementPanel transactions={transactions} />
     </AppLayout>
   )
 }

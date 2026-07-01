@@ -1,21 +1,41 @@
 import { useEffect, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
 export default function PrivateRoute({ children }) {
-  const [session, setSession] = useState(undefined) // undefined = loading
+  const [session, setSession]   = useState(undefined)
+  const [profile, setProfile]   = useState(undefined)
+  const location = useLocation()
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data }) => setSession(data.session))
+    // onAuthStateChange fires immediately with the current session AND catches
+    // the OAuth callback token that arrives in the URL after Google redirect
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, s) => {
+      setSession(s)
+      if (!s) { setProfile(null); return }
+      supabase
+        .from('profiles')
+        .select('id, full_name')
+        .eq('id', s.user.id)
+        .maybeSingle()
+        .then(({ data: p }) => setProfile(p ?? null))
+    })
+    return () => subscription.unsubscribe()
   }, [])
 
-  if (session === undefined) {
+  if (session === undefined || profile === undefined) {
     return (
-      <div className="min-h-screen bg-gray-950 flex items-center justify-center">
-        <div className="text-gray-500">Loading…</div>
+      <div className="min-h-screen bg-space-900 flex items-center justify-center">
+        <div className="text-slate-500">Loading…</div>
       </div>
     )
   }
 
-  return session ? children : <Navigate to="/login" replace />
+  if (!session) return <Navigate to="/login" replace />
+
+  if (!profile && location.pathname !== '/onboarding') {
+    return <Navigate to="/onboarding" replace />
+  }
+
+  return children
 }

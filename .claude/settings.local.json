@@ -16,7 +16,8 @@
       "Bash(ssh -o StrictHostKeyChecking=no -T git@github.com)",
       "Bash(npx vercel *)",
       "Bash(whois retireli.app)",
-      "Bash(whois retirely.io)"
+      "Bash(whois retirely.io)",
+      "Bash(npm run *)"
     ]
   }
 }

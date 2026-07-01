@@ -49,13 +49,21 @@ export default function LandingPage() {
           <a href="#features" className="hover:text-white transition-colors">Features</a>
           <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
         </nav>
-        <Link
-          to="/login"
-          className="relative px-5 py-2 rounded-lg font-semibold text-white text-sm transition-all duration-300 hover:glow-cyan"
-          style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)' }}
-        >
-          Get started
-        </Link>
+        <div className="flex items-center gap-3">
+          <Link
+            to="/login"
+            className="px-5 py-2 rounded-lg font-semibold text-sm text-slate-300 hover:text-white transition-colors glass"
+          >
+            Log in
+          </Link>
+          <Link
+            to="/login"
+            className="relative px-5 py-2 rounded-lg font-semibold text-white text-sm transition-all duration-300 hover:glow-cyan"
+            style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)' }}
+          >
+            Get started
+          </Link>
+        </div>
       </header>
 
       {/* Hero */}
