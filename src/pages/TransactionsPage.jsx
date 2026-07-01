@@ -5,6 +5,7 @@ import TransactionList from '../components/TransactionList'
 import PlaidLinkButton from '../components/PlaidLinkButton'
 import BasiqLinkButton from '../components/BasiqLinkButton'
 import { useTransactions } from '../hooks/useTransactions'
+import { useProfile } from '../hooks/useProfile'
 import { supabase } from '../lib/supabase'
 
 async function authHeaders() {
@@ -17,6 +18,8 @@ async function authHeaders() {
 
 export default function TransactionsPage() {
   const { transactions, loading, addTransaction, deleteTransaction, refresh } = useTransactions()
+  const { profile } = useProfile()
+  const isPremium = profile?.subscription_status === 'premium'
   const [syncing,  setSyncing]  = useState(false)
   const [syncMsg,  setSyncMsg]  = useState(null)
   const [showForm, setShowForm] = useState(false)
@@ -107,7 +110,7 @@ export default function TransactionsPage() {
                   : 'Works with thousands of banks in the US, UK, and Canada.'}
               </p>
             </div>
-            <PlaidLinkButton onSuccess={async () => { await refresh() }} />
+            <PlaidLinkButton isPremium={isPremium} onSuccess={async () => { await refresh() }} />
           </div>
 
           {/* Basiq — Australia */}
@@ -123,7 +126,7 @@ export default function TransactionsPage() {
                   : 'Works with 100+ Australian banks via open banking.'}
               </p>
             </div>
-            <BasiqLinkButton />
+            <BasiqLinkButton isPremium={isPremium} />
           </div>
         </div>
 

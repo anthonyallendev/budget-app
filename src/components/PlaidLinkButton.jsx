@@ -10,7 +10,22 @@ async function authHeaders() {
   }
 }
 
-export default function PlaidLinkButton({ onSuccess }) {
+function UpgradePrompt() {
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <a
+        href="/upgrade"
+        className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:scale-105"
+        style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)' }}
+      >
+        Upgrade to connect your bank
+      </a>
+      <p className="text-slate-600 text-xs text-center max-w-xs">Premium feature · $9/month</p>
+    </div>
+  )
+}
+
+export default function PlaidLinkButton({ onSuccess, isPremium }) {
   const [linkToken, setLinkToken] = useState(null)
   const [loading,   setLoading]   = useState(false)
   const [error,     setError]     = useState(null)
@@ -68,6 +83,8 @@ export default function PlaidLinkButton({ onSuccess }) {
       setLoading(false)
     }
   }
+
+  if (!isPremium) return <UpgradePrompt />
 
   return (
     <div className="flex flex-col items-center gap-3">

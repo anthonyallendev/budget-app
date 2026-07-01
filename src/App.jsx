@@ -9,6 +9,7 @@ import TransactionsPage from './pages/TransactionsPage'
 import BudgetTargetsPage from './pages/BudgetTargetsPage'
 import BudgetLimitsPage from './pages/BudgetLimitsPage'
 import RetirementPage from './pages/RetirementPage'
+import UpgradePage from './pages/UpgradePage'
 import PrivateRoute from './components/PrivateRoute'
 
 function Private({ children }) {
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="/budget-targets" element={<Private><BudgetTargetsPage /></Private>} />
         <Route path="/budget-limits"  element={<Private><BudgetLimitsPage /></Private>} />
         <Route path="/retirement"     element={<Private><RetirementPage /></Private>} />
+        <Route path="/upgrade"        element={<Private><UpgradePage /></Private>} />
       </Routes>
     </BrowserRouter>
   )

@@ -14,7 +14,22 @@ const inputStyle = {
   border: '1px solid rgba(168,85,247,0.2)',
 }
 
-export default function BasiqLinkButton() {
+function UpgradePrompt() {
+  return (
+    <div className="flex flex-col items-center gap-3">
+      <a
+        href="/upgrade"
+        className="flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:scale-105"
+        style={{ background: 'linear-gradient(135deg, #a855f7, #ec4899)' }}
+      >
+        Upgrade to connect your bank
+      </a>
+      <p className="text-slate-600 text-xs text-center max-w-xs">Premium feature · $9/month</p>
+    </div>
+  )
+}
+
+export default function BasiqLinkButton({ isPremium }) {
   const [step,   setStep]   = useState('idle') // idle | needs-mobile | loading
   const [mobile, setMobile] = useState('')
   const [error,  setError]  = useState(null)
@@ -72,6 +87,8 @@ export default function BasiqLinkButton() {
       setStep('idle')
     }
   }
+
+  if (!isPremium) return <UpgradePrompt />
 
   if (step === 'needs-mobile') {
     return (

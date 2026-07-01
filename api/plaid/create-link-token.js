@@ -1,12 +1,18 @@
 import { Products, CountryCode } from 'plaid'
 import { plaid } from '../_lib/plaid.js'
-import { getUser } from '../_lib/supabase.js'
+import { getUser, supabaseAdmin } from '../_lib/supabase.js'
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).end()
 
   const user = await getUser(req)
   if (!user) return res.status(401).json({ error: 'Unauthorized' })
+
+  const { data: profile } = await supabaseAdmin
+    .from('profiles').select('subscription_status').eq('id', user.id).single()
+  if (profile?.subscription_status !== 'premium') {
+    return res.status(403).json({ error: 'upgrade_required' })
+  }
 
   try {
     const response = await plaid.linkTokenCreate({

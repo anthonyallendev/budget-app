@@ -9,6 +9,12 @@ export default async function handler(req, res) {
   const user = await getUser(req)
   if (!user) return res.status(401).json({ error: 'Unauthorized' })
 
+  const { data: profile } = await supabaseAdmin
+    .from('profiles').select('subscription_status').eq('id', user.id).single()
+  if (profile?.subscription_status !== 'premium') {
+    return res.status(403).json({ error: 'upgrade_required' })
+  }
+
   try {
     // Get or create Basiq user for this Retirely user
     const { data: existing } = await supabaseAdmin

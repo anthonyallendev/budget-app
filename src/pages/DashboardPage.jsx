@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import AppLayout from '../components/AppLayout'
 import SpendingCharts from '../components/SpendingCharts'
 import RetirementHero from '../components/RetirementHero'
@@ -16,12 +18,32 @@ function getMonthStats(transactions) {
 }
 
 export default function DashboardPage() {
+  const navigate = useNavigate()
   const { transactions, loading } = useTransactions()
   const { spent, savings } = getMonthStats(transactions)
   const fmt = n => `$${Math.abs(n).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
 
+  const [showUpgradedBanner, setShowUpgradedBanner] = useState(false)
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('upgraded') === 'true') {
+      setShowUpgradedBanner(true)
+      window.history.replaceState({}, '', '/dashboard')
+      setTimeout(() => setShowUpgradedBanner(false), 6000)
+    }
+  }, [])
+
   return (
     <AppLayout>
+      {showUpgradedBanner && (
+        <div className="mb-6 glass rounded-xl px-5 py-3 text-sm flex items-center gap-3"
+          style={{ borderColor: 'rgba(0,212,255,0.3)', color: '#00d4ff' }}>
+          <svg width="16" height="16" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M10 2l2.5 5 5.5.8-4 3.9.9 5.5L10 14.5l-4.9 2.7.9-5.5L2 7.8l5.5-.8z" strokeLinejoin="round" />
+          </svg>
+          Welcome to Premium! Head to Transactions to connect your bank.
+        </div>
+      )}
       <h1 className="text-3xl font-bold mb-1">Dashboard</h1>
       <p className="text-slate-400 text-sm mb-8">
         {new Date().toLocaleString('en-AU', { month: 'long', year: 'numeric' })}
