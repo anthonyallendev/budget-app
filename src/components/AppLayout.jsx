@@ -113,12 +113,22 @@ function IconMenu() {
 
 // ── Nav config ───────────────────────────────────────────────────────────────
 
+function IconInvesting() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <polyline points="2,14 7,9 11,12 18,5" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M14 5h4v4" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 const NAV = [
   { to: '/dashboard',      label: 'Dashboard',      Icon: IconDashboard      },
   { to: '/retirement',     label: 'Retirement',     Icon: IconRetirement     },
   { to: '/transactions',   label: 'Transactions',   Icon: IconTransactions   },
   { to: '/budget-targets', label: 'Budget Targets', Icon: IconBudgetTargets  },
   { to: '/budget-limits',  label: 'Budget Limits',  Icon: IconBudgetLimits   },
+  { to: '/investing',      label: 'Investing',      Icon: IconInvesting      },
 ]
 
 // ── Layout ───────────────────────────────────────────────────────────────────
