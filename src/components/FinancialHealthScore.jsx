@@ -138,7 +138,7 @@ export default function FinancialHealthScore({ transactions = [] }) {
                 style={{ filter: `drop-shadow(0 0 4px ${color})` }} />
             </svg>
             <div className="absolute inset-0 flex items-end justify-center pb-2">
-              <p className="text-xl font-bold leading-none" style={{ color }}>{score}</p>
+              <p className="text-3xl font-bold leading-none" style={{ color }}>{score}</p>
             </div>
           </div>
           <p className="text-xs text-slate-500 leading-none mt-1">{scoreLabel(score)}</p>
