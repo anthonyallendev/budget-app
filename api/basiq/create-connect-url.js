@@ -32,6 +32,7 @@ export default async function handler(req, res) {
     const authLink = await basiq('POST', `/users/${basiqUserId}/auth_link`, {
       scope: 'CLIENT_ACCESS',
       email: user.email,
+      mobile: '+61400000000',
       redirectUrl: `${APP_URL}/transactions?basiq=connected`,
     })
 
