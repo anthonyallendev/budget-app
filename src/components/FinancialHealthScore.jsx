@@ -137,7 +137,7 @@ export default function FinancialHealthScore({ transactions = [] }) {
                 strokeDashoffset={offset}
                 style={{ filter: `drop-shadow(0 0 4px ${color})` }} />
             </svg>
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-end justify-center pb-2">
               <p className="text-xl font-bold leading-none" style={{ color }}>{score}</p>
             </div>
           </div>
