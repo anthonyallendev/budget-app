@@ -14,6 +14,13 @@ const COUNTRIES = [
   { name: 'Other',          preservationAge: 65 },
 ]
 
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16)
+  const g = parseInt(hex.slice(3, 5), 16)
+  const b = parseInt(hex.slice(5, 7), 16)
+  return `${r}, ${g}, ${b}`
+}
+
 function getAge(dob) {
   if (!dob) return null
   const today = new Date()
@@ -134,25 +141,13 @@ export default function RetirementHero() {
         </div>
       ) : (
         <div className="flex flex-col items-center relative z-10">
-          {/* Big animated age */}
-          <div className="relative" style={{ lineHeight: 1 }}>
-            {/* Blurred glow copy — sits behind, animates opacity only */}
+          {/* Big animated age — glow on the wrapper, fill never touched */}
+          <div
+            className="age-glow rounded-xl px-3"
+            style={{ '--glow-rgb': hexToRgb(accentColor) }}
+          >
             <p
-              aria-hidden="true"
-              className="font-black absolute inset-0 age-glow pointer-events-none select-none"
-              style={{
-                '--glow': accentColor,
-                fontSize: '7rem',
-                lineHeight: 1,
-                color: accentColor,
-                filter: 'blur(10px)',
-              }}
-            >
-              {displayAge ?? '—'}
-            </p>
-            {/* Crisp gradient text on top — no filter */}
-            <p
-              className="font-black leading-none relative"
+              className="font-black leading-none"
               style={{
                 fontSize: '7rem',
                 lineHeight: 1,
@@ -195,10 +190,10 @@ export default function RetirementHero() {
 
       <style>{`
         @keyframes ageGlow {
-          0%, 100% { opacity: 0.08; }
-          50%       { opacity: 0.28; }
+          0%, 100% { box-shadow: 0 0 0px 0px transparent; }
+          50%       { box-shadow: 0 0 18px 4px rgba(var(--glow-rgb), 0.2); }
         }
-        .age-glow { animation: ageGlow 5s ease-in-out infinite; }
+        .age-glow { animation: ageGlow 6s ease-in-out infinite; }
       `}</style>
     </div>
   )
