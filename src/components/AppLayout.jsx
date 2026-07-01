@@ -208,8 +208,20 @@ export default function AppLayout({ children }) {
           ))}
         </nav>
 
-        {/* Logout */}
-        <div className="p-4 border-t border-white/5">
+        {/* About + Logout */}
+        <div className="p-4 border-t border-white/5 flex flex-col gap-1">
+          <NavLink
+            to="/about"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-slate-500 hover:text-slate-200 hover:bg-white/5 transition-all duration-200"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.2">
+              <circle cx="10" cy="10" r="8" />
+              <path d="M10 9v5" strokeLinecap="round" />
+              <circle cx="10" cy="6.5" r="0.75" fill="currentColor" strokeWidth="0" />
+            </svg>
+            About Retirely
+          </NavLink>
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-slate-500 hover:text-red-400 hover:bg-red-400/5 transition-all duration-200"
