@@ -27,7 +27,7 @@ const steps = [
   },
 ]
 
-const features = [
+const tools = [
   {
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
@@ -37,18 +37,18 @@ const features = [
       </svg>
     ),
     title: 'Retirement calculator',
-    desc: 'Year-by-year projection showing exactly when your personal savings can cover your living costs until super unlocks.',
+    desc: 'Year-by-year projection showing exactly when your personal savings can cover your living costs until super unlocks. Full AU superannuation support.',
     accent: '#00d4ff',
   },
   {
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 8v4l3 3" strokeLinecap="round" />
+        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" strokeLinecap="round" strokeLinejoin="round" />
+        <polyline points="16 7 22 7 22 13" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     ),
-    title: 'Budget targets',
-    desc: 'Set a savings percentage and watch your retirement date move forward in real time.',
+    title: 'Investment strategies',
+    desc: 'Compare conservative (4%), moderate (7%), and aggressive (10%) return rates side-by-side with real ETF examples.',
     accent: '#7c3aed',
   },
   {
@@ -59,19 +59,43 @@ const features = [
       </svg>
     ),
     title: 'Spending tracker',
-    desc: 'Log transactions by category so you always know where your money is going.',
+    desc: 'Log transactions by category and see exactly where your money goes, with month-over-month comparisons.',
     accent: '#e040fb',
   },
   {
     icon: (
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
-        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" strokeLinecap="round" strokeLinejoin="round" />
-        <polyline points="16 7 22 7 22 13" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 8v4l3 3" strokeLinecap="round" />
       </svg>
     ),
-    title: 'Growth projections',
-    desc: 'Choose conservative (4%), moderate (7%), or aggressive (10%) return rates and see how each changes your future.',
+    title: 'Budget limits',
+    desc: 'Set monthly spending caps by category. Progress bars turn amber before you overspend.',
     accent: '#00d4ff',
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <path d="M20 12V22H4V12" strokeLinejoin="round" />
+        <path d="M22 7H2v5h20V7z" strokeLinejoin="round" />
+        <path d="M12 22V7M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z" strokeLinecap="round" />
+        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z" strokeLinecap="round" />
+      </svg>
+    ),
+    title: 'Savings goals',
+    desc: 'Create goals with icons, targets, and deadlines. Quick-deposit buttons let you top them up in seconds.',
+    accent: '#7c3aed',
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <line x1="12" y1="1" x2="12" y2="23" strokeLinecap="round" />
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeLinecap="round" />
+      </svg>
+    ),
+    title: 'Debt payoff calculator',
+    desc: 'Add your debts, see avalanche vs snowball payoff timelines, and track interest savings with persistent history.',
+    accent: '#e040fb',
   },
   {
     icon: (
@@ -80,8 +104,21 @@ const features = [
         <path d="M2 10h20" strokeLinecap="round" />
       </svg>
     ),
-    title: 'Budget limits',
-    desc: 'Set monthly spending caps by category so you stay on track with your savings goals.',
+    title: 'Tax estimate',
+    desc: 'Instant tax calculations for AU, US, UK, and CA. Know your effective rate and take-home pay at a glance.',
+    accent: '#00d4ff',
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <rect x="3" y="4" width="18" height="18" rx="2" strokeLinejoin="round" />
+        <line x1="16" y1="2" x2="16" y2="6" strokeLinecap="round" />
+        <line x1="8" y1="2" x2="8" y2="6" strokeLinecap="round" />
+        <line x1="3" y1="10" x2="21" y2="10" strokeLinecap="round" />
+      </svg>
+    ),
+    title: 'Bills tracker',
+    desc: "Log recurring bills (monthly, quarterly, yearly) and see what's due in the next 14 days right on your dashboard.",
     accent: '#7c3aed',
   },
   {
@@ -90,16 +127,54 @@ const features = [
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" strokeLinejoin="round" />
       </svg>
     ),
-    title: 'Super overview',
-    desc: 'Track your superannuation separately and see how it combines with personal savings for your full retirement picture.',
+    title: 'Net worth tracker',
+    desc: 'Track assets vs liabilities with daily snapshots and a historical chart showing your wealth growing over time.',
     accent: '#e040fb',
+  },
+]
+
+const habits = [
+  {
+    emoji: '🔥',
+    title: 'Daily check-in streak',
+    desc: 'Show up every day and watch your streak grow from a humble 👍 all the way to 👑. Ten levels of progression to keep you coming back.',
+    accent: '#e040fb',
+  },
+  {
+    emoji: '💚',
+    title: 'Financial health score',
+    desc: 'A live 0–100 score calculated from your savings rate, spending trend, tracking activity, and monthly surplus. Updated every week.',
+    accent: '#00d4ff',
+  },
+  {
+    emoji: '📋',
+    title: 'Weekly check-in',
+    desc: "Three quick questions each week: How's your budget? Did you save? How are you feeling financially? Builds honest self-awareness over time.",
+    accent: '#7c3aed',
+  },
+  {
+    emoji: '📈',
+    title: 'Spending pace',
+    desc: "See how this week compares to last week in real time, with a projected monthly total so surprises don't catch you off guard.",
+    accent: '#e040fb',
+  },
+  {
+    emoji: '🏆',
+    title: 'Milestone celebrations',
+    desc: "Hit a savings goal? Reach a net worth milestone? Set a new streak record? Retirely notices and celebrates it with you.",
+    accent: '#00d4ff',
+  },
+  {
+    emoji: '📊',
+    title: 'Interest rate watch',
+    desc: 'Compare the RBA cash rate against your own mortgage, savings, and credit card rates so you always know when to make a move.',
+    accent: '#7c3aed',
   },
 ]
 
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-space-900 text-white overflow-hidden">
-
 
       {/* Nav */}
       <header className="relative z-10 flex items-center justify-between px-8 py-5 glass border-b border-cyan-glow/10">
@@ -126,7 +201,7 @@ export default function AboutPage() {
         <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium text-cyan-glow border border-cyan-glow/30"
           style={{ background: 'rgba(0,212,255,0.05)' }}>
           <span className="w-1.5 h-1.5 rounded-full bg-cyan-glow animate-pulse" />
-          Your money. Your time. Your freedom.
+          Your money. Your habits. Your freedom.
         </div>
 
         <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-tight">
@@ -136,16 +211,29 @@ export default function AboutPage() {
         </h1>
 
         <p className="text-slate-400 text-lg max-w-2xl leading-relaxed">
-          Retirely is a personal savings and budgeting app built around one idea: every dollar you
-          save is a small piece of your time bought back. The more you save, the sooner you can
-          choose how you spend your days — not your employer.
+          Retirely is a personal finance app built around one idea: every dollar you save is a
+          small piece of your time bought back. Track your spending, build better habits, compete
+          on a leaderboard, and watch your retirement age count down in real time.
         </p>
 
-        <Link to="/login"
-          className="mt-2 px-8 py-3.5 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:glow-cyan"
-          style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)' }}>
-          Start for free
-        </Link>
+        <div className="flex flex-wrap gap-3 justify-center mt-2">
+          <Link to="/login"
+            className="px-8 py-3.5 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:glow-cyan"
+            style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)' }}>
+            Start for free
+          </Link>
+          <a href="#features"
+            className="px-8 py-3.5 rounded-xl font-semibold text-slate-300 hover:text-white transition-colors glass">
+            See what's inside
+          </a>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-6 mt-4 text-sm text-slate-500">
+          <span className="flex items-center gap-1.5"><span className="text-cyan-400">✓</span> No credit card required</span>
+          <span className="flex items-center gap-1.5"><span className="text-cyan-400">✓</span> Free forever tier</span>
+          <span className="flex items-center gap-1.5"><span className="text-cyan-400">✓</span> AU superannuation support</span>
+          <span className="flex items-center gap-1.5"><span className="text-cyan-400">✓</span> Bank sync available</span>
+        </div>
       </section>
 
       {/* ── The big idea ── */}
@@ -165,7 +253,8 @@ export default function AboutPage() {
             <p className="text-slate-400 leading-relaxed">
               The retirement calculator at the heart of Retirely shows you, in real time, what age you
               can genuinely stop working — based on your actual income, your savings rate, and your
-              desired lifestyle. Not a vague estimate. A real number.
+              desired lifestyle. Not a vague estimate. A real number. And every good habit you build
+              makes that number drop.
             </p>
           </div>
           <div className="flex-shrink-0 flex flex-col items-center justify-center gap-2">
@@ -174,6 +263,115 @@ export default function AboutPage() {
             <div className="px-4 py-1.5 rounded-full text-sm font-semibold mt-1"
               style={{ background: 'rgba(0,212,255,0.1)', border: '1px solid rgba(0,212,255,0.25)', color: '#00d4ff' }}>
               8 years early
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Habit engine ── */}
+      <section className="relative z-10 px-6 py-16 max-w-5xl mx-auto">
+        <div className="text-center mb-14">
+          <p className="text-pink-400 text-xs uppercase tracking-widest mb-3">Stay on track</p>
+          <h2 className="text-3xl font-bold mb-4">Good money habits are built daily</h2>
+          <p className="text-slate-400 max-w-2xl mx-auto leading-relaxed">
+            Knowing your numbers is step one. Retirely keeps you coming back with a habit
+            engine that rewards consistency and makes your progress impossible to ignore.
+          </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-5">
+          {habits.map(h => (
+            <div key={h.title}
+              className="glass rounded-2xl p-6 flex flex-col gap-3 hover:scale-[1.02] transition-transform duration-300"
+              style={{ borderColor: `${h.accent}20` }}>
+              <div className="text-3xl">{h.emoji}</div>
+              <h3 className="font-semibold text-white">{h.title}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">{h.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Streak progression preview */}
+        <div className="mt-8 glass rounded-2xl p-6"
+          style={{ borderColor: 'rgba(224,64,251,0.2)', background: 'rgba(224,64,251,0.03)' }}>
+          <p className="text-xs text-slate-500 uppercase tracking-widest mb-4 text-center">Streak progression</p>
+          <div className="flex items-center justify-between gap-2 flex-wrap">
+            {[
+              { emoji: '👍', label: 'Day 1' },
+              { emoji: '⭐', label: 'Week 1' },
+              { emoji: '🌟', label: 'Week 2' },
+              { emoji: '🔥', label: 'Week 3' },
+              { emoji: '💎', label: 'Month 1' },
+              { emoji: '🚀', label: 'Month 2' },
+              { emoji: '⚡', label: 'Month 3' },
+              { emoji: '🏆', label: 'Month 6' },
+              { emoji: '💫', label: 'Month 9' },
+              { emoji: '👑', label: 'Year 1' },
+            ].map(({ emoji, label }) => (
+              <div key={label} className="flex flex-col items-center gap-1 flex-1 min-w-[48px]">
+                <span className="text-2xl">{emoji}</span>
+                <span className="text-xs text-slate-600">{label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Leaderboard ── */}
+      <section className="relative z-10 px-6 py-16 max-w-5xl mx-auto">
+        <div className="glass rounded-3xl p-10 md:p-14 flex flex-col md:flex-row gap-12 items-center"
+          style={{ borderColor: 'rgba(124,58,237,0.2)', background: 'rgba(124,58,237,0.03)' }}>
+          <div className="flex-1">
+            <p className="text-purple-400 text-xs uppercase tracking-widest mb-3">Community</p>
+            <h2 className="text-3xl font-bold mb-5 leading-snug">
+              Compete on habits,<br />not on wealth
+            </h2>
+            <p className="text-slate-400 leading-relaxed mb-4">
+              Retirely's anonymous leaderboard ranks users on their financial <em>behaviours</em> — not
+              how much money they have. A teacher building a daily habit can outrank a high-earner
+              who never checks in.
+            </p>
+            <p className="text-slate-400 leading-relaxed mb-6">
+              Choose your own player name. No real names, no income disclosed — just healthy
+              competition to build better habits.
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { icon: '👑', label: 'Overall', desc: 'Composite score' },
+                { icon: '🔥', label: 'Streak', desc: 'Most consistent' },
+                { icon: '💚', label: 'Health', desc: 'Financial health' },
+                { icon: '💰', label: 'Savings', desc: 'Highest savings %' },
+              ].map(c => (
+                <div key={c.label} className="glass rounded-xl p-3 flex items-center gap-3"
+                  style={{ borderColor: 'rgba(124,58,237,0.15)' }}>
+                  <span className="text-xl">{c.icon}</span>
+                  <div>
+                    <p className="text-white text-sm font-semibold">{c.label}</p>
+                    <p className="text-slate-500 text-xs">{c.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="flex-shrink-0 w-full md:w-56">
+            <div className="glass rounded-2xl overflow-hidden" style={{ borderColor: 'rgba(124,58,237,0.25)' }}>
+              <div className="px-4 py-3 border-b border-white/5">
+                <p className="text-white text-sm font-semibold">👑 Overall</p>
+              </div>
+              {[
+                { rank: 1, name: 'SavingsKing', score: 94, medal: '🥇' },
+                { rank: 2, name: 'EarlyBird', score: 87, medal: '🥈' },
+                { rank: 3, name: 'FIREchaser', score: 81, medal: '🥉' },
+                { rank: 4, name: 'You?', score: '–', medal: '4' },
+              ].map(u => (
+                <div key={u.rank}
+                  className={`flex items-center gap-3 px-4 py-3 ${u.name === 'You?' ? 'border-t border-cyan-glow/20' : ''}`}
+                  style={u.name === 'You?' ? { background: 'rgba(0,212,255,0.04)' } : {}}>
+                  <span className="text-sm w-5 text-center">{u.medal}</span>
+                  <span className={`text-sm flex-1 ${u.name === 'You?' ? 'text-cyan-400' : 'text-slate-300'}`}>{u.name}</span>
+                  <span className={`text-sm font-bold ${u.name === 'You?' ? 'text-slate-500' : 'text-white'}`}>{u.score}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -191,7 +389,6 @@ export default function AboutPage() {
         </div>
 
         <div className="grid md:grid-cols-2 gap-6">
-          {/* Super card */}
           <div className="glass rounded-2xl p-8 flex flex-col gap-4"
             style={{ borderColor: 'rgba(148,163,184,0.15)' }}>
             <div className="flex items-center gap-3">
@@ -207,7 +404,7 @@ export default function AboutPage() {
             <ul className="flex flex-col gap-3 text-sm text-slate-400">
               {[
                 'Locked until preservation age (57–67 depending on country)',
-                'You can\'t touch it early, even in an emergency',
+                "You can't touch it early, even in an emergency",
                 'Employer contributions help it grow, but slowly',
                 'Useful from preservation age — but not before',
               ].map(item => (
@@ -219,7 +416,6 @@ export default function AboutPage() {
             </ul>
           </div>
 
-          {/* Personal savings card */}
           <div className="glass rounded-2xl p-8 flex flex-col gap-4"
             style={{ borderColor: 'rgba(0,212,255,0.2)', background: 'rgba(0,212,255,0.03)' }}>
             <div className="flex items-center gap-3">
@@ -271,7 +467,7 @@ export default function AboutPage() {
         </div>
 
         <div className="flex flex-col gap-6">
-          {steps.map((step, i) => (
+          {steps.map(step => (
             <div key={step.number} className="glass rounded-2xl p-7 flex items-start gap-6"
               style={{ borderColor: `${step.accent}18` }}>
               <div className="flex-shrink-0 text-4xl font-black leading-none"
@@ -282,23 +478,23 @@ export default function AboutPage() {
                 <h3 className="font-semibold text-white mb-1">{step.title}</h3>
                 <p className="text-slate-400 text-sm leading-relaxed">{step.desc}</p>
               </div>
-              {i < steps.length - 1 && (
-                <div className="absolute left-[3.25rem] mt-20 w-px h-6 bg-white/5" />
-              )}
             </div>
           ))}
         </div>
       </section>
 
-      {/* ── Features ── */}
-      <section className="relative z-10 px-6 py-16 max-w-5xl mx-auto">
+      {/* ── Full tools grid ── */}
+      <section id="features" className="relative z-10 px-6 py-16 max-w-5xl mx-auto">
         <div className="text-center mb-14">
           <p className="text-pink-400 text-xs uppercase tracking-widest mb-3">What's included</p>
           <h2 className="text-3xl font-bold">Everything you need, nothing you don't</h2>
+          <p className="text-slate-400 max-w-xl mx-auto mt-4 leading-relaxed">
+            Nine financial tools in one dashboard. All free to start.
+          </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-5">
-          {features.map(f => (
+          {tools.map(f => (
             <div key={f.title}
               className="glass rounded-2xl p-6 flex flex-col gap-3 hover:scale-[1.02] transition-transform duration-300"
               style={{ borderColor: `${f.accent}20` }}>
@@ -310,6 +506,47 @@ export default function AboutPage() {
               <p className="text-slate-400 text-sm leading-relaxed">{f.desc}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* ── Bank sync ── */}
+      <section className="relative z-10 px-6 py-16 max-w-5xl mx-auto">
+        <div className="glass rounded-3xl p-10 flex flex-col md:flex-row gap-10 items-center"
+          style={{ borderColor: 'rgba(0,212,255,0.15)', background: 'rgba(0,212,255,0.02)' }}>
+          <div className="flex-1">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium mb-4"
+              style={{ background: 'rgba(0,212,255,0.08)', color: '#00d4ff', border: '1px solid rgba(0,212,255,0.2)' }}>
+              ⚡ Premium feature
+            </div>
+            <h2 className="text-2xl font-bold mb-4">Connect your bank. Stop typing everything manually.</h2>
+            <p className="text-slate-400 leading-relaxed mb-4">
+              Upgrade to Premium and connect your real bank account. Transactions import automatically
+              — no spreadsheet, no manual entry, no forgetting to log that coffee.
+            </p>
+            <div className="flex flex-wrap gap-4 text-sm">
+              <div className="flex items-center gap-2 text-slate-300">
+                <span className="text-cyan-400">✓</span> Plaid — US, UK, Canada
+              </div>
+              <div className="flex items-center gap-2 text-slate-300">
+                <span className="text-cyan-400">✓</span> Basiq — Australia
+              </div>
+            </div>
+          </div>
+          <div className="flex-shrink-0 flex flex-col gap-3 text-sm">
+            <div className="glass rounded-xl px-5 py-3 flex items-center gap-3"
+              style={{ borderColor: 'rgba(255,255,255,0.06)' }}>
+              <span className="text-slate-500">Free</span>
+              <span className="text-slate-400 flex-1">Manual entry — always available</span>
+              <span className="text-cyan-400">✓</span>
+            </div>
+            <div className="glass rounded-xl px-5 py-3 flex items-center gap-3"
+              style={{ borderColor: 'rgba(0,212,255,0.2)', background: 'rgba(0,212,255,0.05)' }}>
+              <span className="text-cyan-400 font-semibold">Premium</span>
+              <span className="text-slate-300 flex-1">Automatic bank sync</span>
+              <span className="text-cyan-400">⚡</span>
+            </div>
+            <p className="text-slate-600 text-xs text-center">From $9/month · Cancel any time</p>
+          </div>
         </div>
       </section>
 
@@ -332,15 +569,20 @@ export default function AboutPage() {
             Find out your{' '}
             <span className="text-gradient">number</span>
           </h2>
-          <p className="text-slate-400 mb-8 leading-relaxed">
-            It takes less than two minutes to set up. No credit card, no commitment.
+          <p className="text-slate-400 mb-3 leading-relaxed">
+            Set up your profile in under two minutes. No credit card, no commitment.
             Just a clear, honest picture of when you can stop trading time for money.
+          </p>
+          <p className="text-slate-500 text-sm mb-8">
+            Then start your streak. Check in weekly. Climb the leaderboard.<br />
+            Watch your retirement age count down.
           </p>
           <Link to="/login"
             className="inline-block px-10 py-4 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:glow-cyan"
             style={{ background: 'linear-gradient(135deg, #00d4ff, #7c3aed)' }}>
             Get started for free
           </Link>
+          <p className="text-slate-600 text-xs mt-4">Free forever · Premium from $9/mo · Cancel any time</p>
         </div>
       </section>
 
