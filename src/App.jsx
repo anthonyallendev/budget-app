@@ -16,6 +16,7 @@ import DebtPayoffPage from './pages/DebtPayoffPage'
 import SavingsGoalsPage from './pages/SavingsGoalsPage'
 import NetWorthPage from './pages/NetWorthPage'
 import BillsPage from './pages/BillsPage'
+import LeaderboardPage from './pages/LeaderboardPage'
 import PrivateRoute from './components/PrivateRoute'
 
 function Private({ children }) {
@@ -43,6 +44,7 @@ export default function App() {
         <Route path="/savings-goals"  element={<Private><SavingsGoalsPage /></Private>} />
         <Route path="/net-worth"      element={<Private><NetWorthPage /></Private>} />
         <Route path="/bills"          element={<Private><BillsPage /></Private>} />
+        <Route path="/leaderboard"    element={<Private><LeaderboardPage /></Private>} />
       </Routes>
     </BrowserRouter>
   )

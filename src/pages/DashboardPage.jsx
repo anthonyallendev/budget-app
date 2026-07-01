@@ -13,6 +13,7 @@ import GoalQuickDeposit from '../components/GoalQuickDeposit'
 import MilestoneBanner from '../components/MilestoneBanner'
 import FinancialHealthScore from '../components/FinancialHealthScore'
 import InterestRateWidget from '../components/InterestRateWidget'
+import { publishLeaderboardScore } from '../lib/leaderboard'
 import { useTransactions } from '../hooks/useTransactions'
 import { useProfile } from '../hooks/useProfile'
 import { supabase } from '../lib/supabase'
@@ -52,6 +53,7 @@ export default function DashboardPage() {
       supabase.from('savings_goals').select('id').eq('user_id', user.id).limit(1)
         .then(({ data }) => setHasGoal(!!(data && data.length > 0)))
     })
+    publishLeaderboardScore()
   }, [])
   const { spent, earned, surplus } = getMonthStats(transactions)
   const last = getLastMonthStats(transactions)

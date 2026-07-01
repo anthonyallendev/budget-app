@@ -169,6 +169,14 @@ function IconBills() {
   )
 }
 
+function IconLeaderboard() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <path d="M10 2l2.2 4.5 5 .7-3.6 3.5.85 4.9L10 13.3l-4.45 2.3.85-4.9L2.8 7.2l5-.7z" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
 const NAV = [
   { to: '/dashboard',      label: 'Dashboard',      Icon: IconDashboard      },
   { to: '/retirement',     label: 'Retirement',     Icon: IconRetirement     },
@@ -181,6 +189,7 @@ const NAV = [
   { to: '/tax',            label: 'Tax Estimate',   Icon: IconTax            },
   { to: '/debt',           label: 'Debt Payoff',    Icon: IconDebt           },
   { to: '/bills',          label: 'Bills',          Icon: IconBills          },
+  { to: '/leaderboard',   label: 'Leaderboard',    Icon: IconLeaderboard    },
 ]
 
 // ── Layout ───────────────────────────────────────────────────────────────────
