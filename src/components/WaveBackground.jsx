@@ -19,9 +19,9 @@ export default function WaveBackground() {
       backgroundColor: 0x060b1a,
       color:           0x00d4ff,
       color2:          0x7c3aed,
-      points:      18,
-      maxDistance: 22,
-      spacing:     16,
+      points:      8,
+      maxDistance: 25,
+      spacing:     35,
     })
 
     return () => {
