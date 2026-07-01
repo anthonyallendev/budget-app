@@ -108,7 +108,7 @@ export default function FinancialHealthScore({ transactions = [] }) {
   const delta = prev ? score - prev.score : null
 
   // Arc SVG
-  const R = 40, cx = 50, cy = 52
+  const R = 40, cx = 50, cy = 50
   const circumference = Math.PI * R
   const offset = circumference * (1 - score / 100)
 
@@ -126,20 +126,22 @@ export default function FinancialHealthScore({ transactions = [] }) {
 
       <div className="flex items-center gap-6">
         {/* Arc gauge */}
-        <div className="relative shrink-0" style={{ width: 100, height: 60 }}>
-          <svg viewBox="0 0 100 60" width="100" height="60">
-            <path d={`M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${cx + R} ${cy}`}
-              fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" strokeLinecap="round" />
-            <path d={`M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${cx + R} ${cy}`}
-              fill="none" stroke={color} strokeWidth="8" strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={offset}
-              style={{ filter: `drop-shadow(0 0 4px ${color})` }} />
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-end pb-0.5">
-            <p className="text-xl font-bold leading-none" style={{ color }}>{score}</p>
-            <p className="text-xs text-slate-500 leading-none mt-0.5">{scoreLabel(score)}</p>
+        <div className="shrink-0 flex flex-col items-center" style={{ width: 100 }}>
+          <div className="relative" style={{ width: 100, height: 56 }}>
+            <svg viewBox="0 0 100 56" width="100" height="56">
+              <path d={`M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${cx + R} ${cy}`}
+                fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" strokeLinecap="round" />
+              <path d={`M ${cx - R} ${cy} A ${R} ${R} 0 0 1 ${cx + R} ${cy}`}
+                fill="none" stroke={color} strokeWidth="8" strokeLinecap="round"
+                strokeDasharray={circumference}
+                strokeDashoffset={offset}
+                style={{ filter: `drop-shadow(0 0 4px ${color})` }} />
+            </svg>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <p className="text-xl font-bold leading-none" style={{ color }}>{score}</p>
+            </div>
           </div>
+          <p className="text-xs text-slate-500 leading-none mt-1">{scoreLabel(score)}</p>
         </div>
 
         {/* Breakdown */}
