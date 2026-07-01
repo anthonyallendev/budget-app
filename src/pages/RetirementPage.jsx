@@ -74,18 +74,22 @@ function buildChartData(currentAge, retirementAge, preservationAge, currentSavin
   const data = []
   const r = rate / 100
 
+  const hasDrawdown = retirementAge && retirementAge < preservationAge && desiredAnnualIncome
+
   // Phase 1 — accumulation
   const endAge = retirementAge ?? preservationAge
   for (let age = currentAge; age <= endAge; age++) {
+    const val = Math.round(projectSavings(currentSavings, monthlyContrib, rate, age - currentAge))
     data.push({
       age,
-      accumulation: Math.round(projectSavings(currentSavings, monthlyContrib, rate, age - currentAge)),
-      drawdown: null,
+      accumulation: val,
+      // share the peak point with drawdown so the two lines connect
+      drawdown: (hasDrawdown && age === endAge) ? val : null,
     })
   }
 
   // Phase 2 — drawdown (only if retiring before preservation age)
-  if (retirementAge && retirementAge < preservationAge && desiredAnnualIncome) {
+  if (hasDrawdown) {
     let bal = projectSavings(currentSavings, monthlyContrib, rate, retirementAge - currentAge)
     for (let age = retirementAge + 1; age <= preservationAge; age++) {
       bal = bal * (1 + r) - desiredAnnualIncome
