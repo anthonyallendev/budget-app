@@ -87,8 +87,8 @@ export default function DashboardPage() {
       {/* Onboarding checklist — hides once all steps complete */}
       <OnboardingChecklist profile={profile} transactions={transactions} hasGoal={hasGoal} />
 
-      {/* Cash flow summary */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      {/* Cash flow summary + retirement age */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         {[
           {
             label: 'Income this month', value: fmt(earned), accent: '#00d4ff', prefix: '+',
@@ -123,6 +123,7 @@ export default function DashboardPage() {
             }
           </div>
         ))}
+        <RetirementHero compact />
       </div>
 
       {/* Milestone banners — goal completions, net worth highs, debt milestones */}
@@ -144,11 +145,6 @@ export default function DashboardPage() {
       {/* Spending pace */}
       <div className="mb-6">
         <SpendingPace transactions={transactions} />
-      </div>
-
-      {/* Retirement hero — the big number */}
-      <div className="mb-6">
-        <RetirementHero />
       </div>
 
       {/* Utility row: goals quick-deposit + upcoming bills */}
