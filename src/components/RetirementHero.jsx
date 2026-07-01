@@ -135,20 +135,35 @@ export default function RetirementHero() {
       ) : (
         <div className="flex flex-col items-center relative z-10">
           {/* Big animated age */}
-          <p
-            className="font-black leading-none age-glow"
-            style={{
-              '--glow':     accentColor,
-              '--glow-dim': `${accentColor}25`,
-              fontSize: '7rem',
-              lineHeight: 1,
-              background: `linear-gradient(135deg, ${accentColor}, #7c3aed)`,
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-            }}
-          >
-            {displayAge ?? '—'}
-          </p>
+          <div className="relative" style={{ lineHeight: 1 }}>
+            {/* Blurred glow copy — sits behind, animates opacity only */}
+            <p
+              aria-hidden="true"
+              className="font-black absolute inset-0 age-glow pointer-events-none select-none"
+              style={{
+                '--glow': accentColor,
+                fontSize: '7rem',
+                lineHeight: 1,
+                color: accentColor,
+                filter: 'blur(10px)',
+              }}
+            >
+              {displayAge ?? '—'}
+            </p>
+            {/* Crisp gradient text on top — no filter */}
+            <p
+              className="font-black leading-none relative"
+              style={{
+                fontSize: '7rem',
+                lineHeight: 1,
+                background: `linear-gradient(135deg, ${accentColor}, #7c3aed)`,
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              {displayAge ?? '—'}
+            </p>
+          </div>
 
           {/* Years early / late label */}
           <div className="mt-3 flex items-center gap-2">
@@ -180,13 +195,8 @@ export default function RetirementHero() {
 
       <style>{`
         @keyframes ageGlow {
-          0%, 100% {
-            filter: drop-shadow(0 0 1px var(--glow-dim));
-          }
-          50% {
-            filter: drop-shadow(0 0 3px var(--glow))
-                    drop-shadow(0 0 8px var(--glow-dim));
-          }
+          0%, 100% { opacity: 0.08; }
+          50%       { opacity: 0.28; }
         }
         .age-glow { animation: ageGlow 5s ease-in-out infinite; }
       `}</style>
