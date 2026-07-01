@@ -1,96 +1,41 @@
 import { useEffect, useRef } from 'react'
-
-const SPACING = 14  // grid cell size in px
-
-// Three overlapping wave layers
-const WAVES = [
-  { freq: 0.042, amp: 45, speed: 0.55, rowFactor: 0.38, phase: 0.0 },
-  { freq: 0.078, amp: 20, speed: 0.85, rowFactor: 0.22, phase: 1.9 },
-  { freq: 0.018, amp: 65, speed: 0.30, rowFactor: 0.55, phase: 3.7 },
-]
-
-const MAX_AMP = WAVES.reduce((s, w) => s + w.amp, 0)
+import * as THREE from 'three'
+import NET from 'vanta/dist/vanta.net.min'
 
 export default function WaveBackground() {
-  const ref = useRef(null)
+  const ref     = useRef(null)
+  const vantaRef = useRef(null)
 
   useEffect(() => {
-    const canvas = ref.current
-    const ctx    = canvas.getContext('2d')
-    let animId, t = 0
+    vantaRef.current = NET({
+      el:            ref.current,
+      THREE,
+      mouseControls: true,
+      touchControls: true,
+      gyroControls:  false,
+      minHeight:     200,
+      minWidth:      200,
+      scale:         1.0,
+      scaleMobile:   1.0,
+      // Brand colours
+      backgroundColor: 0x060b1a,  // dark navy — matches our bg-space-900
+      color:           0x00d4ff,  // cyan
+      color2:          0x7c3aed,  // purple (used for secondary points)
+      // Network density
+      points:      18,
+      maxDistance: 22,
+      spacing:     16,
+    })
 
-    function resize() {
-      const dpr        = window.devicePixelRatio || 1
-      canvas.width     = window.innerWidth  * dpr
-      canvas.height    = window.innerHeight * dpr
-      canvas.style.width  = window.innerWidth  + 'px'
-      canvas.style.height = window.innerHeight + 'px'
-      ctx.scale(dpr, dpr)
-    }
-    resize()
-    window.addEventListener('resize', resize)
-
-    function draw() {
-      const W = window.innerWidth
-      const H = window.innerHeight
-      ctx.clearRect(0, 0, W, H)
-
-      const cols = Math.ceil(W / SPACING) + 2
-      const rows = Math.ceil(H / SPACING) + 4
-
-      for (let col = 0; col < cols; col++) {
-        for (let row = 0; row < rows; row++) {
-          // Sum wave layers
-          let disp = 0
-          for (const w of WAVES) {
-            disp += Math.sin(
-              col * w.freq + row * w.freq * w.rowFactor + t * w.speed + w.phase
-            ) * w.amp
-          }
-
-          // Normalise to 0 (trough) → 1 (crest)
-          const n = (disp / MAX_AMP + 1) / 2
-
-          // Crests are large and bright; troughs are tiny and near-invisible
-          const alpha  = 0.03 + n * 0.88
-          if (alpha < 0.05) continue   // skip invisible dots
-
-          const radius = 0.3 + n * 2.4
-
-          // Colour: deep cyan at base → pure white at crests
-          const r = Math.round(n * 255)
-          const g = Math.round(180 + n * 75)
-          const b = 255
-
-          // Subtle Y displacement makes the dots actually ripple
-          const cy = row * SPACING + disp * 0.18
-
-          ctx.beginPath()
-          ctx.arc(col * SPACING, cy, radius, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(${r},${g},${b},${alpha.toFixed(2)})`
-          ctx.fill()
-        }
-      }
-
-      t += 0.022
-      animId = requestAnimationFrame(draw)
-    }
-
-    draw()
     return () => {
-      cancelAnimationFrame(animId)
-      window.removeEventListener('resize', resize)
+      if (vantaRef.current) vantaRef.current.destroy()
     }
   }, [])
 
   return (
-    <canvas
+    <div
       ref={ref}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
-        transform: 'rotate(45deg) scale(1.6)',
-        transformOrigin: 'center center',
-      }}
+      style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}
     />
   )
 }
