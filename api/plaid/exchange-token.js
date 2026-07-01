@@ -58,8 +58,7 @@ export async function syncTransactions(userId, accessToken, cursor) {
       type:                 t.amount > 0 ? 'expense' : 'income',
       amount:               Math.abs(t.amount),
       date:                 t.date,
-      name:                 t.merchant_name ?? t.name,
-      description:          t.name,
+      description:          t.merchant_name ?? t.name,
       merchant_name:        t.merchant_name ?? null,
       category:             t.personal_finance_category?.primary
                               ?? t.category?.[0]
@@ -69,9 +68,11 @@ export async function syncTransactions(userId, accessToken, cursor) {
       source:               'plaid',
     }))
 
-    await supabaseAdmin
+    const { error: upsertErr } = await supabaseAdmin
       .from('transactions')
       .upsert(rows, { onConflict: 'plaid_transaction_id', ignoreDuplicates: false })
+
+    if (upsertErr) throw upsertErr
   }
 
   // Save cursor so next sync only fetches new data
