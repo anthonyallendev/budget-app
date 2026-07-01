@@ -100,7 +100,7 @@ export default function BudgetLimitsPanel({ transactions }) {
                       onBlur={() => saveEdit(cat)}
                       onKeyDown={e => e.key === 'Enter' && saveEdit(cat)}
                       className="w-20 text-right rounded-md px-2 py-0.5 text-white text-xs outline-none"
-                      style={{ background: 'linear-gradient(rgba(6,11,26,0.8),rgba(6,11,26,0.8)) padding-box,linear-gradient(135deg,#00d4ff,#7c3aed,#e040fb) border-box', border: '1px solid transparent' }}
+                      style={{ background: 'rgba(6,11,26,0.8)', border: '1px solid rgba(0,212,255,0.18)' }}
                       placeholder="limit"
                     />
                   ) : (
@@ -145,7 +145,7 @@ export default function BudgetLimitsPanel({ transactions }) {
                     onBlur={() => saveEdit(cat)}
                     onKeyDown={e => e.key === 'Enter' && saveEdit(cat)}
                     className="w-20 text-right rounded-md px-2 py-0.5 text-white text-xs outline-none"
-                    style={{ background: 'linear-gradient(rgba(6,11,26,0.8),rgba(6,11,26,0.8)) padding-box,linear-gradient(135deg,#00d4ff,#7c3aed,#e040fb) border-box', border: '1px solid transparent' }}
+                    style={{ background: 'rgba(6,11,26,0.8)', border: '1px solid rgba(0,212,255,0.18)' }}
                     placeholder="set limit"
                   />
                 ) : (

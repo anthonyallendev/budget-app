@@ -10,8 +10,8 @@ async function authHeaders() {
 }
 
 const inputStyle = {
-  background: 'linear-gradient(rgba(6,11,26,0.8),rgba(6,11,26,0.8)) padding-box,linear-gradient(135deg,#00d4ff,#7c3aed,#e040fb) border-box',
-  border: '1px solid transparent',
+  background: 'rgba(6,11,26,0.8)',
+  border: '1px solid rgba(0,212,255,0.18)',
 }
 
 function UpgradePrompt() {
