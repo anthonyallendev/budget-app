@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AppLayout from '../components/AppLayout'
 import TransactionForm from '../components/TransactionForm'
 import TransactionList from '../components/TransactionList'
 import PlaidLinkButton from '../components/PlaidLinkButton'
+import BasiqLinkButton from '../components/BasiqLinkButton'
 import { useTransactions } from '../hooks/useTransactions'
 import { supabase } from '../lib/supabase'
 
@@ -21,12 +22,14 @@ export default function TransactionsPage() {
   const [showForm, setShowForm] = useState(false)
 
   const plaidCount = transactions.filter(t => t.source === 'plaid').length
+  const basiqCount = transactions.filter(t => t.source === 'basiq').length
 
-  async function handleSync() {
+  async function handleSync(source = 'plaid') {
     setSyncing(true)
     setSyncMsg(null)
     try {
-      const res  = await fetch('/api/plaid/sync', { method: 'POST', headers: await authHeaders() })
+      const endpoint = source === 'basiq' ? '/api/basiq/sync' : '/api/plaid/sync'
+      const res  = await fetch(endpoint, { method: 'POST', headers: await authHeaders() })
       const data = await res.json()
       setSyncMsg(data.synced > 0 ? `${data.synced} new transactions imported` : 'Already up to date')
       await refresh()
@@ -38,6 +41,15 @@ export default function TransactionsPage() {
     }
   }
 
+  // Auto-sync after returning from Basiq Connect
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('basiq') === 'connected') {
+      window.history.replaceState({}, '', '/transactions')
+      handleSync('basiq')
+    }
+  }, [])
+
   return (
     <AppLayout>
       <div className="flex items-start justify-between mb-8 gap-4 flex-wrap">
@@ -46,10 +58,10 @@ export default function TransactionsPage() {
           <p className="text-slate-400 text-sm">Add manually or import directly from your bank.</p>
         </div>
         <div className="flex items-center gap-3 flex-wrap">
-          {/* Sync button — shown once at least one Plaid connection exists */}
-          {plaidCount > 0 && (
+          {/* Sync button — shown once at least one bank connection exists */}
+          {(plaidCount > 0 || basiqCount > 0) && (
             <button
-              onClick={handleSync}
+              onClick={() => handleSync(basiqCount > 0 ? 'basiq' : 'plaid')}
               disabled={syncing}
               className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-cyan-400 glass transition-colors disabled:opacity-50"
             >
@@ -80,20 +92,39 @@ export default function TransactionsPage() {
 
       <div className="flex flex-col gap-6">
 
-        {/* Connect bank card — always visible at the top */}
-        <div className="glass rounded-2xl p-7 flex flex-col sm:flex-row items-center gap-6"
-          style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
-          <div className="flex-1">
-            <p className="text-white font-semibold mb-1">
-              {plaidCount > 0 ? 'Add another bank account' : 'Connect your bank'}
-            </p>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              {plaidCount > 0
-                ? `${plaidCount} transactions imported so far. Connect another account or hit Sync to pull in the latest.`
-                : 'Import transactions automatically from your bank. Works with thousands of banks in the US, UK and Canada.'}
-            </p>
+        {/* Connect bank cards */}
+        <div className="grid sm:grid-cols-2 gap-4">
+          {/* Plaid — US / UK / CA */}
+          <div className="glass rounded-2xl p-6 flex flex-col gap-4"
+            style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
+            <div>
+              <p className="text-white font-semibold mb-1">
+                {plaidCount > 0 ? 'Add another US/UK/CA account' : 'Connect your bank'}
+              </p>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                {plaidCount > 0
+                  ? `${plaidCount} transactions imported. Connect another or hit Sync.`
+                  : 'Works with thousands of banks in the US, UK, and Canada.'}
+              </p>
+            </div>
+            <PlaidLinkButton onSuccess={async () => { await refresh() }} />
           </div>
-          <PlaidLinkButton onSuccess={async () => { await refresh() }} />
+
+          {/* Basiq — Australia */}
+          <div className="glass rounded-2xl p-6 flex flex-col gap-4"
+            style={{ borderColor: 'rgba(168,85,247,0.15)' }}>
+            <div>
+              <p className="text-white font-semibold mb-1">
+                {basiqCount > 0 ? 'Add another Australian account' : 'Connect Australian bank'}
+              </p>
+              <p className="text-slate-400 text-sm leading-relaxed">
+                {basiqCount > 0
+                  ? `${basiqCount} transactions imported. Connect another or hit Sync.`
+                  : 'Works with 100+ Australian banks via open banking.'}
+              </p>
+            </div>
+            <BasiqLinkButton />
+          </div>
         </div>
 
         {/* Manual entry form — toggled */}
