@@ -245,7 +245,7 @@ export default function InvestmentStrategiesPage() {
                   value={initial}
                   onChange={e => setInitial(Math.max(0, parseInt(e.target.value) || 0))}
                   className="rounded-lg px-3 py-2 text-white text-sm outline-none w-36"
-                  style={{ background: 'rgba(6,11,26,0.8)', border: '1px solid rgba(0,212,255,0.15)' }}
+                  style={{ background: 'linear-gradient(rgba(6,11,26,0.8),rgba(6,11,26,0.8)) padding-box,linear-gradient(135deg,#00d4ff,#7c3aed,#e040fb) border-box', border: '1px solid transparent' }}
                 />
               </div>
             </div>

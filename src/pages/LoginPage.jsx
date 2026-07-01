@@ -78,8 +78,8 @@ export default function LoginPage() {
                 placeholder="you@example.com"
                 className="rounded-lg px-4 py-2.5 text-white text-sm outline-none transition-all duration-200 focus:border-cyan-glow/60"
                 style={{
-                  background: 'rgba(6,11,26,0.8)',
-                  border: '1px solid rgba(0,212,255,0.15)',
+                  background: 'linear-gradient(rgba(6,11,26,0.8),rgba(6,11,26,0.8)) padding-box,linear-gradient(135deg,#00d4ff,#7c3aed,#e040fb) border-box',
+                  border: '1px solid transparent',
                 }}
                 onFocus={e => e.target.style.boxShadow = '0 0 0 3px rgba(0,212,255,0.12)'}
                 onBlur={e => e.target.style.boxShadow = 'none'}
@@ -95,8 +95,8 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 className="rounded-lg px-4 py-2.5 text-white text-sm outline-none transition-all duration-200"
                 style={{
-                  background: 'rgba(6,11,26,0.8)',
-                  border: '1px solid rgba(0,212,255,0.15)',
+                  background: 'linear-gradient(rgba(6,11,26,0.8),rgba(6,11,26,0.8)) padding-box,linear-gradient(135deg,#00d4ff,#7c3aed,#e040fb) border-box',
+                  border: '1px solid transparent',
                 }}
                 onFocus={e => e.target.style.boxShadow = '0 0 0 3px rgba(0,212,255,0.12)'}
                 onBlur={e => e.target.style.boxShadow = 'none'}

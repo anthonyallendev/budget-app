@@ -31,8 +31,10 @@
 }
 
 @utility glass {
-  background: rgba(13, 22, 48, 0.97);
+  background:
+    linear-gradient(rgba(13, 22, 48, 0.97), rgba(13, 22, 48, 0.97)) padding-box,
+    linear-gradient(135deg, #00d4ff 0%, #7c3aed 60%, #e040fb 100%) border-box;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  border: 1px solid rgba(0, 212, 255, 0.15);
+  border: 1px solid transparent;
 }
