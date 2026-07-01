@@ -521,7 +521,7 @@ export default function RetirementPage() {
             </div>
             {chartData.length > 1 ? (
               <ResponsiveContainer width="100%" height={260}>
-                <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                <AreaChart data={chartData} margin={{ top: 10, right: 10, left: 0, bottom: 16 }}>
                   <defs>
                     <linearGradient id="gradAccum" x1="0" y1="0" x2="0" y2="1">
                       <stop offset="5%"  stopColor="#00d4ff" stopOpacity={0.3} />
@@ -533,16 +533,12 @@ export default function RetirementPage() {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                  <XAxis dataKey="age" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
+                  <XAxis dataKey="age" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false}
+                    label={{ value: 'Age', position: 'insideBottomRight', offset: -4, fill: '#475569', fontSize: 11 }} />
                   <YAxis tickFormatter={v => fmt(v)} tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false} width={60} />
                   <Tooltip content={<CustomTooltip />} />
                   {earlyRetireAge && earlyRetireAge < preservationAge && (
-                    <ReferenceLine x={earlyRetireAge} stroke="#e040fb" strokeDasharray="4 4"
-                      label={({ viewBox }) => (
-                        <text x={viewBox.x - 10} y={viewBox.y + 16} textAnchor="end" fill="#e040fb" fontSize={11}>
-                          Age {earlyRetireAge}
-                        </text>
-                      )} />
+                    <ReferenceLine x={earlyRetireAge} stroke="#e040fb" strokeDasharray="4 4" />
                   )}
                   <Area type="monotone" dataKey="accumulation" name="Savings" stroke="#00d4ff" strokeWidth={2} fill="url(#gradAccum)" dot={false} connectNulls={false} />
                   <Area type="monotone" dataKey="drawdown" name="Drawdown" stroke="#e040fb" strokeWidth={2} fill="url(#gradDraw)" dot={false} connectNulls={false} />
