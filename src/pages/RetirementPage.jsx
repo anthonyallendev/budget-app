@@ -90,9 +90,17 @@ function buildChartData(currentAge, retirementAge, preservationAge, currentSavin
 
   // Phase 2 — drawdown (only if retiring before preservation age)
   if (hasDrawdown) {
-    let bal = projectSavings(currentSavings, monthlyContrib, rate, retirementAge - currentAge)
+    const bal0     = projectSavings(currentSavings, monthlyContrib, rate, retirementAge - currentAge)
+    const gapYears = preservationAge - retirementAge
+    // Use the withdrawal rate that exactly exhausts savings at preservation age,
+    // so the chart always reaches zero — the user's desired income determined
+    // the retirement age; this ensures the line visually closes correctly.
+    const annualWithdrawal = r === 0
+      ? bal0 / gapYears
+      : bal0 * r / (1 - Math.pow(1 + r, -gapYears))
+    let bal = bal0
     for (let age = retirementAge + 1; age <= preservationAge; age++) {
-      bal = bal * (1 + r) - desiredAnnualIncome
+      bal = bal * (1 + r) - annualWithdrawal
       data.push({
         age,
         accumulation: null,
