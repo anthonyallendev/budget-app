@@ -73,14 +73,37 @@ const STRATEGIES = [
   },
 ]
 
+// ── Contribution frequency options ───────────────────────────────────────────
+
+const FREQUENCIES = [
+  { key: 'none',        label: 'None',        periods: 0  },
+  { key: 'weekly',      label: 'Weekly',      periods: 52 },
+  { key: 'fortnightly', label: 'Fortnightly', periods: 26 },
+  { key: 'monthly',     label: 'Monthly',     periods: 12 },
+  { key: 'quarterly',   label: 'Quarterly',   periods: 4  },
+]
+
 // ── Chart helpers ─────────────────────────────────────────────────────────────
 
-function buildChartData(initial, years) {
+function futureValue(initial, annualRate, years, contribution, periods) {
+  if (periods === 0 || contribution === 0) {
+    return Math.round(initial * Math.pow(1 + annualRate, years))
+  }
+  const r = annualRate / periods
+  const n = years * periods
+  return Math.round(
+    initial * Math.pow(1 + r, n) +
+    contribution * ((Math.pow(1 + r, n) - 1) / r)
+  )
+}
+
+function buildChartData(initial, years, contribution, periods) {
   return Array.from({ length: years + 1 }, (_, yr) => ({
     year:         yr,
-    conservative: Math.round(initial * Math.pow(1.04, yr)),
-    moderate:     Math.round(initial * Math.pow(1.07, yr)),
-    aggressive:   Math.round(initial * Math.pow(1.10, yr)),
+    contributed:  initial + contribution * periods * yr,
+    conservative: futureValue(initial, 0.04, yr, contribution, periods),
+    moderate:     futureValue(initial, 0.07, yr, contribution, periods),
+    aggressive:   futureValue(initial, 0.10, yr, contribution, periods),
   }))
 }
 
@@ -92,11 +115,19 @@ function fmtCurrency(n) {
 
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null
+  const contributed = payload.find(p => p.dataKey === 'contributed')
+  const strategies  = payload.filter(p => p.dataKey !== 'contributed')
   return (
     <div className="glass rounded-xl px-4 py-3 text-xs flex flex-col gap-1.5"
-      style={{ border: '1px solid rgba(255,255,255,0.08)', minWidth: 160 }}>
+      style={{ border: '1px solid rgba(255,255,255,0.08)', minWidth: 180 }}>
       <p className="text-slate-400 mb-1">Year {label}</p>
-      {payload.map(p => (
+      {contributed && contributed.value > 0 && (
+        <div className="flex justify-between gap-4 pb-1.5 mb-0.5 border-b border-white/5">
+          <span className="text-slate-500">Total invested</span>
+          <span className="text-slate-400 font-semibold">{fmtCurrency(contributed.value)}</span>
+        </div>
+      )}
+      {strategies.map(p => (
         <div key={p.dataKey} className="flex justify-between gap-4">
           <span style={{ color: p.color }}>{p.name}</span>
           <span className="text-white font-semibold">{fmtCurrency(p.value)}</span>
@@ -108,9 +139,11 @@ function CustomTooltip({ active, payload, label }) {
 
 // ── Strategy card ─────────────────────────────────────────────────────────────
 
-function StrategyCard({ s, initial, years }) {
-  const finalValue = Math.round(initial * Math.pow(1 + s.rate, years))
-  const gain       = finalValue - initial
+function StrategyCard({ s, initial, years, contribution, periods, freqLabel }) {
+  const finalValue     = futureValue(initial, s.rate, years, contribution, periods)
+  const totalInvested  = initial + contribution * periods * years
+  const gain           = finalValue - totalInvested
+  const hasContrib     = contribution > 0 && periods > 0
 
   return (
     <div className="glass rounded-2xl p-7 flex flex-col gap-6"
@@ -140,14 +173,23 @@ function StrategyCard({ s, initial, years }) {
       <div className="rounded-xl px-4 py-3"
         style={{ background: `${s.color}0d`, border: `1px solid ${s.color}25` }}>
         <p className="text-xs text-slate-500 mb-1">
-          ${initial.toLocaleString()} grown over {years} years
+          {hasContrib
+            ? `$${initial.toLocaleString()} + ${freqLabel} contributions over ${years} yrs`
+            : `$${initial.toLocaleString()} grown over ${years} years`}
         </p>
         <p className="text-2xl font-black" style={{ color: s.color }}>
           {fmtCurrency(finalValue)}
         </p>
-        <p className="text-xs text-slate-500 mt-0.5">
-          +{fmtCurrency(gain)} gain
-        </p>
+        <div className="flex flex-wrap gap-x-4 gap-y-0.5 mt-1">
+          {hasContrib && (
+            <p className="text-xs text-slate-500">
+              {fmtCurrency(totalInvested)} invested
+            </p>
+          )}
+          <p className="text-xs text-slate-500">
+            +{fmtCurrency(gain)} from growth
+          </p>
+        </div>
       </div>
 
       {/* Allocation bars */}
@@ -197,10 +239,19 @@ function StrategyCard({ s, initial, years }) {
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export default function InvestmentStrategiesPage() {
-  const [initial, setInitial] = useState(10000)
-  const [years,   setYears]   = useState(20)
+  const [initial,      setInitial]      = useState(10000)
+  const [years,        setYears]        = useState(20)
+  const [frequency,    setFrequency]    = useState('none')
+  const [contribution, setContribution] = useState(500)
 
-  const chartData = useMemo(() => buildChartData(initial, years), [initial, years])
+  const freqObj   = FREQUENCIES.find(f => f.key === frequency)
+  const periods   = freqObj?.periods ?? 0
+  const freqLabel = freqObj?.key === 'none' ? '' : `${freqObj?.label} $${contribution.toLocaleString()}`
+
+  const chartData = useMemo(
+    () => buildChartData(initial, years, frequency === 'none' ? 0 : contribution, periods),
+    [initial, years, contribution, frequency, periods]
+  )
 
   return (
     <AppLayout>
@@ -231,16 +282,16 @@ export default function InvestmentStrategiesPage() {
 
         {/* Chart controls */}
         <div className="glass rounded-2xl p-6 mb-6">
-          <div className="flex flex-wrap gap-6 mb-6">
+          <div className="flex flex-wrap gap-6 mb-5">
             <div className="flex flex-col gap-1.5">
               <label className="text-slate-400 text-xs font-medium uppercase tracking-wide">
                 Starting amount
               </label>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <span className="text-slate-500 text-sm">$</span>
                 <input
                   type="number"
-                  min="1000"
+                  min="0"
                   step="1000"
                   value={initial}
                   onChange={e => setInitial(Math.max(0, parseInt(e.target.value) || 0))}
@@ -263,6 +314,54 @@ export default function InvestmentStrategiesPage() {
               <div className="flex justify-between text-xs text-slate-600 w-48">
                 <span>5yr</span><span>20yr</span><span>40yr</span>
               </div>
+            </div>
+          </div>
+
+          {/* Contribution controls */}
+          <div className="border-t border-white/5 pt-5 mb-6">
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-slate-400 text-xs font-medium uppercase tracking-wide">
+                  Regular contributions
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {FREQUENCIES.map(f => (
+                    <button
+                      key={f.key}
+                      onClick={() => setFrequency(f.key)}
+                      className="px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200"
+                      style={frequency === f.key
+                        ? { background: 'linear-gradient(135deg,#00d4ff,#7c3aed)', color: '#fff' }
+                        : { background: 'rgba(255,255,255,0.05)', color: '#64748b' }}
+                    >
+                      {f.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {frequency !== 'none' && (
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-slate-400 text-xs font-medium uppercase tracking-wide">
+                    Amount per {freqObj?.label.toLowerCase().replace('ly', '')}
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <span className="text-slate-500 text-sm">$</span>
+                    <input
+                      type="number"
+                      min="0"
+                      step="50"
+                      value={contribution}
+                      onChange={e => setContribution(Math.max(0, parseInt(e.target.value) || 0))}
+                      className="rounded-lg px-3 py-2 text-white text-sm outline-none w-32"
+                      style={{ background: 'rgba(6,11,26,0.8)', border: '1px solid rgba(124,58,237,0.3)' }}
+                    />
+                  </div>
+                  <p className="text-slate-600 text-xs">
+                    = {fmtCurrency(contribution * periods)}/yr · {fmtCurrency(contribution * periods * years)} over {years} yrs
+                  </p>
+                </div>
+              )}
             </div>
           </div>
 
@@ -312,15 +411,19 @@ export default function InvestmentStrategiesPage() {
         {/* Strategy cards */}
         <div className="grid md:grid-cols-3 gap-5 mb-8">
           {STRATEGIES.map(s => (
-            <StrategyCard key={s.id} s={s} initial={initial} years={years} />
+            <StrategyCard
+              key={s.id} s={s} initial={initial} years={years}
+              contribution={frequency === 'none' ? 0 : contribution}
+              periods={periods}
+              freqLabel={freqLabel}
+            />
           ))}
         </div>
 
         {/* Footer note */}
         <p className="text-center text-slate-600 text-xs pb-4">
           Ticker codes shown are examples only. AU = ASX-listed. US = US-listed.
-          Returns assume annual compounding with no additional contributions or withdrawals.
-          Fees, tax, and inflation are not factored in.
+          Returns assume annual compounding. Fees, tax, and inflation are not factored in.
         </p>
 
         {/* ── How to start investing ── */}
