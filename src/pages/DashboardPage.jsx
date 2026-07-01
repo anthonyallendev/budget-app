@@ -5,6 +5,14 @@ import SpendingCharts from '../components/SpendingCharts'
 import SpendingInsights from '../components/SpendingInsights'
 import RetirementHero from '../components/RetirementHero'
 import OnboardingChecklist from '../components/OnboardingChecklist'
+import CheckInStreak from '../components/CheckInStreak'
+import SpendingPace from '../components/SpendingPace'
+import UpcomingBillsWidget from '../components/UpcomingBillsWidget'
+import WeeklyCheckIn from '../components/WeeklyCheckIn'
+import GoalQuickDeposit from '../components/GoalQuickDeposit'
+import MilestoneBanner from '../components/MilestoneBanner'
+import FinancialHealthScore from '../components/FinancialHealthScore'
+import InterestRateWidget from '../components/InterestRateWidget'
 import { useTransactions } from '../hooks/useTransactions'
 import { useProfile } from '../hooks/useProfile'
 import { supabase } from '../lib/supabase'
@@ -117,9 +125,41 @@ export default function DashboardPage() {
         ))}
       </div>
 
+      {/* Milestone banners — goal completions, net worth highs, debt milestones */}
+      <div className="mb-6">
+        <MilestoneBanner transactions={transactions} />
+      </div>
+
+      {/* Engagement row: streak + health score */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <CheckInStreak />
+        <FinancialHealthScore transactions={transactions} />
+      </div>
+
+      {/* Weekly check-in modal trigger */}
+      <div className="mb-6">
+        <WeeklyCheckIn />
+      </div>
+
+      {/* Spending pace */}
+      <div className="mb-6">
+        <SpendingPace transactions={transactions} />
+      </div>
+
       {/* Retirement hero — the big number */}
       <div className="mb-6">
         <RetirementHero />
+      </div>
+
+      {/* Utility row: goals quick-deposit + upcoming bills */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <GoalQuickDeposit />
+        <UpcomingBillsWidget />
+      </div>
+
+      {/* Interest rates context */}
+      <div className="mb-6">
+        <InterestRateWidget />
       </div>
 
       {/* Spending insights */}

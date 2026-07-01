@@ -159,6 +159,16 @@ function IconNetWorth() {
   )
 }
 
+function IconBills() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <rect x="3" y="3" width="14" height="14" rx="1.5" />
+      <path d="M7 7h2M7 10h6M7 13h4" strokeLinecap="round" />
+      <circle cx="14.5" cy="7" r="1" fill="currentColor" strokeWidth="0" />
+    </svg>
+  )
+}
+
 const NAV = [
   { to: '/dashboard',      label: 'Dashboard',      Icon: IconDashboard      },
   { to: '/retirement',     label: 'Retirement',     Icon: IconRetirement     },
@@ -170,6 +180,7 @@ const NAV = [
   { to: '/net-worth',      label: 'Net Worth',      Icon: IconNetWorth       },
   { to: '/tax',            label: 'Tax Estimate',   Icon: IconTax            },
   { to: '/debt',           label: 'Debt Payoff',    Icon: IconDebt           },
+  { to: '/bills',          label: 'Bills',          Icon: IconBills          },
 ]
 
 // ── Layout ───────────────────────────────────────────────────────────────────
