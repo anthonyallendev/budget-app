@@ -139,7 +139,7 @@ export default function RetirementHero() {
             className="font-black leading-none age-glow"
             style={{
               '--glow':     accentColor,
-              '--glow-dim': `${accentColor}40`,
+              '--glow-dim': `${accentColor}25`,
               fontSize: '7rem',
               lineHeight: 1,
               background: `linear-gradient(135deg, ${accentColor}, #7c3aed)`,
@@ -181,14 +181,14 @@ export default function RetirementHero() {
       <style>{`
         @keyframes ageGlow {
           0%, 100% {
-            filter: drop-shadow(0 0 2px var(--glow-dim));
+            filter: drop-shadow(0 0 1px var(--glow-dim));
           }
           50% {
-            filter: drop-shadow(0 0 6px var(--glow))
-                    drop-shadow(0 0 16px var(--glow-dim));
+            filter: drop-shadow(0 0 3px var(--glow))
+                    drop-shadow(0 0 8px var(--glow-dim));
           }
         }
-        .age-glow { animation: ageGlow 4s ease-in-out infinite; }
+        .age-glow { animation: ageGlow 5s ease-in-out infinite; }
       `}</style>
     </div>
   )
