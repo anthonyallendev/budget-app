@@ -177,6 +177,16 @@ function IconLeaderboard() {
   )
 }
 
+function IconReports() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.2">
+      <rect x="3" y="2" width="14" height="16" rx="1.5" />
+      <path d="M7 6h6M7 9.5h6M7 13h4" strokeLinecap="round" />
+      <path d="M12 13h2v3h-2z" strokeLinejoin="round" strokeWidth="1" />
+    </svg>
+  )
+}
+
 const NAV = [
   { to: '/dashboard',      label: 'Dashboard',      Icon: IconDashboard      },
   { to: '/retirement',     label: 'Retirement',     Icon: IconRetirement     },
@@ -190,6 +200,7 @@ const NAV = [
   { to: '/debt',           label: 'Debt Payoff',    Icon: IconDebt           },
   { to: '/bills',          label: 'Bills',          Icon: IconBills          },
   { to: '/leaderboard',   label: 'Leaderboard',    Icon: IconLeaderboard    },
+  { to: '/reports',       label: 'Reports',        Icon: IconReports        },
 ]
 
 // ── Layout ───────────────────────────────────────────────────────────────────

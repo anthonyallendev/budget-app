@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import AppLayout from '../components/AppLayout'
 import TransactionForm from '../components/TransactionForm'
 import TransactionList from '../components/TransactionList'
@@ -8,6 +9,7 @@ import { useTransactions } from '../hooks/useTransactions'
 import { useProfile } from '../hooks/useProfile'
 import { supabase } from '../lib/supabase'
 import RecurringTransactions from '../components/RecurringTransactions'
+import { downloadTransactionsCSV } from '../lib/csvExport'
 
 async function authHeaders() {
   const { data: { session } } = await supabase.auth.getSession()
@@ -25,6 +27,7 @@ const inputBase = {
 export default function TransactionsPage() {
   const { transactions, loading, addTransaction, deleteTransaction, refresh } = useTransactions()
   const { profile } = useProfile()
+  const navigate = useNavigate()
   const isPremium = profile?.subscription_status === 'premium'
   const [syncing,    setSyncing]    = useState(false)
   const [syncMsg,    setSyncMsg]    = useState(null)
@@ -99,6 +102,27 @@ export default function TransactionsPage() {
               {syncing ? 'Syncing…' : 'Sync bank'}
             </button>
           )}
+          <button
+            onClick={() => {
+              if (!isPremium) { navigate('/upgrade'); return }
+              downloadTransactionsCSV(transactions)
+            }}
+            title={isPremium ? 'Export all transactions as CSV' : 'Premium feature — upgrade to export'}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium glass transition-colors"
+            style={{ color: isPremium ? '#00d4ff' : '#64748b' }}
+          >
+            {!isPremium && (
+              <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <rect x="3" y="9" width="14" height="9" rx="1.5" />
+                <path d="M7 9V6a3 3 0 0 1 6 0v3" strokeLinecap="round" />
+              </svg>
+            )}
+            <svg width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path d="M10 3v10M6 9l4 4 4-4" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M3 15v2a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2" strokeLinecap="round" />
+            </svg>
+            Export CSV
+          </button>
           <button
             onClick={() => setShowForm(f => !f)}
             className="px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white glass transition-colors"

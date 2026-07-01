@@ -13,7 +13,9 @@ const FREE_FEATURES = [
   'Dashboard & retirement calculator',
   'Manual transaction entry',
   'Budget targets & limits',
-  'Retirement projections',
+  'Savings goals, net worth & debt tracker',
+  'Engagement features (streak, health score, leaderboard)',
+  'Bills tracker & tax estimate',
 ]
 
 const PREMIUM_FEATURES = [
@@ -21,7 +23,9 @@ const PREMIUM_FEATURES = [
   'Bank sync — US, UK & Canada (Plaid)',
   'Bank sync — Australia (Basiq)',
   'Automatic transaction import',
-  'CSV data export',
+  'CSV transaction export',
+  '12-month history charts & trends',
+  'Financial summary PDF report',
   'Priority support',
 ]
 
@@ -82,7 +86,7 @@ export default function UpgradePage() {
           <p className="text-slate-400 text-lg">
             {isPremium
               ? 'Manage your subscription below.'
-              : 'Connect your bank and let Retirely do the heavy lifting.'}
+              : 'Unlock bank sync, 12-month reports, CSV export, and more.'}
           </p>
         </div>
 
