@@ -11,6 +11,10 @@ import BudgetLimitsPage from './pages/BudgetLimitsPage'
 import RetirementPage from './pages/RetirementPage'
 import UpgradePage from './pages/UpgradePage'
 import InvestmentStrategiesPage from './pages/InvestmentStrategiesPage'
+import TaxEstimatePage from './pages/TaxEstimatePage'
+import DebtPayoffPage from './pages/DebtPayoffPage'
+import SavingsGoalsPage from './pages/SavingsGoalsPage'
+import NetWorthPage from './pages/NetWorthPage'
 import PrivateRoute from './components/PrivateRoute'
 
 function Private({ children }) {
@@ -33,6 +37,10 @@ export default function App() {
         <Route path="/retirement"     element={<Private><RetirementPage /></Private>} />
         <Route path="/upgrade"        element={<Private><UpgradePage /></Private>} />
         <Route path="/investing"      element={<Private><InvestmentStrategiesPage /></Private>} />
+        <Route path="/tax"            element={<Private><TaxEstimatePage /></Private>} />
+        <Route path="/debt"           element={<Private><DebtPayoffPage /></Private>} />
+        <Route path="/savings-goals"  element={<Private><SavingsGoalsPage /></Private>} />
+        <Route path="/net-worth"      element={<Private><NetWorthPage /></Private>} />
       </Routes>
     </BrowserRouter>
   )

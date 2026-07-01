@@ -2,8 +2,12 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import AppLayout from '../components/AppLayout'
 import SpendingCharts from '../components/SpendingCharts'
+import SpendingInsights from '../components/SpendingInsights'
 import RetirementHero from '../components/RetirementHero'
+import OnboardingChecklist from '../components/OnboardingChecklist'
 import { useTransactions } from '../hooks/useTransactions'
+import { useProfile } from '../hooks/useProfile'
+import { supabase } from '../lib/supabase'
 
 function getMonthStats(transactions) {
   const now = new Date()
@@ -13,15 +17,38 @@ function getMonthStats(transactions) {
   })
   const spent   = thisMonth.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0)
   const earned  = thisMonth.filter(t => t.type === 'income').reduce((s, t)  => s + parseFloat(t.amount), 0)
-  const savings = earned - spent
-  return { spent, savings }
+  const surplus = earned - spent
+  return { spent, earned, surplus }
+}
+
+function getLastMonthStats(transactions) {
+  const now = new Date()
+  const lastMonth = transactions.filter(tx => {
+    const d = new Date(tx.date)
+    const lm = new Date(now.getFullYear(), now.getMonth() - 1, 1)
+    return d.getMonth() === lm.getMonth() && d.getFullYear() === lm.getFullYear()
+  })
+  const spent  = lastMonth.filter(t => t.type === 'expense').reduce((s, t) => s + parseFloat(t.amount), 0)
+  const earned = lastMonth.filter(t => t.type === 'income').reduce((s, t)  => s + parseFloat(t.amount), 0)
+  return { spent, earned }
 }
 
 export default function DashboardPage() {
   const navigate = useNavigate()
   const { transactions, loading } = useTransactions()
-  const { spent, savings } = getMonthStats(transactions)
+  const { profile } = useProfile()
+  const [hasGoal, setHasGoal] = useState(false)
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) return
+      supabase.from('savings_goals').select('id').eq('user_id', user.id).limit(1)
+        .then(({ data }) => setHasGoal(!!(data && data.length > 0)))
+    })
+  }, [])
+  const { spent, earned, surplus } = getMonthStats(transactions)
+  const last = getLastMonthStats(transactions)
   const fmt = n => `$${Math.abs(n).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
+  const pctChange = (curr, prev) => prev === 0 ? null : Math.round(((curr - prev) / prev) * 100)
 
   const [showUpgradedBanner, setShowUpgradedBanner] = useState(false)
   useEffect(() => {
@@ -49,19 +76,42 @@ export default function DashboardPage() {
         {new Date().toLocaleString('en-AU', { month: 'long', year: 'numeric' })}
       </p>
 
-      {/* Stat cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+      {/* Onboarding checklist — hides once all steps complete */}
+      <OnboardingChecklist profile={profile} transactions={transactions} hasGoal={hasGoal} />
+
+      {/* Cash flow summary */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         {[
-          { label: 'Spent this month',  value: fmt(spent),   accent: '#e040fb', prefix: '-' },
-          { label: 'Net savings',       value: fmt(savings), accent: savings >= 0 ? '#00d4ff' : '#e040fb', prefix: savings >= 0 ? '+' : '-' },
+          {
+            label: 'Income this month', value: fmt(earned), accent: '#00d4ff', prefix: '+',
+            change: pctChange(earned, last.earned), changeLabel: 'vs last month',
+          },
+          {
+            label: 'Spent this month', value: fmt(spent), accent: '#e040fb', prefix: '-',
+            change: pctChange(spent, last.spent), changeLabel: 'vs last month',
+          },
+          {
+            label: surplus >= 0 ? 'Surplus' : 'Deficit',
+            value: fmt(surplus),
+            accent: surplus >= 0 ? '#7c3aed' : '#f43f5e',
+            prefix: surplus >= 0 ? '+' : '-',
+            change: null, changeLabel: 'income minus expenses',
+          },
         ].map(card => (
-          <div key={card.label} className="glass rounded-2xl p-6" style={{ borderColor: `${card.accent}20` }}>
+          <div key={card.label} className="glass rounded-2xl p-6">
             <p className="text-slate-500 text-xs uppercase tracking-widest mb-2">{card.label}</p>
             {loading
               ? <div className="h-8 w-24 rounded bg-white/5 animate-pulse" />
-              : <p className="text-3xl font-bold" style={{ color: card.accent, textShadow: `0 0 20px ${card.accent}50` }}>
-                  {card.prefix}{card.value}
-                </p>
+              : <>
+                  <p className="text-3xl font-bold" style={{ color: card.accent, textShadow: `0 0 20px ${card.accent}50` }}>
+                    {card.prefix}{card.value}
+                  </p>
+                  <p className="text-xs mt-2" style={{ color: card.change == null ? '#475569' : card.change > 0 ? '#f43f5e' : '#22d3ee' }}>
+                    {card.change != null
+                      ? `${card.change > 0 ? '▲' : '▼'} ${Math.abs(card.change)}% ${card.changeLabel}`
+                      : card.changeLabel}
+                  </p>
+                </>
             }
           </div>
         ))}
@@ -71,6 +121,9 @@ export default function DashboardPage() {
       <div className="mb-6">
         <RetirementHero />
       </div>
+
+      {/* Spending insights */}
+      <SpendingInsights transactions={transactions} />
 
       {/* Charts */}
       <SpendingCharts transactions={transactions} />

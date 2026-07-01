@@ -7,6 +7,7 @@ import BasiqLinkButton from '../components/BasiqLinkButton'
 import { useTransactions } from '../hooks/useTransactions'
 import { useProfile } from '../hooks/useProfile'
 import { supabase } from '../lib/supabase'
+import RecurringTransactions from '../components/RecurringTransactions'
 
 async function authHeaders() {
   const { data: { session } } = await supabase.auth.getSession()
@@ -16,13 +17,34 @@ async function authHeaders() {
   }
 }
 
+const inputBase = {
+  background: 'linear-gradient(rgba(6,11,26,0.8),rgba(6,11,26,0.8)) padding-box,linear-gradient(135deg,#00d4ff,#7c3aed,#e040fb) border-box',
+  border: '1px solid transparent',
+}
+
 export default function TransactionsPage() {
   const { transactions, loading, addTransaction, deleteTransaction, refresh } = useTransactions()
   const { profile } = useProfile()
   const isPremium = profile?.subscription_status === 'premium'
-  const [syncing,  setSyncing]  = useState(false)
-  const [syncMsg,  setSyncMsg]  = useState(null)
-  const [showForm, setShowForm] = useState(false)
+  const [syncing,    setSyncing]    = useState(false)
+  const [syncMsg,    setSyncMsg]    = useState(null)
+  const [showForm,   setShowForm]   = useState(false)
+  const [search,     setSearch]     = useState('')
+  const [filterType, setFilterType] = useState('all')
+  const [filterCat,  setFilterCat]  = useState('all')
+
+  const categories = ['all', ...Array.from(new Set(transactions.map(t => t.category))).sort()]
+
+  const filtered = transactions.filter(tx => {
+    if (filterType !== 'all' && tx.type !== filterType) return false
+    if (filterCat  !== 'all' && tx.category !== filterCat) return false
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      return (tx.description || '').toLowerCase().includes(q) ||
+             (tx.category    || '').toLowerCase().includes(q)
+    }
+    return true
+  })
 
   const plaidCount = transactions.filter(t => t.source === 'plaid').length
   const basiqCount = transactions.filter(t => t.source === 'basiq').length
@@ -135,10 +157,59 @@ export default function TransactionsPage() {
           <TransactionForm onAdd={async (tx) => { await addTransaction(tx); setShowForm(false) }} />
         )}
 
+        {/* Search & filter bar */}
+        {!loading && transactions.length > 0 && (
+          <div className="glass rounded-2xl p-4 flex flex-col sm:flex-row gap-3 items-start sm:items-center flex-wrap">
+            <input
+              type="text"
+              placeholder="Search description or category…"
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="flex-1 min-w-0 rounded-lg px-3 py-2 text-white text-sm outline-none"
+              style={inputBase}
+            />
+            <div className="flex gap-2 flex-wrap">
+              {['all', 'income', 'expense'].map(t => (
+                <button
+                  key={t}
+                  onClick={() => setFilterType(t)}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all"
+                  style={filterType === t
+                    ? { background: 'linear-gradient(135deg,#00d4ff,#7c3aed)', color: '#fff' }
+                    : { background: 'rgba(255,255,255,0.05)', color: '#64748b' }}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+            <select
+              value={filterCat}
+              onChange={e => setFilterCat(e.target.value)}
+              className="rounded-lg px-3 py-2 text-sm outline-none"
+              style={{ ...inputBase, colorScheme: 'dark', color: filterCat === 'all' ? '#64748b' : '#fff' }}
+            >
+              {categories.map(c => (
+                <option key={c} value={c}>{c === 'all' ? 'All categories' : c}</option>
+              ))}
+            </select>
+            {(search || filterType !== 'all' || filterCat !== 'all') && (
+              <button
+                onClick={() => { setSearch(''); setFilterType('all'); setFilterCat('all') }}
+                className="text-xs text-slate-500 hover:text-white transition-colors whitespace-nowrap"
+              >
+                Clear filters
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Recurring transactions */}
+        {!loading && <RecurringTransactions transactions={transactions} />}
+
         {/* Transaction list */}
         {loading
           ? <div className="glass rounded-2xl p-10 text-center text-slate-600 text-sm">Loading…</div>
-          : <TransactionList transactions={transactions} onDelete={deleteTransaction} />
+          : <TransactionList transactions={filtered} total={transactions.length} onDelete={deleteTransaction} />
         }
       </div>
     </AppLayout>

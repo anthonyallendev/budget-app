@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import { useProfile } from '../hooks/useProfile'
 import AppLayout from '../components/AppLayout'
+import RetirementReadinessScore from '../components/RetirementReadinessScore'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine
 } from 'recharts'
@@ -144,6 +145,7 @@ export default function RetirementPage() {
   const { profile, loading: profileLoading, saveProfile } = useProfile()
   const [saving, setSaving] = useState(false)
   const [saved, setSaved]   = useState(false)
+  const [superForm, setSuperForm] = useState({ voluntaryContrib: 0, fundFeePercent: 0.5 })
   // tracks whether the user has manually edited the monthly contribution
   const contribOverridden = useRef(false)
 
@@ -226,11 +228,16 @@ export default function RetirementPage() {
     ? projectSavings(Number(form.personal_savings), Number(form.monthly_contribution), rate, earlyRetireAge - currentAge)
     : 0
 
-  const superBalance   = Number(profile?.super_balance ?? 0)
-  const yearsToPreserv = currentAge ? Math.max(preservationAge - currentAge, 0) : 0
-  const superAtPreserv = projectSavings(superBalance, 0, rate, yearsToPreserv)
-  const superYears     = Math.max(form.life_expectancy - preservationAge, 1)
-  const superPerYear   = superAtPreserv / superYears
+  const superBalance    = Number(profile?.super_balance ?? 0)
+  const yearsToPreserv  = currentAge ? Math.max(preservationAge - currentAge, 0) : 0
+  const isAustralia     = profile?.country === 'Australia'
+  const sgcRate         = 0.115  // 11.5% employer guarantee
+  const sgcMonthly      = isAustralia && annualSalary > 0 ? Math.round((annualSalary * sgcRate) / 12) : 0
+  const totalSuperMonthly = sgcMonthly + Number(superForm.voluntaryContrib)
+  const netSuperRate    = Math.max(0, rate - Number(superForm.fundFeePercent))
+  const superAtPreserv  = projectSavings(superBalance, totalSuperMonthly, netSuperRate, yearsToPreserv)
+  const superYears      = Math.max(form.life_expectancy - preservationAge, 1)
+  const superPerYear    = superAtPreserv / superYears
 
   const chartData = buildChartData(
     currentAge, earlyRetireAge, preservationAge,
@@ -255,6 +262,16 @@ export default function RetirementPage() {
     <AppLayout>
       <h1 className="text-3xl font-bold mb-1">Retirement Calculator</h1>
       <p className="text-slate-400 text-sm mb-8">See how your savings can unlock early retirement.</p>
+
+      <RetirementReadinessScore
+        annualSalary={Number(form.annual_salary)}
+        personalSavings={Number(form.personal_savings)}
+        monthlyContrib={Number(form.monthly_contribution)}
+        desiredIncome={Number(form.desired_annual_income)}
+        currentAge={currentAge}
+        preservationAge={preservationAge}
+        earlyRetireAge={earlyRetireAge}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -424,6 +441,48 @@ export default function RetirementPage() {
               </div>
             </div>
           </div>
+
+          {/* Superannuation calculator — AU only */}
+          {isAustralia && superBalance > 0 && (
+            <div className="glass rounded-2xl p-5 flex flex-col gap-4">
+              <p className="text-slate-500 text-xs uppercase tracking-widest">Super calculator</p>
+              <div className="flex flex-col gap-1">
+                <div className="flex justify-between text-xs">
+                  <span className="text-slate-400">Employer SGC (11.5%)</span>
+                  <span className="text-cyan-400 font-semibold">${sgcMonthly.toLocaleString()}/mo</span>
+                </div>
+                <div className="flex justify-between text-xs mt-1">
+                  <span className="text-slate-400">Current balance</span>
+                  <span className="text-white font-semibold">{fmt(superBalance)}</span>
+                </div>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-slate-400 text-xs">Personal voluntary contribution ($/mo)</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">$</span>
+                  <input type="number" min="0" placeholder="0"
+                    value={superForm.voluntaryContrib || ''}
+                    onChange={e => setSuperForm(f => ({ ...f, voluntaryContrib: e.target.value }))}
+                    className="w-full rounded-lg pl-7 pr-4 py-2.5 text-white text-sm outline-none"
+                    style={inputStyle} onFocus={focusGlow} onBlur={blurGlow}
+                  />
+                </div>
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-slate-400 text-xs">Annual fund fee (%)</label>
+                <div className="relative">
+                  <input type="number" min="0" max="5" step="0.1" placeholder="0.5"
+                    value={superForm.fundFeePercent || ''}
+                    onChange={e => setSuperForm(f => ({ ...f, fundFeePercent: e.target.value }))}
+                    className="w-full rounded-lg px-4 py-2.5 text-white text-sm outline-none"
+                    style={inputStyle} onFocus={focusGlow} onBlur={blurGlow}
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">%</span>
+                </div>
+                <p className="text-slate-600 text-xs">Typical industry fund: 0.5–1.5%</p>
+              </div>
+            </div>
+          )}
 
           <button
             onClick={handleSave}

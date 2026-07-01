@@ -1,4 +1,4 @@
-export default function TransactionList({ transactions, onDelete }) {
+export default function TransactionList({ transactions, total, onDelete }) {
   if (transactions.length === 0) {
     return (
       <div className="glass rounded-2xl p-10 text-center" style={{ borderColor: 'rgba(124,58,237,0.2)' }}>
@@ -12,7 +12,11 @@ export default function TransactionList({ transactions, onDelete }) {
     <div className="glass rounded-2xl overflow-hidden">
       <div className="px-6 py-4 border-b border-white/5 flex items-center justify-between">
         <h2 className="text-white font-semibold">Transactions</h2>
-        <span className="text-slate-500 text-sm">{transactions.length} total</span>
+        <span className="text-slate-500 text-sm">
+          {total != null && total !== transactions.length
+            ? `${transactions.length} of ${total}`
+            : `${transactions.length} total`}
+        </span>
       </div>
 
       <div className="overflow-x-auto">
