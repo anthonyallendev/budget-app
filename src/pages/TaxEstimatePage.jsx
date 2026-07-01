@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AppLayout from '../components/AppLayout'
 
 // Tax brackets by country (2024-25 financial year approximations)
@@ -15,8 +15,8 @@ const TAX_CONFIGS = {
     // Medicare levy
     extraLevy: (income) => income > 18200 ? income * 0.02 : 0,
     extraLevyLabel: 'Medicare levy (2%)',
-    superRate: 0.115,  // 11.5% super guarantee
-    superLabel: 'Super (11.5%)',
+    superRate: 0.12,  // 12% super guarantee (from 1 Jul 2025)
+    superLabel: 'Super (12%)',
   },
   'United States': {
     currency: 'USD',
@@ -90,9 +90,18 @@ function fmt(n, symbol) {
   return `${symbol}${Math.round(n).toLocaleString()}`
 }
 
+function loadSaved() {
+  try { return JSON.parse(localStorage.getItem('taxEstimate')) || {} } catch { return {} }
+}
+
 export default function TaxEstimatePage() {
-  const [salary,  setSalary]  = useState('')
-  const [country, setCountry] = useState('Australia')
+  const saved = loadSaved()
+  const [salary,  setSalary]  = useState(saved.salary  || '')
+  const [country, setCountry] = useState(saved.country || 'Australia')
+
+  useEffect(() => {
+    localStorage.setItem('taxEstimate', JSON.stringify({ salary, country }))
+  }, [salary, country])
 
   const cfg    = TAX_CONFIGS[country]
   const income = parseFloat(salary) || 0

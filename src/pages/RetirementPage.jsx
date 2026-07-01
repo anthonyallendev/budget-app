@@ -231,7 +231,7 @@ export default function RetirementPage() {
   const superBalance    = Number(profile?.super_balance ?? 0)
   const yearsToPreserv  = currentAge ? Math.max(preservationAge - currentAge, 0) : 0
   const isAustralia     = profile?.country === 'Australia'
-  const sgcRate         = 0.115  // 11.5% employer guarantee
+  const sgcRate         = 0.12  // 12% employer guarantee (from 1 Jul 2025)
   const sgcMonthly      = isAustralia && annualSalary > 0 ? Math.round((annualSalary * sgcRate) / 12) : 0
   const totalSuperMonthly = sgcMonthly + Number(superForm.voluntaryContrib)
   const netSuperRate    = Math.max(0, rate - Number(superForm.fundFeePercent))
@@ -448,7 +448,7 @@ export default function RetirementPage() {
               <p className="text-slate-500 text-xs uppercase tracking-widest">Super calculator</p>
               <div className="flex flex-col gap-1">
                 <div className="flex justify-between text-xs">
-                  <span className="text-slate-400">Employer SGC (11.5%)</span>
+                  <span className="text-slate-400">Employer SGC (12%)</span>
                   <span className="text-cyan-400 font-semibold">${sgcMonthly.toLocaleString()}/mo</span>
                 </div>
                 <div className="flex justify-between text-xs mt-1">
