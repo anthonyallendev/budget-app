@@ -39,13 +39,6 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen bg-space-900 flex items-center justify-center px-4 overflow-hidden">
-      {/* Background glow blobs */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-100px] left-[-100px] w-[400px] h-[400px] rounded-full opacity-25"
-          style={{ background: 'radial-gradient(circle, #7c3aed, transparent 70%)' }} />
-        <div className="absolute bottom-[-100px] right-[-100px] w-[400px] h-[400px] rounded-full opacity-20"
-          style={{ background: 'radial-gradient(circle, #00d4ff, transparent 70%)' }} />
-      </div>
 
       <div className="relative z-10 w-full max-w-sm flex flex-col gap-6">
         {/* Logo */}

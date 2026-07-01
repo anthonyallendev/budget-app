@@ -2,11 +2,11 @@ import { useEffect, useRef } from 'react'
 
 const SPACING = 14  // grid cell size in px
 
-// Three overlapping wave layers — diagonal built into rowFactor, no CSS rotation needed
+// Three overlapping wave layers
 const WAVES = [
-  { freq: 0.042, amp: 26, speed: 0.22, rowFactor: 0.38, phase: 0.0 },
-  { freq: 0.078, amp: 11, speed: 0.38, rowFactor: 0.22, phase: 1.9 },
-  { freq: 0.018, amp: 38, speed: 0.11, rowFactor: 0.55, phase: 3.7 },
+  { freq: 0.042, amp: 45, speed: 0.55, rowFactor: 0.38, phase: 0.0 },
+  { freq: 0.078, amp: 20, speed: 0.85, rowFactor: 0.22, phase: 1.9 },
+  { freq: 0.018, amp: 65, speed: 0.30, rowFactor: 0.55, phase: 3.7 },
 ]
 
 const MAX_AMP = WAVES.reduce((s, w) => s + w.amp, 0)
@@ -72,7 +72,7 @@ export default function WaveBackground() {
         }
       }
 
-      t += 0.007
+      t += 0.022
       animId = requestAnimationFrame(draw)
     }
 
@@ -86,7 +86,11 @@ export default function WaveBackground() {
   return (
     <canvas
       ref={ref}
-      style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}
+      style={{
+        position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
+        transform: 'rotate(45deg) scale(1.6)',
+        transformOrigin: 'center center',
+      }}
     />
   )
 }

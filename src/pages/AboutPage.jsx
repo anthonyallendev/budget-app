@@ -100,15 +100,6 @@ export default function AboutPage() {
   return (
     <div className="min-h-screen bg-space-900 text-white overflow-hidden">
 
-      {/* Glow blobs */}
-      <div className="fixed inset-0 pointer-events-none">
-        <div className="absolute top-[-200px] left-[-200px] w-[600px] h-[600px] rounded-full opacity-20"
-          style={{ background: 'radial-gradient(circle, #7c3aed, transparent 70%)' }} />
-        <div className="absolute top-[30%] right-[-150px] w-[500px] h-[500px] rounded-full opacity-10"
-          style={{ background: 'radial-gradient(circle, #00d4ff, transparent 70%)' }} />
-        <div className="absolute bottom-[-100px] left-[20%] w-[400px] h-[400px] rounded-full opacity-10"
-          style={{ background: 'radial-gradient(circle, #e040fb, transparent 70%)' }} />
-      </div>
 
       {/* Nav */}
       <header className="relative z-10 flex items-center justify-between px-8 py-5 glass border-b border-cyan-glow/10">
