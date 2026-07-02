@@ -187,6 +187,21 @@ function IconReports() {
   )
 }
 
+function IconReferral() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.2">
+      {/* Two people */}
+      <circle cx="6.5" cy="6" r="2.5" />
+      <path d="M2 16c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" strokeLinecap="round" />
+      {/* Plus / add person on right */}
+      <circle cx="14.5" cy="6" r="2.5" />
+      <path d="M12 16c0-2.5 1.8-4 4-4" strokeLinecap="round" />
+      {/* Link arrow */}
+      <path d="M10 9l2.5 1.5" strokeLinecap="round" strokeWidth="0.9" />
+    </svg>
+  )
+}
+
 const NAV = [
   { to: '/dashboard',      label: 'Dashboard',      Icon: IconDashboard      },
   { to: '/retirement',     label: 'Retirement',     Icon: IconRetirement     },
@@ -201,6 +216,7 @@ const NAV = [
   { to: '/bills',          label: 'Bills',          Icon: IconBills          },
   { to: '/leaderboard',   label: 'Leaderboard',    Icon: IconLeaderboard    },
   { to: '/reports',       label: 'Reports',        Icon: IconReports        },
+  { to: '/referrals',    label: 'Refer & Earn',   Icon: IconReferral       },
 ]
 
 // ── Layout ───────────────────────────────────────────────────────────────────

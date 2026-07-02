@@ -1,4 +1,5 @@
-import { Link, NavLink } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, NavLink, useSearchParams } from 'react-router-dom'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 const portfolioData = [
@@ -30,6 +31,13 @@ function CustomTooltip({ active, payload, label }) {
 }
 
 export default function LandingPage() {
+  const [searchParams] = useSearchParams()
+
+  useEffect(() => {
+    const ref = searchParams.get('ref')
+    if (ref) localStorage.setItem('referralCode', ref.toUpperCase().trim())
+  }, [searchParams])
+
   return (
     <div className="min-h-screen bg-space-900 text-white overflow-hidden">
       {/* Background glow blobs */}

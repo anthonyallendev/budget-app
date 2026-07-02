@@ -1,15 +1,22 @@
-import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 
 export default function LoginPage() {
   const navigate = useNavigate()
+  const [searchParams] = useSearchParams()
   const [mode, setMode] = useState('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
+
+  useEffect(() => {
+    // Persist ?ref=CODE from URL into localStorage so it survives page transitions
+    const ref = searchParams.get('ref')
+    if (ref) localStorage.setItem('referralCode', ref.toUpperCase().trim())
+  }, [searchParams])
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -22,9 +29,24 @@ export default function LoginPage() {
       if (error) setError(error.message || error.code || JSON.stringify(error))
       else navigate('/dashboard')
     } else {
-      const { error } = await supabase.auth.signUp({ email, password })
-      if (error) setError(error.message || error.code || JSON.stringify(error))
-      else setMessage('Check your email to confirm your account, then log in.')
+      const { data: signUpData, error } = await supabase.auth.signUp({ email, password })
+      if (error) {
+        setError(error.message || error.code || JSON.stringify(error))
+      } else {
+        // Record referral attribution in background (non-blocking)
+        const storedRef = localStorage.getItem('referralCode')
+        if (storedRef && signUpData?.session) {
+          fetch('/api/referral/record-signup', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${signUpData.session.access_token}`,
+            },
+            body: JSON.stringify({ referralCode: storedRef }),
+          }).then(() => localStorage.removeItem('referralCode')).catch(() => {})
+        }
+        setMessage('Check your email to confirm your account, then log in.')
+      }
     }
 
     setLoading(false)

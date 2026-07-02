@@ -18,6 +18,7 @@ import NetWorthPage from './pages/NetWorthPage'
 import BillsPage from './pages/BillsPage'
 import LeaderboardPage from './pages/LeaderboardPage'
 import ReportsPage from './pages/ReportsPage'
+import ReferralPage from './pages/ReferralPage'
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage'
 import AuthCallbackPage from './pages/AuthCallbackPage'
 import PrivateRoute from './components/PrivateRoute'
@@ -50,6 +51,7 @@ export default function App() {
         <Route path="/bills"          element={<Private><BillsPage /></Private>} />
         <Route path="/leaderboard"    element={<Private><LeaderboardPage /></Private>} />
         <Route path="/reports"        element={<Private><ReportsPage /></Private>} />
+        <Route path="/referrals"      element={<Private><ReferralPage /></Private>} />
         <Route path="/privacy"        element={<PrivacyPolicyPage />} />
       </Routes>
     </BrowserRouter>
