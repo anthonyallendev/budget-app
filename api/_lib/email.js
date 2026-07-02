@@ -1,4 +1,4 @@
-const FROM = 'Retirely <hello@retirely.money>'
+const FROM = 'Retirely <onboarding@resend.dev>'
 const APP_URL = process.env.APP_URL ?? 'https://retirely.money'
 
 async function send({ to, subject, html }) {
