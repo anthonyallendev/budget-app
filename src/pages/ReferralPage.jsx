@@ -198,15 +198,20 @@ export default function ReferralPage() {
   }
 
   function updateRow(id, value) {
+    setEmailRows(rows => rows.map(r => r.id === id ? { ...r, value, status: null, msg: null } : r))
+  }
+
+  function handleRowBlur(id) {
     setEmailRows(rows => {
-      const updated = rows.map(r => r.id === id ? { ...r, value, status: null, msg: null } : r)
-      // Auto-add a new row when the last one has a valid email
-      const last = updated[updated.length - 1]
-      const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(last.value)
-      if (isValid) {
-        updated.push({ id: nextId.current++, value: '', status: null, msg: null })
+      const idx = rows.findIndex(r => r.id === id)
+      const isLast = idx === rows.length - 1
+      if (!isLast) return rows
+      const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(rows[idx].value)
+      const lastAlreadyEmpty = rows[rows.length - 1].value === ''
+      if (isValid && !lastAlreadyEmpty) {
+        return [...rows, { id: nextId.current++, value: '', status: null, msg: null }]
       }
-      return updated
+      return rows
     })
   }
 
@@ -374,8 +379,8 @@ export default function ReferralPage() {
                     type="email"
                     value={row.value}
                     onChange={e => updateRow(row.id, e.target.value)}
+                    onBlur={() => handleRowBlur(row.id)}
                     placeholder={i === 0 ? 'friend@example.com' : 'Add another email…'}
-                    autoFocus={i > 0 && row.value === ''}
                     className="w-full rounded-xl px-4 py-2.5 text-white text-sm outline-none pr-10"
                     style={{
                       background: 'rgba(6,11,26,0.8)',
