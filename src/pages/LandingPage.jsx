@@ -48,6 +48,7 @@ export default function LandingPage() {
         <nav className="hidden md:flex items-center gap-8 text-slate-400 text-sm">
           <a href="#features" className="hover:text-white transition-colors">Features</a>
           <Link to="/about" className="hover:text-white transition-colors">About</Link>
+          <Link to="/privacy" className="hover:text-white transition-colors">Privacy & Terms</Link>
         </nav>
         <div className="flex items-center gap-3">
           <Link
@@ -243,7 +244,9 @@ export default function LandingPage() {
       </section>
 
       <footer className="relative z-10 text-center text-slate-600 text-sm py-8 border-t border-white/5">
-        © {new Date().getFullYear()} Retirely — All rights reserved
+        © {new Date().getFullYear()} Retirely — All rights reserved ·{' '}
+        <Link to="/about" className="hover:text-slate-400 transition-colors">About</Link> ·{' '}
+        <Link to="/privacy" className="hover:text-slate-400 transition-colors">Privacy & Terms</Link>
       </footer>
     </div>
   )
