@@ -275,7 +275,7 @@ export default function AppLayout({ children }) {
         </div>
 
         {/* Nav links */}
-        <nav className="flex flex-col gap-1 p-4 flex-1">
+        <nav className="flex flex-col gap-1 p-4 flex-1 overflow-y-auto">
           {NAV.map(({ to, label, Icon }) => (
             <NavLink
               key={to}
