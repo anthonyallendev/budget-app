@@ -332,6 +332,17 @@ export default function AppLayout({ children }) {
             </svg>
             About Retirely
           </NavLink>
+          <NavLink
+            to="/privacy"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-slate-500 hover:text-slate-200 hover:bg-white/5 transition-all duration-200"
+          >
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.2">
+              <path d="M10 2l6 2.5v5c0 3.8-2.5 7-6 8.5C6.5 16.5 4 13.3 4 9.5v-5L10 2z" strokeLinejoin="round" />
+              <path d="M7.5 10l2 2 3-3" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            Privacy Policy
+          </NavLink>
           <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-slate-500 hover:text-red-400 hover:bg-red-400/5 transition-all duration-200"
