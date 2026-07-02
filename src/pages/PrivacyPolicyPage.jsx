@@ -157,6 +157,21 @@ function PrivacyContent() {
             'We do not run third-party analytics, tracking pixels, or advertising scripts',
           ]} />
         </Sub>
+
+        <Sub title="2.9 Referral Programme Data">
+          <p>If you participate in the Refer &amp; Earn programme, we collect and process the following additional data:</p>
+          <Ul items={[
+            'Your unique referral code (auto-generated or custom, linked to your account)',
+            'Email addresses of people you invite — these are third-party email addresses you provide to us for the purpose of sending a single invitation and up to three follow-up reminder emails',
+            'A record of each invite sent, including the date, reminder count, and whether the invitee subscribed',
+            'Referral credit records: the amount earned, date earned, and payout status',
+            'If you set up cash payouts: your Stripe Connect account ID and KYC verification status (identity verification is handled by Stripe, not us)',
+            'Unsubscribe tokens, which allow invitees to opt out of reminder emails',
+          ]} />
+          <p className="mt-2">
+            <strong className="text-white">Important (APP 5 disclosure):</strong> When you provide a third party's email address to send an invitation, we collect that email address on your behalf. We use it only to send the invitation and up to three monthly reminder emails. We do not use invitee email addresses for any other purpose. Invitees can unsubscribe at any time using the link in each email, after which we will not contact them again.
+          </p>
+        </Sub>
       </Section>
 
       <Section id="pp-use" title="3. How We Use Your Information">
@@ -170,8 +185,9 @@ function PrivacyContent() {
           'To process your Premium subscription payments via Stripe',
           'To sync bank transactions (Premium users, via Plaid and Basiq)',
           'To send account-related emails (e.g. password reset — we do not send marketing emails without your explicit consent)',
+          'To operate the Refer & Earn programme: to send invitation and reminder emails to addresses you provide, apply referral credits to your account, and process cash payouts via Stripe Connect',
           'To investigate and respond to support requests',
-          'To detect and prevent fraud or abuse',
+          'To detect and prevent fraud or abuse, including referral credit fraud',
         ]} />
         <p className="mt-3 text-white/70">
           <strong className="text-white">We do not use your financial data for advertising, profiling for third parties, credit scoring, or any purpose other than operating the Service.</strong>
@@ -199,6 +215,7 @@ function PrivacyContent() {
                 <TableRow service="Stripe" purpose="Payment processing (Premium subscriptions)" link="stripe.com/privacy" />
                 <TableRow service="Plaid" purpose="Bank transaction sync — US, UK, Canada (Premium)" link="plaid.com/legal/privacy-notice" />
                 <TableRow service="Basiq" purpose="Bank transaction sync — Australia (Premium)" link="basiq.io/privacy-policy" />
+                <TableRow service="Resend" purpose="Transactional email delivery (referral invites, credit notifications)" link="resend.com/legal/privacy-policy" />
                 <TableRow service="Google" purpose="OAuth sign-in (if you choose to sign in with Google)" link="policies.google.com/privacy" />
               </tbody>
             </table>
@@ -249,6 +266,8 @@ function PrivacyContent() {
           'Bank-synced transaction data is retained while your account is active and deleted upon account closure',
           'Payment records (invoices, transaction IDs) may be retained for up to 7 years for tax and legal compliance',
           'Anonymised, aggregated data (which cannot identify you) may be retained indefinitely for service improvement',
+          'Referral invite records (third-party email addresses you provided) are retained until the invitee unsubscribes, converts to a user and closes their account, or you close your account — whichever comes first',
+          'Referral credit and payout records may be retained for up to 7 years for financial compliance purposes',
           'Data stored in your browser\'s localStorage (streaks, preferences) is under your control and not subject to our retention policy',
         ]} />
       </Section>
@@ -455,7 +474,7 @@ function TermsContent() {
           'Tax estimates provided by the Service are approximations for educational purposes. They are not a substitute for professional tax advice and should not be used to lodge a tax return.',
           'The investment strategy content on the Service is educational and uses hypothetical examples. It is not a recommendation to buy, sell, or hold any investment product.',
           'You should seek independent financial, legal, and tax advice from a licensed professional before making any financial decisions.',
-          '{COMPANY} is not an Australian Financial Services Licence (AFSL) holder and does not provide regulated financial advice.',
+          `${COMPANY} is not an Australian Financial Services Licence (AFSL) holder and does not provide regulated financial advice.`,
         ]} />
       </Section>
 
@@ -504,10 +523,10 @@ function TermsContent() {
         </p>
         <Ul items={[
           'The Service is provided "as is" and "as available" without warranty of any kind, express or implied',
-          '{COMPANY} does not warrant that the Service will be uninterrupted, error-free, or free from viruses or harmful components',
-          '{COMPANY} is not liable for any loss or damage arising from your reliance on financial projections, tax estimates, or other calculations provided by the Service',
-          '{COMPANY} is not liable for any direct, indirect, incidental, consequential, or punitive damages arising from your use of or inability to use the Service',
-          '{COMPANY} is not responsible for any losses caused by bank sync errors, data inaccuracies from third-party providers (Plaid, Basiq), or payment processing issues',
+          `${COMPANY} does not warrant that the Service will be uninterrupted, error-free, or free from viruses or harmful components`,
+          `${COMPANY} is not liable for any loss or damage arising from your reliance on financial projections, tax estimates, or other calculations provided by the Service`,
+          `${COMPANY} is not liable for any direct, indirect, incidental, consequential, or punitive damages arising from your use of or inability to use the Service`,
+          `${COMPANY} is not responsible for any losses caused by bank sync errors, data inaccuracies from third-party providers (Plaid, Basiq), or payment processing issues`,
           'Our total liability to you for any claim arising out of or relating to the Service shall not exceed the amount you paid to us in the 12 months preceding the claim',
         ]} />
         <p>
@@ -582,7 +601,49 @@ function TermsContent() {
         </p>
       </Section>
 
-      <Section id="tc-contact" title="16. Contact">
+      <Section id="tc-referral" title="17. Refer & Earn Programme">
+        <Sub title="17.1 How It Works">
+          <p>
+            {COMPANY} offers a Refer &amp; Earn programme that rewards you with account credit when someone subscribes to Premium using your referral link or code.
+          </p>
+          <Ul items={[
+            'Each user is assigned a unique referral code, which can be customised from the Refer & Earn page',
+            'You earn $1 AUD in account credit for each person who subscribes to Premium using your referral link — credit is applied only after their payment is confirmed',
+            'Credits automatically reduce your next subscription charge (e.g. 9 credits = one free month)',
+            'When your total unused credits exceed your monthly subscription cost, the surplus is eligible for cash payout',
+          ]} />
+        </Sub>
+
+        <Sub title="17.2 Cash Payouts">
+          <Ul items={[
+            'Cash payouts are available via Stripe Connect when your payout-eligible balance reaches a minimum of $5 AUD',
+            'To receive cash payouts, you must complete identity verification (KYC) through Stripe Connect Express — this is a legal requirement for processing payments',
+            'Payouts are processed in AUD and transferred to your connected bank account or debit card via Stripe',
+            'Payout processing times are subject to Stripe\'s standard transfer timelines (typically 2–5 business days)',
+            `${COMPANY} is not responsible for delays caused by Stripe or your financial institution`,
+          ]} />
+        </Sub>
+
+        <Sub title="17.3 Eligibility and Anti-Abuse Rules">
+          <p>To maintain the integrity of the programme, the following rules apply:</p>
+          <Ul items={[
+            'You cannot refer yourself — using your own referral code on your own account is not permitted and will not earn a credit',
+            'Only one credit is ever earned per referred user, regardless of how many times they are invited or how many referral codes they encounter',
+            'Credits are only awarded after a referred user\'s first Premium payment is successfully processed — incomplete or refunded payments do not qualify',
+            'You may send up to 20 referral invitations per day via email',
+            `${COMPANY} reserves the right to withhold, reverse, or forfeit referral credits if we reasonably suspect fraudulent activity, including but not limited to creating fake accounts, using automated sign-up tools, or any other manipulation of the programme`,
+            'Referral credits have no cash value outside of the payout mechanism described above and cannot be transferred between accounts',
+          ]} />
+        </Sub>
+
+        <Sub title="17.4 Programme Changes">
+          <p>
+            {COMPANY} reserves the right to modify, suspend, or discontinue the Refer &amp; Earn programme at any time with 30 days\' notice where reasonably practicable. Any credits earned prior to discontinuation will be honoured for a period of 90 days after notice is given.
+          </p>
+        </Sub>
+      </Section>
+
+      <Section id="tc-contact" title="18. Contact Us">
         <p>If you have any questions about these Terms, please contact us:</p>
         <div className="mt-3 glass rounded-xl p-4" style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
           <p className="text-white font-semibold">{COMPANY}</p>
@@ -632,7 +693,8 @@ const TC_TOC = [
   { id: 'tc-availability', label: '13. Service Availability' },
   { id: 'tc-governing',    label: '14. Governing Law' },
   { id: 'tc-changes',      label: '15. Changes to Terms' },
-  { id: 'tc-contact',      label: '16. Contact' },
+  { id: 'tc-referral',     label: '17. Refer & Earn Programme' },
+  { id: 'tc-contact',      label: '18. Contact' },
 ]
 
 export default function PrivacyPolicyPage() {
