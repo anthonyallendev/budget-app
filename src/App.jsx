@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import WaveBackground from './components/WaveBackground'
+import WaveBackground from './components/ParticleBackground'
 import LandingPage from './pages/LandingPage'
 import AboutPage from './pages/AboutPage'
 import LoginPage from './pages/LoginPage'
