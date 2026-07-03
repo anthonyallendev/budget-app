@@ -246,7 +246,7 @@ export default function AppLayout({ children }) {
   return (
     <div className="min-h-screen bg-space-900 text-white">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 glass border-b border-cyan-glow/10" style={{ background: 'rgba(6,11,26,0.82)' }}>
+      <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 glass border-b border-cyan-glow/10">
         <span className="text-3xl font-bold text-gradient">Retirely</span>
         <button
           onClick={() => setOpen(true)}
@@ -380,9 +380,14 @@ export default function AppLayout({ children }) {
         </div>
       </aside>
 
-      {/* Page content */}
-      <main className="relative z-10 pt-24 pb-8 px-6 md:px-8 max-w-6xl mx-auto">
-        {children}
+      {/* Page content — fixed scroll container so content clips at the header bottom */}
+      <main
+        className="fixed inset-x-0 bottom-0 z-10 overflow-y-auto overflow-x-hidden"
+        style={{ top: '73px' }}
+      >
+        <div className="pt-6 pb-8 px-6 md:px-8 max-w-6xl mx-auto">
+          {children}
+        </div>
       </main>
     </div>
   )
