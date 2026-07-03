@@ -39,7 +39,7 @@ export default function LandingPage() {
   }, [searchParams])
 
   return (
-    <div className="min-h-screen bg-space-900 text-white overflow-hidden">
+    <div className="min-h-screen bg-space-900 text-white">
       {/* Background glow blobs */}
       <div className="fixed inset-0 pointer-events-none">
         <div className="absolute top-[-200px] left-[-200px] w-[600px] h-[600px] rounded-full opacity-20"
