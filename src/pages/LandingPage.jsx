@@ -51,7 +51,7 @@ export default function LandingPage() {
       </div>
 
       {/* Nav */}
-      <header className="relative z-10 flex items-center justify-between px-8 py-5 glass border-b border-cyan-glow/10">
+      <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-8 py-5 glass border-b border-cyan-glow/10">
         <span className="text-xl font-bold text-gradient">Retirely</span>
         <nav className="hidden md:flex items-center gap-8 text-slate-400 text-sm">
           <a href="#features" className="hover:text-white transition-colors">Features</a>
@@ -75,6 +75,9 @@ export default function LandingPage() {
           </Link>
         </div>
       </header>
+
+      {/* Scrollable content — clips at header bottom */}
+      <div className="fixed inset-x-0 bottom-0 overflow-y-auto overflow-x-hidden" style={{ top: '77px' }}>
 
       {/* Hero */}
       <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 pt-28 pb-20 gap-8">
@@ -358,6 +361,8 @@ export default function LandingPage() {
         <Link to="/about" className="hover:text-slate-400 transition-colors">About</Link> ·{' '}
         <Link to="/privacy" className="hover:text-slate-400 transition-colors">Privacy & Terms</Link>
       </footer>
+
+      </div>{/* end scroll container */}
     </div>
   )
 }
