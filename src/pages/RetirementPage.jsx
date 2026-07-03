@@ -113,6 +113,50 @@ function buildChartData(currentAge, retirementAge, preservationAge, currentSavin
   return data
 }
 
+function buildSuperChartData(currentAge, preservationAge, lifeExpectancy, balance, monthlyContrib, rate, annualIncome) {
+  if (!currentAge || currentAge >= preservationAge) return []
+  const data = []
+
+  // Accumulation phase
+  for (let age = currentAge; age <= preservationAge; age++) {
+    const val = Math.round(projectSavings(balance, monthlyContrib, rate, age - currentAge))
+    data.push({
+      age,
+      accumulation: val,
+      drawdown: age === preservationAge ? val : null,
+    })
+  }
+
+  // Drawdown phase
+  if (annualIncome > 0) {
+    const r = rate / 100
+    const bal0 = Math.round(projectSavings(balance, monthlyContrib, rate, preservationAge - currentAge))
+    let bal = bal0
+    const maxAge = Math.max(lifeExpectancy, preservationAge + 1)
+    for (let age = preservationAge + 1; age <= maxAge; age++) {
+      bal = bal * (1 + r) - annualIncome
+      if (bal <= 0) {
+        data.push({ age, accumulation: null, drawdown: 0 })
+        break
+      }
+      data.push({ age, accumulation: null, drawdown: Math.round(bal) })
+    }
+  }
+
+  return data
+}
+
+function superRunsOutAge(preservationAge, balance, rate, annualIncome) {
+  if (!annualIncome || annualIncome <= 0 || balance <= 0) return null
+  const r = rate / 100
+  let bal = balance
+  for (let yr = 0; yr < 80; yr++) {
+    bal = bal * (1 + r) - annualIncome
+    if (bal <= 0) return preservationAge + yr + 1
+  }
+  return null
+}
+
 function getBudgetRatio() {
   try { return JSON.parse(localStorage.getItem('budgetRatio')) || null }
   catch { return null }
@@ -156,6 +200,7 @@ export default function RetirementPage() {
     interest_rate:         7,
     desired_annual_income: 0,
     life_expectancy:       85,
+    super_balance:         0,
   })
 
   // Load profile into form once
@@ -169,6 +214,7 @@ export default function RetirementPage() {
         interest_rate:         profile.interest_rate         ?? 7,
         desired_annual_income: profile.desired_annual_income ?? 0,
         life_expectancy:       profile.life_expectancy       ?? 85,
+        super_balance:         profile.super_balance         ?? 0,
       })
     }
   }, [profile])
@@ -228,16 +274,27 @@ export default function RetirementPage() {
     ? projectSavings(Number(form.personal_savings), Number(form.monthly_contribution), rate, earlyRetireAge - currentAge)
     : 0
 
-  const superBalance    = Number(profile?.super_balance ?? 0)
-  const yearsToPreserv  = currentAge ? Math.max(preservationAge - currentAge, 0) : 0
-  const isAustralia     = profile?.country === 'Australia'
-  const sgcRate         = 0.12  // 12% employer guarantee (from 1 Jul 2025)
-  const sgcMonthly      = isAustralia && annualSalary > 0 ? Math.round((annualSalary * sgcRate) / 12) : 0
-  const totalSuperMonthly = sgcMonthly + Number(superForm.voluntaryContrib)
-  const netSuperRate    = Math.max(0, rate - Number(superForm.fundFeePercent))
-  const superAtPreserv  = projectSavings(superBalance, totalSuperMonthly, netSuperRate, yearsToPreserv)
-  const superYears      = Math.max(form.life_expectancy - preservationAge, 1)
-  const superPerYear    = superAtPreserv / superYears
+  const superBalance      = Number(form.super_balance ?? 0)
+  const yearsToPreserv    = currentAge ? Math.max(preservationAge - currentAge, 0) : 0
+  const isAustralia       = profile?.country === 'Australia'
+  const sgcRate           = 0.12
+  const sgcMonthly        = isAustralia && annualSalary > 0 ? Math.round((annualSalary * sgcRate) / 12) : 0
+  const voluntaryMonthly  = Number(superForm.voluntaryContrib)
+  const totalSuperMonthly = sgcMonthly + voluntaryMonthly
+  const netSuperRate      = Math.max(0, rate - Number(superForm.fundFeePercent))
+  const superAtPreserv    = projectSavings(superBalance, totalSuperMonthly, netSuperRate, yearsToPreserv)
+  const superYears        = Math.max(form.life_expectancy - preservationAge, 1)
+  const superPerYear      = desiredIncome > 0 ? desiredIncome : superAtPreserv / superYears
+
+  // Super breakdown metrics
+  const totalSGCContribs  = sgcMonthly * 12 * yearsToPreserv
+  const totalVolContribs  = voluntaryMonthly * 12 * yearsToPreserv
+  const totalContribs     = totalSGCContribs + totalVolContribs
+  const investGrowth      = Math.max(0, superAtPreserv - superBalance - totalContribs)
+  const superExhaustedAge = superRunsOutAge(preservationAge, superAtPreserv, netSuperRate, superPerYear)
+  const superChartData    = isAustralia
+    ? buildSuperChartData(currentAge, preservationAge, form.life_expectancy, superBalance, totalSuperMonthly, netSuperRate, superPerYear)
+    : []
 
   const chartData = buildChartData(
     currentAge, earlyRetireAge, preservationAge,
@@ -443,19 +500,33 @@ export default function RetirementPage() {
           </div>
 
           {/* Superannuation calculator — AU only */}
-          {isAustralia && superBalance > 0 && (
-            <div className="glass rounded-2xl p-5 flex flex-col gap-4">
-              <p className="text-slate-500 text-xs uppercase tracking-widest">Super calculator</p>
-              <div className="flex flex-col gap-1">
-                <div className="flex justify-between text-xs">
-                  <span className="text-slate-400">Employer SGC (12%)</span>
-                  <span className="text-cyan-400 font-semibold">${sgcMonthly.toLocaleString()}/mo</span>
-                </div>
-                <div className="flex justify-between text-xs mt-1">
-                  <span className="text-slate-400">Current balance</span>
-                  <span className="text-white font-semibold">{fmt(superBalance)}</span>
+          {isAustralia && (
+            <div className="glass rounded-2xl p-5 flex flex-col gap-4" style={{ borderColor: 'rgba(224,64,251,0.15)' }}>
+              <p className="text-slate-500 text-xs uppercase tracking-widest">Super fund</p>
+
+              {/* Current super balance — editable */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-slate-400 text-xs">Current super balance ($)</label>
+                <div className="relative">
+                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 text-sm">$</span>
+                  <input type="number" min="0" placeholder="0"
+                    value={form.super_balance || ''}
+                    onChange={e => set('super_balance', e.target.value)}
+                    className="w-full rounded-lg pl-7 pr-4 py-2.5 text-white text-sm outline-none"
+                    style={inputStyle} onFocus={focusGlow} onBlur={blurGlow}
+                  />
                 </div>
               </div>
+
+              {/* SGC display */}
+              {sgcMonthly > 0 && (
+                <div className="flex items-center justify-between py-2 px-3 rounded-lg text-xs"
+                  style={{ background: 'rgba(224,64,251,0.06)', border: '1px solid rgba(224,64,251,0.15)' }}>
+                  <span className="text-slate-400">Employer SGC (12% of salary)</span>
+                  <span className="font-semibold" style={{ color: '#e040fb' }}>${sgcMonthly.toLocaleString()}/mo</span>
+                </div>
+              )}
+
               <div className="flex flex-col gap-1.5">
                 <label className="text-slate-400 text-xs">Personal voluntary contribution ($/mo)</label>
                 <div className="relative">
@@ -467,7 +538,9 @@ export default function RetirementPage() {
                     style={inputStyle} onFocus={focusGlow} onBlur={blurGlow}
                   />
                 </div>
+                <p className="text-slate-600 text-xs">Concessional cap: $30,000/yr (incl. SGC)</p>
               </div>
+
               <div className="flex flex-col gap-1.5">
                 <label className="text-slate-400 text-xs">Annual fund fee (%)</label>
                 <div className="relative">
@@ -536,20 +609,133 @@ export default function RetirementPage() {
             </div>
           </div>
 
-          {/* Super summary */}
-          {superBalance > 0 && (
-            <div className="glass rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-4"
-              style={{ borderColor: 'rgba(224,64,251,0.15)' }}>
-              <div className="flex-1 text-center sm:text-left">
-                <p className="text-slate-500 text-xs uppercase tracking-widest mb-1">Super / pension fund</p>
-                <p className="text-white font-semibold">
-                  Projected value at {preservationAge}: <span style={{ color: '#e040fb' }}>{fmt(superAtPreserv)}</span>
-                </p>
-                <p className="text-slate-400 text-sm mt-1">
-                  Provides approximately <span className="text-white font-semibold">{fmt(superPerYear)}/year</span> from age {preservationAge} to {form.life_expectancy}
-                </p>
+          {/* Super expanded section */}
+          {isAustralia && (superBalance > 0 || sgcMonthly > 0) && (
+            <div className="glass rounded-2xl p-6 flex flex-col gap-6" style={{ borderColor: 'rgba(224,64,251,0.18)' }}>
+              {/* Header */}
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <h2 className="text-white font-semibold">Super fund projection</h2>
+                  <p className="text-slate-500 text-xs mt-0.5">
+                    Age {currentAge} → {preservationAge} (preservation) · {netSuperRate}% net return
+                  </p>
+                </div>
+                <span className="text-2xl">🏦</span>
               </div>
-              <div className="text-4xl">🏦</div>
+
+              {/* Key metrics */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {[
+                  { label: 'Current balance', value: fmt(superBalance), color: '#94a3b8' },
+                  { label: `At age ${preservationAge}`, value: fmt(superAtPreserv), color: '#e040fb' },
+                  { label: 'Annual income', value: `${fmt(superPerYear)}/yr`, color: '#7c3aed' },
+                  {
+                    label: superExhaustedAge ? `Lasts until age` : 'Never runs out',
+                    value: superExhaustedAge ? String(superExhaustedAge) : '∞',
+                    color: superExhaustedAge && superExhaustedAge < form.life_expectancy ? '#f43f5e' : '#00d4ff',
+                  },
+                ].map(m => (
+                  <div key={m.label} className="rounded-xl p-3 text-center"
+                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                    <p className="text-slate-500 text-xs mb-1.5 leading-tight">{m.label}</p>
+                    <p className="font-bold text-lg leading-none" style={{ color: m.color }}>{m.value}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Super chart */}
+              {superChartData.length > 1 && (
+                <>
+                  <div className="flex gap-4 text-xs text-slate-500">
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-3 h-0.5 rounded inline-block" style={{ background: '#e040fb' }} />
+                      Accumulation
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-3 h-0.5 rounded inline-block" style={{ background: '#7c3aed' }} />
+                      Drawdown
+                    </span>
+                  </div>
+                  <ResponsiveContainer width="100%" height={220}>
+                    <AreaChart data={superChartData} margin={{ top: 8, right: 10, left: 0, bottom: 16 }}>
+                      <defs>
+                        <linearGradient id="gradSuper" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%"  stopColor="#e040fb" stopOpacity={0.35} />
+                          <stop offset="95%" stopColor="#e040fb" stopOpacity={0}    />
+                        </linearGradient>
+                        <linearGradient id="gradSuperDraw" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%"  stopColor="#7c3aed" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#7c3aed" stopOpacity={0}   />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                      <XAxis dataKey="age" tick={{ fill: '#64748b', fontSize: 11 }} axisLine={false} tickLine={false}
+                        label={{ value: 'Age', position: 'insideBottom', offset: -8, fill: '#e040fb', fontSize: 12 }} />
+                      <YAxis tickFormatter={v => fmt(v)} tick={{ fill: '#64748b', fontSize: 10 }} axisLine={false} tickLine={false} width={58} />
+                      <Tooltip content={<CustomTooltip />} />
+                      <ReferenceLine x={preservationAge} stroke="#e040fb" strokeDasharray="4 4"
+                        label={{ value: `Age ${preservationAge}`, position: 'top', fill: '#e040fb', fontSize: 10 }} />
+                      <Area type="monotone" dataKey="accumulation" name="Super balance" stroke="#e040fb" strokeWidth={2} fill="url(#gradSuper)" dot={false} connectNulls={false} />
+                      <Area type="monotone" dataKey="drawdown" name="Drawdown" stroke="#7c3aed" strokeWidth={2} fill="url(#gradSuperDraw)" dot={false} connectNulls={false} />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </>
+              )}
+
+              {/* Contribution breakdown */}
+              {yearsToPreserv > 0 && (
+                <div className="flex flex-col gap-3">
+                  <p className="text-slate-500 text-xs uppercase tracking-wider">How {fmt(superAtPreserv)} is made up</p>
+                  {[
+                    { label: 'Starting balance', value: superBalance, color: '#64748b' },
+                    { label: `Employer SGC (${yearsToPreserv} yrs)`, value: totalSGCContribs, color: '#e040fb' },
+                    ...(totalVolContribs > 0 ? [{ label: 'Your contributions', value: totalVolContribs, color: '#a78bfa' }] : []),
+                    { label: 'Investment growth', value: investGrowth, color: '#00d4ff' },
+                  ].map(row => {
+                    const pct = superAtPreserv > 0 ? (row.value / superAtPreserv) * 100 : 0
+                    return (
+                      <div key={row.label}>
+                        <div className="flex items-center justify-between text-xs mb-1.5">
+                          <span className="text-slate-400 flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full inline-block" style={{ background: row.color }} />
+                            {row.label}
+                          </span>
+                          <span className="font-semibold" style={{ color: row.color }}>
+                            {fmt(row.value)} <span className="text-slate-600 font-normal">({pct.toFixed(0)}%)</span>
+                          </span>
+                        </div>
+                        <div className="h-1.5 rounded-full" style={{ background: 'rgba(255,255,255,0.05)' }}>
+                          <div className="h-1.5 rounded-full transition-all duration-700"
+                            style={{ width: `${Math.min(100, pct)}%`, background: row.color, opacity: 0.7 }} />
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
+
+              {/* Fund longevity warning */}
+              {superExhaustedAge && superExhaustedAge < form.life_expectancy && (
+                <div className="rounded-xl px-4 py-3 text-sm flex items-start gap-3"
+                  style={{ background: 'rgba(244,63,94,0.06)', border: '1px solid rgba(244,63,94,0.2)' }}>
+                  <span className="text-red-400 mt-0.5 shrink-0">⚠️</span>
+                  <div>
+                    <p className="text-red-300 font-medium text-xs">Super shortfall detected</p>
+                    <p className="text-slate-400 text-xs mt-0.5">
+                      At {fmt(superPerYear)}/yr, your super runs out at age {superExhaustedAge} — {form.life_expectancy - superExhaustedAge} year{form.life_expectancy - superExhaustedAge !== 1 ? 's' : ''} before your life expectancy. Consider increasing voluntary contributions or adjusting your retirement income target.
+                    </p>
+                  </div>
+                </div>
+              )}
+              {(!superExhaustedAge || superExhaustedAge >= form.life_expectancy) && superAtPreserv > 0 && (
+                <div className="rounded-xl px-4 py-3 text-xs flex items-center gap-3"
+                  style={{ background: 'rgba(0,212,255,0.05)', border: '1px solid rgba(0,212,255,0.15)' }}>
+                  <span>✅</span>
+                  <p className="text-slate-400">
+                    Super covers <span className="text-white font-semibold">{fmt(superPerYear)}/yr</span> from age {preservationAge} and lasts beyond your life expectancy of {form.life_expectancy}.
+                  </p>
+                </div>
+              )}
             </div>
           )}
 

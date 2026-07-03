@@ -55,6 +55,7 @@ export default function LandingPage() {
         <span className="text-xl font-bold text-gradient">Retirely</span>
         <nav className="hidden md:flex items-center gap-8 text-slate-400 text-sm">
           <a href="#features" className="hover:text-white transition-colors">Features</a>
+          <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
           <Link to="/about" className="hover:text-white transition-colors">About</Link>
           <Link to="/privacy" className="hover:text-white transition-colors">Privacy & Terms</Link>
         </nav>
@@ -112,9 +113,9 @@ export default function LandingPage() {
         {/* Stat pills */}
         <div className="flex flex-wrap justify-center gap-4 mt-4">
           {[
-            { label: 'Users', value: '10,000+' },
-            { label: 'Avg. savings found', value: '$4,200/yr' },
             { label: 'Banks supported', value: '12,000+' },
+            { label: 'Always free to start', value: '$0' },
+            { label: 'No credit card needed', value: '✓' },
           ].map(stat => (
             <div key={stat.label} className="glass rounded-xl px-6 py-3 text-center">
               <div className="text-xl font-bold text-gradient">{stat.value}</div>
@@ -228,6 +229,107 @@ export default function LandingPage() {
               <p className="text-slate-400 text-sm leading-relaxed">{f.desc}</p>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section id="pricing" className="relative z-10 px-6 py-20 max-w-5xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-3">Simple pricing</h2>
+        <p className="text-slate-400 text-center mb-14">Start free. Upgrade when you want bank sync.</p>
+
+        <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          {/* Free */}
+          <div className="glass rounded-2xl p-8 flex flex-col gap-6" style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
+            <div>
+              <p className="text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">Free</p>
+              <div className="flex items-end gap-1">
+                <span className="text-5xl font-bold text-white">$0</span>
+                <span className="text-slate-500 text-sm mb-2">/month</span>
+              </div>
+              <p className="text-slate-500 text-sm mt-1">Forever free. No credit card required.</p>
+            </div>
+            <ul className="flex flex-col gap-2.5 text-sm text-slate-300">
+              {[
+                'Dashboard & spending charts',
+                'Manual transaction entry',
+                'Budget tools (limits, 50/30/20)',
+                'Retirement calculator',
+                'Debt payoff tracker',
+                'Savings goals',
+                'Net worth tracker',
+                'Bills tracker',
+                'Tax estimator',
+                'Financial leaderboard',
+              ].map(f => (
+                <li key={f} className="flex items-center gap-2.5">
+                  <span className="w-4 h-4 rounded-full flex items-center justify-center shrink-0"
+                    style={{ background: 'rgba(0,212,255,0.15)' }}>
+                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="#00d4ff" strokeWidth="2">
+                      <path d="M2 5l2.5 2.5L8 3" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <Link
+              to="/login"
+              className="block text-center py-3 rounded-xl font-semibold text-slate-300 hover:text-white glass transition-colors"
+            >
+              Get started free
+            </Link>
+          </div>
+
+          {/* Premium */}
+          <div className="rounded-2xl p-8 flex flex-col gap-6 relative overflow-hidden"
+            style={{ background: 'linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.12))', border: '1px solid rgba(124,58,237,0.35)' }}>
+            <div className="absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full text-white"
+              style={{ background: 'linear-gradient(135deg,#00d4ff,#7c3aed)' }}>
+              POPULAR
+            </div>
+            <div>
+              <p className="text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">Premium</p>
+              <div className="flex items-end gap-1">
+                <span className="text-5xl font-bold text-white">$9</span>
+                <span className="text-slate-500 text-sm mb-2">/month</span>
+              </div>
+              <p className="text-slate-500 text-sm mt-1">
+                Or <span className="text-cyan-400 font-semibold">$79/year</span> — save 27%
+              </p>
+            </div>
+            <ul className="flex flex-col gap-2.5 text-sm text-slate-300">
+              <li className="flex items-center gap-2.5 text-slate-500 text-xs uppercase tracking-wider font-medium">
+                Everything in Free, plus:
+              </li>
+              {[
+                'Bank sync — US, UK & Canada (Plaid)',
+                'Bank sync — Australia (Basiq)',
+                'Auto transaction import',
+                'CSV data export',
+                '12-month income & expense reports',
+                'Monthly PDF statements',
+                'Annual financial year statements',
+                'Financial summary PDF export',
+              ].map(f => (
+                <li key={f} className="flex items-center gap-2.5">
+                  <span className="w-4 h-4 rounded-full flex items-center justify-center shrink-0"
+                    style={{ background: 'rgba(124,58,237,0.2)' }}>
+                    <svg width="8" height="8" viewBox="0 0 10 10" fill="none" stroke="#a78bfa" strokeWidth="2">
+                      <path d="M2 5l2.5 2.5L8 3" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                  {f}
+                </li>
+              ))}
+            </ul>
+            <Link
+              to="/login"
+              className="block text-center py-3 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:glow-purple"
+              style={{ background: 'linear-gradient(135deg, #7c3aed, #e040fb)' }}
+            >
+              Start free — upgrade anytime
+            </Link>
+          </div>
         </div>
       </section>
 

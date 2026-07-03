@@ -9,6 +9,7 @@ import { useTransactions } from '../hooks/useTransactions'
 import { useProfile } from '../hooks/useProfile'
 import { supabase } from '../lib/supabase'
 import RecurringTransactions from '../components/RecurringTransactions'
+import TransactionReview, { getUnreviewedCount } from '../components/TransactionReview'
 import { downloadTransactionsCSV } from '../lib/csvExport'
 
 async function authHeaders() {
@@ -25,16 +26,17 @@ const inputBase = {
 }
 
 export default function TransactionsPage() {
-  const { transactions, loading, addTransaction, deleteTransaction, refresh } = useTransactions()
+  const { transactions, loading, addTransaction, deleteTransaction, updateTransaction, refresh } = useTransactions()
   const { profile } = useProfile()
   const navigate = useNavigate()
   const isPremium = profile?.subscription_status === 'premium'
-  const [syncing,    setSyncing]    = useState(false)
-  const [syncMsg,    setSyncMsg]    = useState(null)
-  const [showForm,   setShowForm]   = useState(false)
-  const [search,     setSearch]     = useState('')
-  const [filterType, setFilterType] = useState('all')
-  const [filterCat,  setFilterCat]  = useState('all')
+  const [syncing,      setSyncing]      = useState(false)
+  const [syncMsg,      setSyncMsg]      = useState(null)
+  const [showForm,     setShowForm]     = useState(false)
+  const [showReview,   setShowReview]   = useState(false)
+  const [search,       setSearch]       = useState('')
+  const [filterType,   setFilterType]   = useState('all')
+  const [filterCat,    setFilterCat]    = useState('all')
 
   const categories = ['all', ...Array.from(new Set(transactions.map(t => t.category))).sort()]
 
@@ -102,6 +104,29 @@ export default function TransactionsPage() {
               {syncing ? 'Syncing…' : 'Sync bank'}
             </button>
           )}
+          {/* 7-day review button */}
+          {!loading && transactions.length > 0 && (() => {
+            const unreviewed = getUnreviewedCount(transactions)
+            return (
+              <button
+                onClick={() => setShowReview(true)}
+                className="relative flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-cyan-400 glass transition-colors"
+              >
+                <svg width="15" height="15" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.5">
+                  <path d="M2 5h16M2 10h10M2 15h7" strokeLinecap="round" />
+                  <circle cx="16" cy="14" r="3.5" />
+                  <path d="M14.5 14l1 1 2-2" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.3" />
+                </svg>
+                Review
+                {unreviewed > 0 && (
+                  <span className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full text-xs font-bold flex items-center justify-center text-white"
+                    style={{ background: 'linear-gradient(135deg,#00d4ff,#7c3aed)' }}>
+                    {unreviewed > 9 ? '9+' : unreviewed}
+                  </span>
+                )}
+              </button>
+            )
+          })()}
           <button
             onClick={() => {
               if (!isPremium) { navigate('/upgrade'); return }
@@ -236,6 +261,14 @@ export default function TransactionsPage() {
           : <TransactionList transactions={filtered} total={transactions.length} onDelete={deleteTransaction} />
         }
       </div>
+
+      {showReview && (
+        <TransactionReview
+          transactions={transactions}
+          onUpdate={updateTransaction}
+          onClose={() => setShowReview(false)}
+        />
+      )}
     </AppLayout>
   )
 }

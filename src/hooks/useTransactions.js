@@ -39,5 +39,11 @@ export function useTransactions() {
     await fetchTransactions()
   }
 
-  return { transactions, loading, error, addTransaction, deleteTransaction, refresh: fetchTransactions }
+  async function updateTransaction(id, changes) {
+    const { error } = await supabase.from('transactions').update(changes).eq('id', id)
+    if (error) throw new Error(error.message)
+    setTransactions(prev => prev.map(t => t.id === id ? { ...t, ...changes } : t))
+  }
+
+  return { transactions, loading, error, addTransaction, deleteTransaction, updateTransaction, refresh: fetchTransactions }
 }
