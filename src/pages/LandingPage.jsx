@@ -277,7 +277,7 @@ export default function LandingPage() {
             </ul>
             <Link
               to="/login"
-              className="block text-center py-3 rounded-xl font-semibold text-slate-300 hover:text-white glass transition-colors"
+              className="block text-center py-3 rounded-xl font-semibold text-slate-300 hover:text-white glass transition-colors mt-auto"
             >
               Get started free
             </Link>
@@ -327,7 +327,7 @@ export default function LandingPage() {
             </ul>
             <Link
               to="/login"
-              className="block text-center py-3 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:glow-purple"
+              className="block text-center py-3 rounded-xl font-semibold text-white transition-all duration-300 hover:scale-105 hover:glow-purple mt-auto"
               style={{ background: 'linear-gradient(135deg, #7c3aed, #e040fb)' }}
             >
               Start free — upgrade anytime
