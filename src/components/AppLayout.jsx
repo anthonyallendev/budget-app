@@ -246,7 +246,7 @@ export default function AppLayout({ children }) {
   return (
     <div className="min-h-screen bg-space-900 text-white">
       {/* Header */}
-      <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 glass border-b border-cyan-glow/10">
+      <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 glass border-b border-cyan-glow/10" style={{ background: 'rgba(6,11,26,0.82)' }}>
         <span className="text-3xl font-bold text-gradient">Retirely</span>
         <button
           onClick={() => setOpen(true)}
