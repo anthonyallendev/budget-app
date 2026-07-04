@@ -726,7 +726,7 @@ export default function PrivacyPolicyPage() {
       </header>
 
       {/* Hero */}
-      <div className="max-w-5xl mx-auto px-6 pt-16 pb-8">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 pt-16 pb-8">
         <div className="mb-3">
           <span className="text-xs font-medium text-cyan-400 uppercase tracking-widest">Legal</span>
         </div>
@@ -755,7 +755,7 @@ export default function PrivacyPolicyPage() {
       </div>
 
       {/* Tab selector */}
-      <div className="max-w-5xl mx-auto px-6 mb-8">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 mb-8">
         <div className="flex gap-1 glass rounded-xl p-1 w-fit">
           {TABS.map(t => (
             <button
@@ -774,7 +774,7 @@ export default function PrivacyPolicyPage() {
       </div>
 
       {/* Content + TOC */}
-      <div className="max-w-5xl mx-auto px-6 pb-20 flex gap-10 items-start">
+      <div className="relative z-10 max-w-5xl mx-auto px-6 pb-20 flex gap-10 items-start">
 
         {/* Table of contents — sticky on desktop */}
         <aside className="hidden lg:block w-52 shrink-0 sticky top-28">
@@ -800,7 +800,7 @@ export default function PrivacyPolicyPage() {
         </div>
       </div>
 
-      <footer className="text-center text-slate-600 text-sm py-8 border-t border-white/5">
+      <footer className="relative z-10 text-center text-slate-600 text-sm py-8 border-t border-white/5">
         © {new Date().getFullYear()} Retirely ·{' '}
         <Link to="/about" className="hover:text-slate-400 transition-colors">About</Link> ·{' '}
         <Link to="/privacy" className="hover:text-slate-400 transition-colors">Privacy & Terms</Link> ·{' '}
