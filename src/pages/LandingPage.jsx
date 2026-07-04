@@ -19,16 +19,10 @@ const portfolioData = [
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null
   return (
-    <div style={{
-      background: 'rgba(6,11,26,0.95)',
-      border: '1px solid rgba(0,212,255,0.2)',
-      borderRadius: '12px',
-      padding: '12px 16px',
-      fontSize: '14px',
-    }}>
-      <p style={{ color: '#94a3b8', marginBottom: '8px' }}>{label}</p>
+    <div className="glass rounded-xl px-4 py-3 text-sm" style={{ border: '1px solid rgba(0,212,255,0.2)' }}>
+      <p className="text-slate-400 mb-2">{label}</p>
       {payload.map(p => (
-        <p key={p.name} style={{ color: p.color, fontWeight: 600 }}>
+        <p key={p.name} style={{ color: p.color }} className="font-semibold">
           {p.name}: ${p.value.toLocaleString()}
         </p>
       ))}
