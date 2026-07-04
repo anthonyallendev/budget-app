@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import AppLayout from '../components/AppLayout'
 import PremiumGate from '../components/PremiumGate'
+import AIMoneyReport from '../components/AIMoneyReport'
 import { useProfile } from '../hooks/useProfile'
 import { useTransactions } from '../hooks/useTransactions'
 import { openFinancialSummaryPDF } from '../lib/pdfReport'
@@ -356,6 +357,7 @@ export default function ReportsPage() {
         {[
           { key: 'overview',    label: 'Overview' },
           { key: 'statements',  label: 'Statements', badge: hasNewStatement },
+          { key: 'ai',          label: '✨ AI Report' },
         ].map(t => (
           <button
             key={t.key}
@@ -525,6 +527,9 @@ export default function ReportsPage() {
       {tab === 'statements' && (
         <StatementsTab transactions={transactions} profile={profile} isPremium={isPremium} />
       )}
+
+      {/* ── AI Report tab ── */}
+      {tab === 'ai' && <AIMoneyReport isPremium={isPremium} />}
     </AppLayout>
   )
 }

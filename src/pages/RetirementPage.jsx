@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useProfile } from '../hooks/useProfile'
 import AppLayout from '../components/AppLayout'
 import RetirementReadinessScore from '../components/RetirementReadinessScore'
+import MonteCarloSimulator from '../components/MonteCarloSimulator'
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, ReferenceLine
 } from 'recharts'
@@ -788,6 +789,20 @@ export default function RetirementPage() {
             )}
           </div>
         </div>
+
+        {/* ── Section 3: Monte Carlo simulation (premium) ── */}
+        <MonteCarloSimulator
+          isPremium={profile?.subscription_status === 'premium'}
+          inputs={{
+            currentAge:          currentAge ?? 0,
+            retirementAge:       earlyRetireAge ?? preservationAge,
+            lifeExpectancy:      Number(form.life_expectancy),
+            startingBalance:     Number(form.personal_savings),
+            monthlyContribution: Number(form.monthly_contribution),
+            riskRate:            Number(form.interest_rate),
+            annualSpend:         desiredIncome,
+          }}
+        />
 
       </div>
     </AppLayout>

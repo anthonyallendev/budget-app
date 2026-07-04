@@ -9,6 +9,10 @@ import TransactionsPage from './pages/TransactionsPage'
 import BudgetTargetsPage from './pages/BudgetTargetsPage'
 import BudgetLimitsPage from './pages/BudgetLimitsPage'
 import RetirementPage from './pages/RetirementPage'
+import ScenarioPlannerPage from './pages/ScenarioPlannerPage'
+import AgePensionPage from './pages/AgePensionPage'
+import SubscriptionAuditPage from './pages/SubscriptionAuditPage'
+import HouseholdPage from './pages/HouseholdPage'
 import UpgradePage from './pages/UpgradePage'
 import InvestmentStrategiesPage from './pages/InvestmentStrategiesPage'
 import TaxEstimatePage from './pages/TaxEstimatePage'
@@ -43,6 +47,10 @@ export default function App() {
         <Route path="/budget-targets" element={<Private><BudgetTargetsPage /></Private>} />
         <Route path="/budget-limits"  element={<Private><BudgetLimitsPage /></Private>} />
         <Route path="/retirement"     element={<Private><RetirementPage /></Private>} />
+        <Route path="/scenarios"      element={<Private><ScenarioPlannerPage /></Private>} />
+        <Route path="/age-pension"    element={<Private><AgePensionPage /></Private>} />
+        <Route path="/subscriptions"  element={<Private><SubscriptionAuditPage /></Private>} />
+        <Route path="/household"      element={<Private><HouseholdPage /></Private>} />
         <Route path="/upgrade"        element={<Private><UpgradePage /></Private>} />
         <Route path="/investing"      element={<Private><InvestmentStrategiesPage /></Private>} />
         <Route path="/tax"            element={<Private><TaxEstimatePage /></Private>} />

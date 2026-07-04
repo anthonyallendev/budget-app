@@ -212,10 +212,64 @@ function IconSettings() {
   )
 }
 
+function IconScenarios() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.2">
+      {/* Branching paths */}
+      <path d="M3 10h4" strokeLinecap="round" />
+      <path d="M7 10c3 0 3-4 6-4h3" strokeLinecap="round" />
+      <path d="M7 10c3 0 3 4 6 4h3" strokeLinecap="round" />
+      <circle cx="3" cy="10" r="1.2" fill="currentColor" strokeWidth="0" />
+      <circle cx="17" cy="6" r="1.2" fill="currentColor" strokeWidth="0" />
+      <circle cx="17" cy="14" r="1.2" fill="currentColor" strokeWidth="0" />
+    </svg>
+  )
+}
+
+function IconPension() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.2">
+      {/* Shield with $ */}
+      <path d="M10 2l6 2.5v5c0 3.8-2.5 7-6 8.5C6.5 16.5 4 13.3 4 9.5v-5L10 2z" strokeLinejoin="round" />
+      <path d="M12 7.5c0-1-.9-1.5-2-1.5s-2 .5-2 1.5 1 1.4 2 1.5 2 .5 2 1.5-.9 1.5-2 1.5-2-.5-2-1.5" strokeLinecap="round" strokeWidth="1" />
+      <path d="M10 5v9" strokeLinecap="round" strokeWidth="0.9" />
+    </svg>
+  )
+}
+
+function IconSubscriptions() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.2">
+      {/* Recurring arrows */}
+      <path d="M16 8A6.5 6.5 0 0 0 4.5 6.5" strokeLinecap="round" />
+      <path d="M4 12a6.5 6.5 0 0 0 11.5 1.5" strokeLinecap="round" />
+      <path d="M4.5 3v3.5H8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M15.5 17v-3.5H12" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  )
+}
+
+function IconHousehold() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="1.2">
+      {/* House + two people */}
+      <path d="M3 9l7-6 7 6" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 8.5V17h10V8.5" strokeLinecap="round" />
+      <circle cx="8" cy="11.5" r="1.3" />
+      <circle cx="12" cy="11.5" r="1.3" />
+      <path d="M6 16c.3-1.6 1-2.4 2-2.4s1.7.8 2 2.4M10 16c.3-1.6 1-2.4 2-2.4s1.7.8 2 2.4" strokeLinecap="round" strokeWidth="0.9" />
+    </svg>
+  )
+}
+
 const NAV = [
   { to: '/dashboard',      label: 'Dashboard',      Icon: IconDashboard      },
   { to: '/retirement',     label: 'Retirement',     Icon: IconRetirement     },
+  { to: '/scenarios',      label: 'Scenarios',      Icon: IconScenarios      },
+  { to: '/age-pension',    label: 'Age Pension',    Icon: IconPension        },
   { to: '/transactions',   label: 'Transactions',   Icon: IconTransactions   },
+  { to: '/subscriptions',  label: 'Subscriptions',  Icon: IconSubscriptions  },
+  { to: '/household',      label: 'Household',      Icon: IconHousehold      },
   { to: '/budget-targets', label: 'Budget Targets', Icon: IconBudgetTargets  },
   { to: '/budget-limits',  label: 'Budget Limits',  Icon: IconBudgetLimits   },
   { to: '/investing',      label: 'Investing',      Icon: IconInvesting      },

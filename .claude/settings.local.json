@@ -1,5 +1,6 @@
 {
   "permissions": {
+    "defaultMode": "bypassPermissions",
     "allow": [
       "Bash(git init *)",
       "Bash(git add *)",
@@ -17,7 +18,10 @@
       "Bash(npx vercel *)",
       "Bash(whois retireli.app)",
       "Bash(whois retirely.io)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "WebSearch",
+      "WebFetch",
+      "Bash(curl *)"
     ]
   }
 }
