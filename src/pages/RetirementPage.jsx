@@ -335,12 +335,9 @@ export default function RetirementPage() {
         {/* ── Section 1: Personal savings inputs + savings projection ── */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-          {/* Left: profile + savings inputs */}
-          <div className="flex flex-col gap-4">
-
             {/* Profile summary */}
             {currentAge && (
-              <div className="glass rounded-2xl p-5" style={{ borderColor: 'rgba(0,212,255,0.1)' }}>
+              <div className="glass rounded-2xl p-5 lg:row-start-1 lg:col-start-1" style={{ borderColor: 'rgba(0,212,255,0.1)' }}>
                 <p className="text-slate-500 text-xs uppercase tracking-widest mb-3">Your profile</p>
                 <div className="flex flex-col gap-1 text-sm">
                   <div className="flex justify-between">
@@ -366,7 +363,7 @@ export default function RetirementPage() {
             )}
 
             {/* Personal savings inputs */}
-            <div className="glass rounded-2xl p-5 flex flex-col gap-4" style={{ borderColor: 'rgba(0,212,255,0.1)' }}>
+            <div className="glass rounded-2xl p-5 flex flex-col gap-4 lg:row-start-2 lg:col-start-1" style={{ borderColor: 'rgba(0,212,255,0.1)' }}>
               <p className="text-slate-500 text-xs uppercase tracking-widest">Personal savings</p>
 
               <div className="flex flex-col gap-1.5">
@@ -462,13 +459,9 @@ export default function RetirementPage() {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Right: hero result cards + savings projection chart */}
-          <div className="lg:col-span-2 flex flex-col gap-6">
 
             {/* Hero result cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:row-start-1 lg:col-start-2 lg:col-span-2">
               <div className="glass rounded-2xl p-6 flex flex-col items-center justify-center text-center"
                 style={{ borderColor: 'rgba(0,212,255,0.2)' }}>
                 <p className="text-slate-500 text-xs uppercase tracking-widest mb-3">You can retire at</p>
@@ -505,7 +498,7 @@ export default function RetirementPage() {
             </div>
 
             {/* Savings projection chart */}
-            <div className="glass rounded-2xl p-6 flex-1" style={{ borderColor: 'rgba(0,212,255,0.1)' }}>
+            <div className="glass rounded-2xl p-6 lg:row-start-2 lg:col-start-2 lg:col-span-2" style={{ borderColor: 'rgba(0,212,255,0.1)' }}>
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
                 <div>
                   <h2 className="text-white font-semibold mb-1">Savings projection</h2>
@@ -560,7 +553,6 @@ export default function RetirementPage() {
                 </div>
               )}
             </div>
-          </div>
         </div>
 
         {/* ── Section 2: Retirement income + super inputs alongside super projection ── */}
