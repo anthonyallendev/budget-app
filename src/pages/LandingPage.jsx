@@ -19,10 +19,16 @@ const portfolioData = [
 function CustomTooltip({ active, payload, label }) {
   if (!active || !payload?.length) return null
   return (
-    <div className="glass rounded-xl px-4 py-3 text-sm" style={{ border: '1px solid rgba(0,212,255,0.2)' }}>
-      <p className="text-slate-400 mb-2">{label}</p>
+    <div style={{
+      background: 'rgba(6,11,26,0.95)',
+      border: '1px solid rgba(0,212,255,0.2)',
+      borderRadius: '12px',
+      padding: '12px 16px',
+      fontSize: '14px',
+    }}>
+      <p style={{ color: '#94a3b8', marginBottom: '8px' }}>{label}</p>
       {payload.map(p => (
-        <p key={p.name} style={{ color: p.color }} className="font-semibold">
+        <p key={p.name} style={{ color: p.color, fontWeight: 600 }}>
           {p.name}: ${p.value.toLocaleString()}
         </p>
       ))}
@@ -216,10 +222,10 @@ export default function LandingPage() {
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                 <XAxis dataKey="year" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
                 <YAxis tickFormatter={v => `$${(v/1000).toFixed(0)}k`} tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Tooltip content={<CustomTooltip />} />
-                <Area type="monotone" dataKey="conservative" name="Conservative" stroke="#00d4ff" strokeWidth={2} fill="url(#gradCyan)"   dot={false} />
-                <Area type="monotone" dataKey="moderate"     name="Moderate"     stroke="#7c3aed" strokeWidth={2} fill="url(#gradPurple)" dot={false} />
-                <Area type="monotone" dataKey="aggressive"   name="Aggressive"   stroke="#e040fb" strokeWidth={2} fill="url(#gradPink)"   dot={false} />
+                <Tooltip content={<CustomTooltip />} isAnimationActive={false} cursor={{ stroke: 'rgba(255,255,255,0.08)', strokeWidth: 1 }} />
+                <Area type="monotone" dataKey="conservative" name="Conservative" stroke="#00d4ff" strokeWidth={2} fill="url(#gradCyan)"   dot={false} isAnimationActive={false} />
+                <Area type="monotone" dataKey="moderate"     name="Moderate"     stroke="#7c3aed" strokeWidth={2} fill="url(#gradPurple)" dot={false} isAnimationActive={false} />
+                <Area type="monotone" dataKey="aggressive"   name="Aggressive"   stroke="#e040fb" strokeWidth={2} fill="url(#gradPink)"   dot={false} isAnimationActive={false} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
