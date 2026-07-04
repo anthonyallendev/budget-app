@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const LAST_UPDATED = '1 July 2026'
+const LAST_UPDATED = '4 July 2026'
 const CONTACT_EMAIL = 'privacy@retirely.money'
 const COMPANY = 'Retirely'
 const DOMAIN = 'retirely.money'
@@ -114,6 +114,8 @@ function PrivacyContent() {
             'Debt payoff records (debt name, balance, interest rate, minimum payment)',
             'Recurring bills (name, amount, due date, category, frequency)',
             'Tax estimate inputs (salary, country)',
+            'Scenario planner inputs — the what-if retirement plans you create (Premium)',
+            'Age Pension estimator inputs — relationship status, homeowner status, asset and income figures you enter (Premium)',
           ]} />
         </Sub>
 
@@ -172,6 +174,27 @@ function PrivacyContent() {
             <strong className="text-white">Important (APP 5 disclosure):</strong> When you provide a third party's email address to send an invitation, we collect that email address on your behalf. We use it only to send the invitation and up to three monthly reminder emails. We do not use invitee email addresses for any other purpose. Invitees can unsubscribe at any time using the link in each email, after which we will not contact them again.
           </p>
         </Sub>
+
+        <Sub title="2.10 AI Money Reports (Premium)">
+          <p>If you use the AI monthly money report feature, we generate your report using Anthropic's Claude AI model. To do this, we send Anthropic a <strong className="text-white">summary</strong> of your recent transactions, consisting of:</p>
+          <Ul items={[
+            'Aggregated income and spending totals by category for the last 60 days',
+            'Your five largest recent expenses, including merchant name, amount, date, and category',
+            'Your first name (for a friendly greeting), if you have provided one',
+          ]} />
+          <p>We do <strong className="text-white">not</strong> send Anthropic your email address, account identifiers, bank account details, full transaction history, or any credentials. Under Anthropic's commercial terms, data sent via their API is not used to train their AI models. Generated reports are stored in our database (one per month) so they load instantly on return visits, and are deleted with your account.</p>
+        </Sub>
+
+        <Sub title="2.11 Household Data (Premium feature)">
+          <p>If you create or join a household:</p>
+          <Ul items={[
+            'We store your household membership, the household name, and its invite code',
+            'Your transactions become visible (read-only) to the other members of your household, and theirs become visible to you',
+            'Household members can see your display name and per-member income/spending totals on the Household page',
+            'Leaving the household immediately ends this sharing in both directions',
+          ]} />
+          <p><strong className="text-white">Joining a household is your consent to this sharing.</strong> Only join a household with people you trust to see your transaction history — and only share your invite code with them.</p>
+        </Sub>
       </Section>
 
       <Section id="pp-use" title="3. How We Use Your Information">
@@ -184,6 +207,8 @@ function PrivacyContent() {
           'To generate your monthly and annual financial statements',
           'To process your Premium subscription payments via Stripe',
           'To sync bank transactions (Premium users, via Plaid and Basiq)',
+          'To generate your monthly AI money report (Premium users, via Anthropic — see section 2.10)',
+          'To show your transactions and totals to members of your household, if you have joined one (see section 2.11)',
           'To send account-related emails (e.g. password reset — we do not send marketing emails without your explicit consent)',
           'To operate the Refer & Earn programme: to send invitation and reminder emails to addresses you provide, apply referral credits to your account, and process cash payouts via Stripe Connect',
           'To investigate and respond to support requests',
@@ -215,6 +240,7 @@ function PrivacyContent() {
                 <TableRow service="Stripe" purpose="Payment processing (Premium subscriptions)" link="stripe.com/privacy" />
                 <TableRow service="Plaid" purpose="Bank transaction sync — US, UK, Canada (Premium)" link="plaid.com/legal/privacy-notice" />
                 <TableRow service="Basiq" purpose="Bank transaction sync — Australia (Premium)" link="basiq.io/privacy-policy" />
+                <TableRow service="Anthropic" purpose="AI generation of monthly money reports from transaction summaries (Premium)" link="anthropic.com/legal/privacy" />
                 <TableRow service="Resend" purpose="Transactional email delivery (referral invites, credit notifications)" link="resend.com/legal/privacy-policy" />
                 <TableRow service="Google" purpose="OAuth sign-in (if you choose to sign in with Google)" link="policies.google.com/privacy" />
               </tbody>
@@ -404,6 +430,11 @@ function TermsContent() {
           'Anonymous community leaderboard',
           'Monthly and annual financial statements (Premium)',
           'Bank account connection and automatic transaction import (Premium)',
+          'Monte Carlo retirement simulation and scenario planner (Premium)',
+          'Age Pension estimator for Australian users (Premium)',
+          'AI-generated monthly money reports (Premium)',
+          'Subscription audit — automatic detection of recurring charges (Premium)',
+          'Household mode — linking accounts with a partner for a combined view (Premium)',
         ]} />
         <p>
           The Service is provided for personal, non-commercial use. We reserve the right to modify, suspend, or discontinue any part of the Service at any time.
@@ -435,12 +466,14 @@ function TermsContent() {
         <Sub title="4.2 Premium Subscription">
           <p>Premium is available for <strong className="text-white">$9.00 AUD per month</strong> or <strong className="text-white">$79.00 AUD per year</strong> (approximately 26% saving). Premium includes:</p>
           <Ul items={[
-            'Bank account sync via Plaid (US/UK/CA) and Basiq (AU)',
-            'Automatic transaction import',
+            'AI-generated monthly money reports',
+            'Monte Carlo retirement simulator and scenario planner',
+            'Age Pension estimator (Australia)',
+            'Subscription audit',
+            'Household mode with shared Premium (see section 4.7)',
+            'Bank account sync via Plaid (US/UK/CA) and Basiq (AU) with automatic transaction import',
             'CSV transaction export',
-            '12-month history charts and reports',
-            'Monthly and annual PDF statements',
-            'Financial summary PDF report',
+            '12-month history charts, monthly/annual PDF statements, and financial summary reports',
             'Priority support',
           ]} />
         </Sub>
@@ -462,6 +495,14 @@ function TermsContent() {
         <Sub title="4.6 Failed Payments">
           <p>If a payment fails, Stripe will attempt to retry the charge. If payment cannot be collected, your account may be downgraded to the free tier. You will be notified by email before this occurs.</p>
         </Sub>
+        <Sub title="4.7 Household Premium Sharing">
+          <Ul items={[
+            'One active Premium subscription extends Premium features to every member of the subscriber\'s household within the Service',
+            'Household coverage applies only while the paying member\'s subscription remains active and the covered member remains in the household — it ends automatically when either changes',
+            'A household is intended for people who genuinely share their finances (e.g. partners living together). We reserve the right to limit household size or suspend household coverage where we reasonably suspect the feature is being abused to share one subscription among unrelated users',
+            'Covered members do not have a billing relationship with us and are not charged; the paying member remains responsible for the subscription',
+          ]} />
+        </Sub>
       </Section>
 
       <Section id="tc-financial" title="5. Financial Disclaimer">
@@ -470,6 +511,9 @@ function TermsContent() {
         </p>
         <Ul items={[
           'All retirement projections, savings calculations, and investment return figures are estimates based on the inputs you provide and assumed average annual returns. They are illustrative only and do not guarantee future outcomes.',
+          'Monte Carlo simulations are statistical illustrations using randomised hypothetical market returns. A high "success rate" is not a guarantee that your money will last, and a simulated outcome is not a prediction of your actual outcome.',
+          'Age Pension estimates are approximations based on published Services Australia rates and thresholds, which change several times a year. They are not a Centrelink assessment or determination of your entitlement. Always confirm your actual entitlement with Services Australia.',
+          'AI-generated money reports are produced automatically by a large language model from a summary of your transactions. They may contain errors or omissions, are general information only, and are not financial advice (see section 16).',
           'Actual investment returns vary and can be negative. Past performance does not predict future results.',
           'Tax estimates provided by the Service are approximations for educational purposes. They are not a substitute for professional tax advice and should not be used to lodge a tax return.',
           'The investment strategy content on the Service is educational and uses hypothetical examples. It is not a recommendation to buy, sell, or hold any investment product.',
@@ -601,6 +645,26 @@ function TermsContent() {
         </p>
       </Section>
 
+      <Section id="tc-ai" title="16. AI Features and Household Mode">
+        <Sub title="16.1 AI-Generated Content">
+          <Ul items={[
+            'The AI money report feature uses Anthropic\'s Claude AI model to generate a written summary of your recent finances from your transaction data (see our Privacy Policy, section 2.10, for what data is shared)',
+            'AI-generated content is produced automatically without human review. It may contain inaccuracies, miscategorisations, or omissions — always verify important figures against your own records',
+            'AI reports are general information only and do not constitute financial, tax, or investment advice. Any "suggestion" in a report is a generic observation, not a personal recommendation',
+            'We may add, change, or remove AI features, or change the underlying AI provider or model, at any time',
+          ]} />
+        </Sub>
+        <Sub title="16.2 Household Mode">
+          <Ul items={[
+            'By creating or joining a household, you consent to the other members of that household viewing your transaction history and monthly totals (read-only) within the Service',
+            'You are responsible for who you share your household invite code with. Anyone who joins using your code will be able to see your transactions until you or they leave the household',
+            'You must not add a person to a household without their knowledge, or use household mode to access another person\'s financial data without their genuine consent',
+            'You can leave a household at any time from the Household page, which immediately ends the sharing in both directions',
+            'Household Premium coverage is described in section 4.7',
+          ]} />
+        </Sub>
+      </Section>
+
       <Section id="tc-referral" title="17. Refer & Earn Programme">
         <Sub title="17.1 How It Works">
           <p>
@@ -693,6 +757,7 @@ const TC_TOC = [
   { id: 'tc-availability', label: '13. Service Availability' },
   { id: 'tc-governing',    label: '14. Governing Law' },
   { id: 'tc-changes',      label: '15. Changes to Terms' },
+  { id: 'tc-ai',           label: '16. AI Features & Household Mode' },
   { id: 'tc-referral',     label: '17. Refer & Earn Programme' },
   { id: 'tc-contact',      label: '18. Contact' },
 ]
@@ -706,7 +771,10 @@ export default function PrivacyPolicyPage() {
 
       {/* Nav */}
       <header className="relative z-10 flex items-center justify-between px-8 py-5 glass border-b border-cyan-glow/10">
-        <Link to="/" className="text-xl font-bold text-gradient">Retirely</Link>
+        <Link to="/" className="flex items-center gap-2">
+          <span className="text-xl font-bold text-gradient">Retirely</span>
+          <img src="/favicon.svg" alt="" className="w-5 h-5" />
+        </Link>
         <nav className="hidden md:flex items-center gap-8 text-slate-400 text-sm">
           <Link to="/" className="hover:text-white transition-colors">Home</Link>
           <Link to="/about" className="hover:text-white transition-colors">About</Link>

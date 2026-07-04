@@ -37,12 +37,15 @@ function CustomTooltip({ active, payload, label }) {
 }
 
 const FEATURES = [
-  { icon: '🏦', title: 'Bank sync',             desc: 'Connect your accounts and import transactions automatically.',      accent: '#00d4ff' },
-  { icon: '📊', title: 'Smart budgets',          desc: 'Set limits by category and get alerts before you overspend.',       accent: '#7c3aed' },
-  { icon: '📈', title: 'Retirement calculator',  desc: 'See exactly when you can retire based on your S&P 500 growth rate.',accent: '#e040fb' },
-  { icon: '💳', title: 'Spending tracker',       desc: 'Categorise every purchase and understand where your money goes.',   accent: '#00d4ff' },
-  { icon: '🔒', title: 'Bank-grade security',    desc: 'Your data is encrypted end-to-end. We never store your credentials.',accent: '#7c3aed' },
-  { icon: '📉', title: 'Charts & reports',       desc: 'Beautiful dashboards that make your finances easy to understand.',  accent: '#e040fb' },
+  { icon: '🎲', title: 'Will my money last?',    desc: 'Monte Carlo simulation runs 1,000 market histories to show the real odds your savings go the distance.', accent: '#00d4ff' },
+  { icon: '✨', title: 'AI money reports',       desc: 'Your month explained in plain English — where the money went, what changed, and one practical suggestion.', accent: '#7c3aed' },
+  { icon: '🛤️', title: 'Scenario planner',       desc: 'Downsize the house? Work two more years? Compare what-if retirement plans side by side.', accent: '#e040fb' },
+  { icon: '🛡️', title: 'Age Pension estimator',  desc: 'The Centrelink assets and income tests worked out for you — see what you could get and when (Australia).', accent: '#00d4ff' },
+  { icon: '🏠', title: 'Household mode',         desc: 'Link with your partner and see your combined money picture. One subscription covers you both.', accent: '#7c3aed' },
+  { icon: '🔄', title: 'Subscription audit',     desc: 'Automatically finds recurring charges hiding in your transactions — and flags sneaky price rises.', accent: '#e040fb' },
+  { icon: '🏦', title: 'Bank sync',              desc: 'Connect your accounts and import transactions automatically — Australia, US, UK & Canada.', accent: '#00d4ff' },
+  { icon: '📈', title: 'Retirement calculator',  desc: 'See exactly when you can retire, with superannuation projections built in.', accent: '#7c3aed' },
+  { icon: '🔒', title: 'Bank-grade security',    desc: 'Your data is encrypted end-to-end. We never store your bank credentials.', accent: '#e040fb' },
 ]
 
 const FREE_FEATURES = [
@@ -54,10 +57,10 @@ const FREE_FEATURES = [
 ]
 
 const PREMIUM_FEATURES = [
-  'Bank sync — US, UK & Canada (Plaid)', 'Bank sync — Australia (Basiq)',
-  'Auto transaction import', 'CSV data export',
-  '12-month income & expense reports', 'Monthly PDF statements',
-  'Annual financial year statements', 'Financial summary PDF export',
+  '✨ AI monthly money reports', '"Will my money last?" Monte Carlo simulator',
+  'Scenario planner — what-if retirement plans', 'Age Pension estimator (Australia)',
+  'Subscription audit & price-rise alerts', 'Household mode — one sub covers you both',
+  'Bank sync & auto-import (AU, US, UK, CA)', '12-month reports, PDF statements & CSV export',
 ]
 
 function CheckIcon({ color }) {
@@ -163,7 +166,7 @@ export default function LandingPage() {
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-medium text-cyan-glow border border-cyan-glow/30"
             style={{ background: 'rgba(0,212,255,0.05)' }}>
             <span className="w-1.5 h-1.5 rounded-full bg-cyan-glow animate-pulse" />
-            Now with AI-powered retirement projections
+            New: AI money reports & "Will my money last?" simulations
           </div>
 
           <h1 className="text-5xl md:text-7xl font-bold tracking-tight max-w-3xl leading-tight">
@@ -172,8 +175,8 @@ export default function LandingPage() {
           </h1>
 
           <p className="text-slate-400 text-lg max-w-xl leading-relaxed">
-            Connect your bank, track every dollar, set smart budgets, and see exactly
-            when you can retire — all in one futuristic dashboard.
+            Connect your bank, track every dollar, test whether your money will last,
+            and see exactly when you can retire — all in one futuristic dashboard.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -253,7 +256,7 @@ export default function LandingPage() {
           <div className="grid md:grid-cols-3 gap-6">
             {FEATURES.map((f, i) => (
               <div key={f.title}
-                className={`reveal reveal-d${i + 1} glass rounded-2xl p-6 flex flex-col gap-3 hover:scale-[1.02] transition-transform duration-300`}
+                className={`reveal reveal-d${(i % 6) + 1} glass rounded-2xl p-6 flex flex-col gap-3 hover:scale-[1.02] transition-transform duration-300`}
                 style={{ borderColor: `${f.accent}20` }}>
                 <div className="w-10 h-10 rounded-xl flex items-center justify-center text-xl"
                   style={{ background: `${f.accent}15`, boxShadow: `0 0 12px ${f.accent}30` }}>
@@ -269,7 +272,7 @@ export default function LandingPage() {
         {/* ── Pricing ──────────────────────────────────────────────────── */}
         <section id="pricing" className="relative z-10 px-6 py-20 max-w-5xl mx-auto">
           <h2 className="reveal text-3xl font-bold text-center mb-3">Simple pricing</h2>
-          <p className="reveal reveal-d1 text-slate-400 text-center mb-14">Start free. Upgrade when you want bank sync.</p>
+          <p className="reveal reveal-d1 text-slate-400 text-center mb-14">Start free. Upgrade for the full toolkit — one subscription covers your whole household.</p>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
 

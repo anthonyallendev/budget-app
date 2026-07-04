@@ -131,6 +131,72 @@ const tools = [
     desc: 'Track assets vs liabilities with daily snapshots and a historical chart showing your wealth growing over time.',
     accent: '#e040fb',
   },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <path d="M3 17c4 0 4-10 8-10s4 6 10 3" strokeLinecap="round" />
+        <path d="M3 21c5 0 5-6 9-6s5 3 9 1" strokeLinecap="round" opacity="0.5" />
+      </svg>
+    ),
+    title: 'Monte Carlo simulator ⚡',
+    desc: 'Will my money last? 1,000 simulated market histories show the real odds your savings survive retirement — including bad-luck years.',
+    accent: '#00d4ff',
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <path d="M3 12h5M8 12c4 0 4-5 8-5h5M8 12c4 0 4 5 8 5h5" strokeLinecap="round" />
+      </svg>
+    ),
+    title: 'Scenario planner ⚡',
+    desc: 'Downsize the house, work two more years, spend a little less — compare unlimited what-if plans side by side.',
+    accent: '#7c3aed',
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <path d="M12 2l8 3.5v6c0 5-3.5 9-8 10.5C7.5 20.5 4 16.5 4 11.5v-6L12 2z" strokeLinejoin="round" />
+        <path d="M12 7v9M15 9.5c0-1.2-1.3-2-3-2s-3 .8-3 2 1.5 1.7 3 2 3 .8 3 2-1.3 2-3 2-3-.8-3-2" strokeLinecap="round" strokeWidth="1.1" />
+      </svg>
+    ),
+    title: 'Age Pension estimator ⚡',
+    desc: 'The Centrelink assets test, income test and deeming rules worked out automatically — see what you could get (Australia).',
+    accent: '#e040fb',
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <path d="M12 3l1.8 4.2 4.2 1.8-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8L12 3z" strokeLinejoin="round" />
+        <path d="M19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9L19 14z" strokeLinejoin="round" strokeWidth="1.1" />
+      </svg>
+    ),
+    title: 'AI money reports ⚡',
+    desc: 'Once a month, your finances explained in plain English — where the money went, what changed, and one practical suggestion.',
+    accent: '#00d4ff',
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <path d="M20 9.5A8 8 0 0 0 5.5 6M4 14.5A8 8 0 0 0 18.5 18" strokeLinecap="round" />
+        <path d="M5.5 2.5V6H9M18.5 21.5V18H15" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    ),
+    title: 'Subscription audit ⚡',
+    desc: 'Finds recurring charges hiding in your transactions, totals the real monthly cost, and flags sneaky price rises.',
+    accent: '#7c3aed',
+  },
+  {
+    icon: (
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.4">
+        <path d="M3 11l9-8 9 8M5 10v10h14V10" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="9.5" cy="13.5" r="1.5" /><circle cx="14.5" cy="13.5" r="1.5" />
+        <path d="M7 19c.4-1.8 1.3-2.7 2.5-2.7s2.1.9 2.5 2.7M12 19c.4-1.8 1.3-2.7 2.5-2.7s2.1.9 2.5 2.7" strokeLinecap="round" strokeWidth="1.1" />
+      </svg>
+    ),
+    title: 'Household mode ⚡',
+    desc: 'Link with your partner and see your combined money picture. One Premium subscription covers the whole household.',
+    accent: '#e040fb',
+  },
 ]
 
 const habits = [
@@ -178,7 +244,10 @@ export default function AboutPage() {
 
       {/* Nav */}
       <header className="relative z-10 flex items-center justify-between px-8 py-5 glass border-b border-cyan-glow/10">
-        <Link to="/" className="text-xl font-bold text-gradient">Retirely</Link>
+        <Link to="/" className="flex items-center gap-2">
+          <span className="text-xl font-bold text-gradient">Retirely</span>
+          <img src="/favicon.svg" alt="" className="w-5 h-5" />
+        </Link>
         <nav className="hidden md:flex items-center gap-8 text-slate-400 text-sm">
           <Link to="/" className="hover:text-white transition-colors">Home</Link>
           <Link to="/about" className="text-white">About</Link>
@@ -231,8 +300,8 @@ export default function AboutPage() {
         <div className="flex flex-wrap items-center justify-center gap-6 mt-4 text-sm text-slate-500">
           <span className="flex items-center gap-1.5"><span className="text-cyan-400">✓</span> No credit card required</span>
           <span className="flex items-center gap-1.5"><span className="text-cyan-400">✓</span> Free forever tier</span>
-          <span className="flex items-center gap-1.5"><span className="text-cyan-400">✓</span> AU superannuation support</span>
-          <span className="flex items-center gap-1.5"><span className="text-cyan-400">✓</span> Bank sync available</span>
+          <span className="flex items-center gap-1.5"><span className="text-cyan-400">✓</span> AU super & Age Pension support</span>
+          <span className="flex items-center gap-1.5"><span className="text-cyan-400">✓</span> Bank sync & AI reports available</span>
         </div>
       </section>
 
@@ -489,7 +558,7 @@ export default function AboutPage() {
           <p className="text-pink-400 text-xs uppercase tracking-widest mb-3">What's included</p>
           <h2 className="text-3xl font-bold">Everything you need, nothing you don't</h2>
           <p className="text-slate-400 max-w-xl mx-auto mt-4 leading-relaxed">
-            Nine financial tools in one dashboard. All free to start.
+            Fifteen financial tools in one dashboard. Free to start — tools marked ⚡ are part of Premium.
           </p>
         </div>
 
@@ -529,6 +598,9 @@ export default function AboutPage() {
               </div>
               <div className="flex items-center gap-2 text-slate-300">
                 <span className="text-cyan-400">✓</span> Basiq — Australia
+              </div>
+              <div className="flex items-center gap-2 text-slate-300">
+                <span className="text-cyan-400">✓</span> One subscription covers your household
               </div>
             </div>
           </div>
