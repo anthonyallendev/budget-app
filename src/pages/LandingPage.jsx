@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Link, NavLink, useSearchParams } from 'react-router-dom'
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
@@ -32,11 +32,25 @@ function CustomTooltip({ active, payload, label }) {
 
 export default function LandingPage() {
   const [searchParams] = useSearchParams()
+  const scrollRef = useRef(null)
 
   useEffect(() => {
     const ref = searchParams.get('ref')
     if (ref) localStorage.setItem('referralCode', ref.toUpperCase().trim())
   }, [searchParams])
+
+  useEffect(() => {
+    const root = scrollRef.current
+    if (!root) return
+    const observer = new IntersectionObserver(
+      entries => entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in-view'); observer.unobserve(e.target) }
+      }),
+      { root, threshold: 0.1, rootMargin: '0px 0px -48px 0px' }
+    )
+    root.querySelectorAll('.reveal').forEach(el => observer.observe(el))
+    return () => observer.disconnect()
+  }, [])
 
   return (
     <div className="min-h-screen bg-space-900 text-white">
@@ -77,7 +91,7 @@ export default function LandingPage() {
       </header>
 
       {/* Scrollable content — clips at header bottom */}
-      <div className="fixed inset-x-0 bottom-0 overflow-y-auto overflow-x-hidden" style={{ top: '77px' }}>
+      <div ref={scrollRef} className="fixed inset-x-0 bottom-0 overflow-y-auto overflow-x-hidden" style={{ top: '77px' }}>
 
       {/* Hero */}
       <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 pt-28 pb-20 gap-8">
@@ -130,7 +144,7 @@ export default function LandingPage() {
 
       {/* Demo Chart */}
       <section className="relative z-10 px-6 py-16 max-w-5xl mx-auto w-full">
-        <div className="glass rounded-3xl p-8" style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
+        <div className="reveal glass rounded-3xl p-8" style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
               <h2 className="text-2xl font-bold mb-1">Watch your wealth grow</h2>
@@ -173,10 +187,10 @@ export default function LandingPage() {
 
       {/* Features */}
       <section id="features" className="relative z-10 px-6 py-20 max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-3">
+        <h2 className="reveal text-3xl font-bold text-center mb-3">
           Everything you need
         </h2>
-        <p className="text-slate-400 text-center mb-14">Built for people who take their future seriously.</p>
+        <p className="reveal reveal-d1 text-slate-400 text-center mb-14">Built for people who take their future seriously.</p>
 
         <div className="grid md:grid-cols-3 gap-6">
           {[
@@ -216,10 +230,10 @@ export default function LandingPage() {
               desc: 'Beautiful dashboards that make your finances easy to understand.',
               accent: '#e040fb',
             },
-          ].map(f => (
+          ].map((f, i) => (
             <div
               key={f.title}
-              className="glass rounded-2xl p-6 flex flex-col gap-3 hover:scale-[1.02] transition-transform duration-300"
+              className={`reveal reveal-d${i + 1} glass rounded-2xl p-6 flex flex-col gap-3 hover:scale-[1.02] transition-transform duration-300`}
               style={{ borderColor: `${f.accent}20` }}
             >
               <div
@@ -237,12 +251,12 @@ export default function LandingPage() {
 
       {/* Pricing */}
       <section id="pricing" className="relative z-10 px-6 py-20 max-w-5xl mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-3">Simple pricing</h2>
-        <p className="text-slate-400 text-center mb-14">Start free. Upgrade when you want bank sync.</p>
+        <h2 className="reveal text-3xl font-bold text-center mb-3">Simple pricing</h2>
+        <p className="reveal reveal-d1 text-slate-400 text-center mb-14">Start free. Upgrade when you want bank sync.</p>
 
         <div className="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {/* Free */}
-          <div className="glass rounded-2xl p-8 flex flex-col gap-6" style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
+          <div className="reveal reveal-d2 glass rounded-2xl p-8 flex flex-col gap-6" style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
             <div>
               <p className="text-slate-400 text-sm font-medium uppercase tracking-wider mb-2">Free</p>
               <div className="flex items-end gap-1">
@@ -284,7 +298,7 @@ export default function LandingPage() {
           </div>
 
           {/* Premium */}
-          <div className="rounded-2xl p-8 flex flex-col gap-6 relative overflow-hidden"
+          <div className="reveal reveal-d3 rounded-2xl p-8 flex flex-col gap-6 relative overflow-hidden"
             style={{ background: 'linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.12))', border: '1px solid rgba(124,58,237,0.35)' }}>
             <div className="absolute top-4 right-4 text-xs font-bold px-3 py-1 rounded-full text-white"
               style={{ background: 'linear-gradient(135deg,#00d4ff,#7c3aed)' }}>
@@ -338,7 +352,7 @@ export default function LandingPage() {
 
       {/* CTA */}
       <section className="relative z-10 px-6 py-20 text-center">
-        <div className="glass rounded-3xl max-w-2xl mx-auto px-8 py-14" style={{ borderColor: 'rgba(124,58,237,0.3)' }}>
+        <div className="reveal glass rounded-3xl max-w-2xl mx-auto px-8 py-14" style={{ borderColor: 'rgba(124,58,237,0.3)' }}>
           <h2 className="text-4xl font-bold mb-4">
             Ready to take{' '}
             <span className="text-gradient">control?</span>
