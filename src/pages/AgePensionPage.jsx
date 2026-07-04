@@ -29,10 +29,9 @@ const RULES = {
 function calcPension({ relationship, homeowner, financialAssets, otherAssets, otherIncomeFn, age }) {
   const isCouple = relationship === 'couple'
   const maxFn = isCouple ? RULES.maxRate.coupleEach * 2 : RULES.maxRate.single
-
-  if (age && age < RULES.qualifyingAge) {
-    return { eligibleAge: false, maxFn, pensionFn: 0 }
-  }
+  // Under pension age we still show the estimate — the UI explains it's what
+  // they'd get at 67 under today's rules.
+  const eligibleAge = !age || age >= RULES.qualifyingAge
 
   // Assets test
   const totalAssets = financialAssets + otherAssets
@@ -60,7 +59,7 @@ function calcPension({ relationship, homeowner, financialAssets, otherAssets, ot
   const incomeCutOffFn = incomeFreeArea + maxFn / RULES.incomeTaper
 
   return {
-    eligibleAge: true,
+    eligibleAge,
     maxFn, pensionFn, assetsTestFn, incomeTestFn, bindingTest,
     totalAssets, freeArea, deemedFn, totalIncomeFn,
     assetsCutOff, incomeCutOffFn,
