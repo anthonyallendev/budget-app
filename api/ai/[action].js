@@ -1,5 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk'
-import { supabaseAdmin, getUser } from '../_lib/supabase.js'
+import { supabaseAdmin, getUser, isPremiumUser } from '../_lib/supabase.js'
 
 // Consolidated AI endpoints (Vercel Hobby 12-function limit):
 //   POST /api/ai/monthly-report  { regenerate?: boolean }
@@ -62,15 +62,15 @@ async function monthlyReport(req, res, user) {
   const month = new Date().toISOString().slice(0, 7) // 'YYYY-MM'
   const regenerate = req.body?.regenerate === true
 
-  // Server-side premium gate — free accounts can't reach this feature at all
-  const { data: profile } = await supabaseAdmin
-    .from('profiles')
-    .select('subscription_status, full_name')
-    .eq('id', user.id)
-    .maybeSingle()
-  if (profile?.subscription_status !== 'premium') {
+  // Server-side premium gate (household-aware) — free accounts can't reach this
+  if (!(await isPremiumUser(user.id))) {
     return res.status(403).json({ error: 'Premium subscription required' })
   }
+  const { data: profile } = await supabaseAdmin
+    .from('profiles')
+    .select('full_name')
+    .eq('id', user.id)
+    .maybeSingle()
 
   if (!regenerate) {
     const { data: existing } = await supabaseAdmin

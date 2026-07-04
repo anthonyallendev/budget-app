@@ -1,5 +1,5 @@
 import { basiq } from '../_lib/basiq.js'
-import { supabaseAdmin, getUser } from '../_lib/supabase.js'
+import { supabaseAdmin, getUser, isPremiumUser } from '../_lib/supabase.js'
 
 const APP_URL = process.env.APP_URL ?? 'https://retirely.money'
 
@@ -9,9 +9,7 @@ export default async function handler(req, res) {
   const user = await getUser(req)
   if (!user) return res.status(401).json({ error: 'Unauthorized' })
 
-  const { data: profile } = await supabaseAdmin
-    .from('profiles').select('subscription_status').eq('id', user.id).single()
-  if (profile?.subscription_status !== 'premium') {
+  if (!(await isPremiumUser(user.id))) {
     return res.status(403).json({ error: 'upgrade_required' })
   }
 

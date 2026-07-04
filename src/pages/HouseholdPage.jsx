@@ -82,10 +82,10 @@ function SetupCard({ createHousehold, joinHousehold }) {
   )
 }
 
-function HouseholdDashboard({ household, members, leaveHousehold }) {
+function HouseholdDashboard({ household, members, leaveHousehold, isPremium }) {
   const [copied, setCopied] = useState(false)
   const [userId, setUserId] = useState(null)
-  const { transactions, loading: txLoading } = useHouseholdTransactions(true)
+  const { transactions, loading: txLoading } = useHouseholdTransactions(isPremium)
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => setUserId(data?.user?.id ?? null))
@@ -137,19 +137,36 @@ function HouseholdDashboard({ household, members, leaveHousehold }) {
         )}
       </div>
 
-      {/* This month combined */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        {[
-          { label: 'Household income this month', value: fmt(monthStats.income), color: '#00d4ff' },
-          { label: 'Household spending this month', value: fmt(monthStats.expenses), color: '#e040fb' },
-          { label: 'Net this month', value: fmt(monthStats.income - monthStats.expenses), color: monthStats.income - monthStats.expenses >= 0 ? '#00b894' : '#f43f5e' },
-        ].map(k => (
-          <div key={k.label} className="glass rounded-2xl p-5 text-center">
-            <p className="text-slate-500 text-xs uppercase tracking-widest mb-2">{k.label}</p>
-            <p className="text-2xl font-bold" style={{ color: k.color }}>{txLoading ? '—' : k.value}</p>
+      {/* This month combined — premium (one subscription covers the household) */}
+      {isPremium ? (
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          {[
+            { label: 'Household income this month', value: fmt(monthStats.income), color: '#00d4ff' },
+            { label: 'Household spending this month', value: fmt(monthStats.expenses), color: '#e040fb' },
+            { label: 'Net this month', value: fmt(monthStats.income - monthStats.expenses), color: monthStats.income - monthStats.expenses >= 0 ? '#00b894' : '#f43f5e' },
+          ].map(k => (
+            <div key={k.label} className="glass rounded-2xl p-5 text-center">
+              <p className="text-slate-500 text-xs uppercase tracking-widest mb-2">{k.label}</p>
+              <p className="text-2xl font-bold" style={{ color: k.color }}>{txLoading ? '—' : k.value}</p>
+            </div>
+          ))}
+        </div>
+      ) : (
+        <PremiumGate
+          feature="the combined household view"
+          description="One Premium subscription covers your whole household — when either of you upgrades, you both unlock the combined money picture and every other Premium feature.">
+          <div className="grid grid-cols-3 gap-4 p-5">
+            {['Household income', 'Household spending', 'Net this month'].map((l, i) => (
+              <div key={l} className="glass rounded-2xl p-5 text-center">
+                <p className="text-slate-500 text-xs uppercase tracking-widest mb-2">{l}</p>
+                <p className="text-2xl font-bold" style={{ color: ['#00d4ff', '#e040fb', '#00b894'][i] }}>
+                  {['$9,420', '$6,180', '$3,240'][i]}
+                </p>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </PremiumGate>
+      )}
 
       {/* Members */}
       <div className="glass rounded-2xl p-6" style={{ borderColor: 'rgba(124,58,237,0.15)' }}>
@@ -171,10 +188,12 @@ function HouseholdDashboard({ household, members, leaveHousehold }) {
                   </p>
                   <p className="text-slate-500 text-xs">Joined {new Date(m.joined_at).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}</p>
                 </div>
-                <div className="text-right text-xs shrink-0">
-                  <p style={{ color: '#00d4ff' }}>+{fmt(stats.income)}</p>
-                  <p style={{ color: '#e040fb' }}>−{fmt(stats.expenses)}</p>
-                </div>
+                {isPremium && (
+                  <div className="text-right text-xs shrink-0">
+                    <p style={{ color: '#00d4ff' }}>+{fmt(stats.income)}</p>
+                    <p style={{ color: '#e040fb' }}>−{fmt(stats.expenses)}</p>
+                  </div>
+                )}
               </div>
             )
           })}
@@ -201,7 +220,7 @@ function HouseholdDashboard({ household, members, leaveHousehold }) {
   )
 }
 
-function HouseholdBody() {
+function HouseholdBody({ isPremium }) {
   const { household, members, loading, error, createHousehold, joinHousehold, leaveHousehold } = useHousehold()
 
   if (loading) return <div className="flex items-center justify-center h-64 text-slate-500">Loading…</div>
@@ -217,24 +236,8 @@ function HouseholdBody() {
   }
 
   if (!household) return <SetupCard createHousehold={createHousehold} joinHousehold={joinHousehold} />
-  return <HouseholdDashboard household={household} members={members} leaveHousehold={leaveHousehold} />
+  return <HouseholdDashboard household={household} members={members} leaveHousehold={leaveHousehold} isPremium={isPremium} />
 }
-
-const DEMO = (
-  <div className="p-6 flex flex-col gap-4">
-    <div className="grid grid-cols-3 gap-4">
-      {['Household income', 'Household spending', 'Net this month'].map((l, i) => (
-        <div key={l} className="glass rounded-2xl p-5 text-center">
-          <p className="text-slate-500 text-xs uppercase tracking-widest mb-2">{l}</p>
-          <p className="text-2xl font-bold" style={{ color: ['#00d4ff', '#e040fb', '#00b894'][i] }}>
-            {['$9,420', '$6,180', '$3,240'][i]}
-          </p>
-        </div>
-      ))}
-    </div>
-    <p className="text-slate-400 text-sm text-center">You + your partner, one combined money picture.</p>
-  </div>
-)
 
 export default function HouseholdPage() {
   const { profile, loading } = useProfile()
@@ -243,17 +246,14 @@ export default function HouseholdPage() {
   return (
     <AppLayout>
       <h1 className="text-3xl font-bold mb-1">Household</h1>
-      <p className="text-slate-400 text-sm mb-8">Budget as a couple — link accounts and see your combined finances in one place.</p>
+      <p className="text-slate-400 text-sm mb-8">
+        Budget as a couple — link accounts and see your combined finances in one place.
+        One Premium subscription covers the whole household.
+      </p>
       {loading ? (
         <div className="flex items-center justify-center h-64 text-slate-500">Loading…</div>
-      ) : isPremium ? (
-        <HouseholdBody />
       ) : (
-        <PremiumGate
-          feature="household mode"
-          description="Link with your partner and see combined income, spending and member breakdowns — retirement is a team sport.">
-          {DEMO}
-        </PremiumGate>
+        <HouseholdBody isPremium={isPremium} />
       )}
     </AppLayout>
   )

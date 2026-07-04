@@ -25,7 +25,7 @@ const PREMIUM_FEATURES = [
   'Scenario Planner — compare what-if retirement plans',
   'Age Pension estimator (Australia)',
   'Subscription audit — spot recurring charges & price rises',
-  'Household mode — budget together with your partner',
+  'Household mode — one subscription covers you & your partner',
   'Bank sync & auto-import — AU, US, UK & Canada',
   '12-month reports, PDF statements & CSV export',
   'Priority support',
@@ -98,20 +98,34 @@ export default function UpgradePage() {
             <div className="w-16 h-16 rounded-full flex items-center justify-center"
               style={{ background: 'linear-gradient(135deg, rgba(0,212,255,0.2), rgba(124,58,237,0.2))', border: '1px solid rgba(0,212,255,0.3)' }}>
               <svg width="28" height="28" viewBox="0 0 20 20" fill="none" stroke="#00d4ff" strokeWidth="1.5">
-                <path d="M4 10l4 4 8-8" strokeLinecap="round" strokeLinejoin="round" />
+                {profile?.premium_via_household
+                  ? <path d="M3 9l7-6 7 6M5 8.5V17h10V8.5" strokeLinecap="round" strokeLinejoin="round" />
+                  : <path d="M4 10l4 4 8-8" strokeLinecap="round" strokeLinejoin="round" />}
               </svg>
             </div>
-            <div>
-              <p className="text-white font-semibold text-lg mb-1">Active subscription</p>
-              <p className="text-slate-400 text-sm">You have full access to all Premium features.</p>
-            </div>
-            <button
-              onClick={handlePortal}
-              disabled={portalLoading}
-              className="px-6 py-3 rounded-xl text-sm font-medium glass text-slate-300 hover:text-white transition-colors disabled:opacity-50"
-            >
-              {portalLoading ? 'Opening…' : 'Manage subscription →'}
-            </button>
+            {profile?.premium_via_household ? (
+              <div>
+                <p className="text-white font-semibold text-lg mb-1">Covered by your household</p>
+                <p className="text-slate-400 text-sm max-w-sm">
+                  Someone in your household has Premium, so you get every Premium feature at no charge.
+                  One subscription covers the whole household.
+                </p>
+              </div>
+            ) : (
+              <>
+                <div>
+                  <p className="text-white font-semibold text-lg mb-1">Active subscription</p>
+                  <p className="text-slate-400 text-sm">You have full access to all Premium features — and so does everyone in your household.</p>
+                </div>
+                <button
+                  onClick={handlePortal}
+                  disabled={portalLoading}
+                  className="px-6 py-3 rounded-xl text-sm font-medium glass text-slate-300 hover:text-white transition-colors disabled:opacity-50"
+                >
+                  {portalLoading ? 'Opening…' : 'Manage subscription →'}
+                </button>
+              </>
+            )}
             {error && <p className="text-red-400 text-sm">{error}</p>}
           </div>
         ) : (
