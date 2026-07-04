@@ -95,7 +95,7 @@ export default function LandingPage() {
       </header>
 
       {/* Scrollable content — clips at header bottom */}
-      <div ref={scrollRef} className="fixed inset-x-0 bottom-0 overflow-y-auto overflow-x-hidden" style={{ top: '77px' }}>
+      <div ref={scrollRef} className="fixed inset-x-0 bottom-0 overflow-y-auto overflow-x-hidden" style={{ top: '77px', overflowAnchor: 'none' }}>
 
       {/* Hero */}
       <main className="relative z-10 flex flex-col items-center justify-center text-center px-6 pt-28 pb-20 gap-8">
@@ -148,7 +148,7 @@ export default function LandingPage() {
 
       {/* Demo Chart */}
       <section className="relative z-10 px-6 py-16 max-w-5xl mx-auto w-full">
-        <div className="reveal glass rounded-3xl p-8" style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
+        <div className="glass rounded-3xl p-8" style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
             <div>
               <h2 className="text-2xl font-bold mb-1">Watch your wealth grow</h2>
