@@ -30,6 +30,14 @@
   background-clip: text;
 }
 
+/* ── Landing page scroll container ──────────────────────────────────────── */
+/* overflow-anchor:none disables browser scroll-anchoring for this container */
+/* so that reveal animations never cause the viewport to jump.               */
+/* Applied via class (not React inline style) so it reliably reaches the DOM */
+.landing-scroll {
+  overflow-anchor: none;
+}
+
 /* ── Scroll reveal ───────────────────────────────────────────────────────── */
 /* Hidden state has no transition — exits are instant so they can't          */
 /* interfere with scroll position or trigger ResizeObserver inside charts.   */
