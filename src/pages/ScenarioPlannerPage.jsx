@@ -9,6 +9,9 @@ import {
 } from 'recharts'
 
 const COLORS = ['#00d4ff', '#e040fb', '#f59e0b', '#00b894', '#a78bfa']
+// Past the base palette, generate evenly-spread hues so any number of
+// scenarios stays distinguishable
+const colorFor = i => COLORS[i] ?? `hsl(${(i * 137.5) % 360}, 85%, 65%)`
 const MAX_AGE = 100
 
 function getAge(dob) {
@@ -151,7 +154,6 @@ function PlannerBody({ profile }) {
   const scenarios = Array.isArray(saved) ? saved : []
 
   function addScenario(preset) {
-    if (scenarios.length >= 4) return
     const base = { ...baseline, id: String(Date.now()) }
     const presets = {
       blank:     { ...base, name: `Scenario ${scenarios.length + 1}` },
@@ -191,7 +193,7 @@ function PlannerBody({ profile }) {
             <Legend wrapperStyle={{ fontSize: 12, paddingTop: 8 }} />
             {all.map((s, i) => (
               <Line key={s.id} type="monotone" dataKey={`s${i}`} name={i === 0 ? 'Current plan' : s.name}
-                stroke={COLORS[i % COLORS.length]} strokeWidth={i === 0 ? 2.5 : 2}
+                stroke={colorFor(i)} strokeWidth={i === 0 ? 2.5 : 2}
                 strokeDasharray={i === 0 ? undefined : '6 3'} dot={false} connectNulls />
             ))}
           </LineChart>
@@ -207,19 +209,17 @@ function PlannerBody({ profile }) {
           { key: 'blank',    label: '＋ Blank scenario' },
         ].map(b => (
           <button key={b.key} onClick={() => addScenario(b.key)}
-            disabled={scenarios.length >= 4}
-            className="px-4 py-2 rounded-xl text-sm font-medium transition-all hover:scale-105 disabled:opacity-40 disabled:hover:scale-100"
+            className="px-4 py-2 rounded-xl text-sm font-medium transition-all hover:scale-105"
             style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.3)', color: '#a78bfa' }}>
             {b.label}
           </button>
         ))}
-        {scenarios.length >= 4 && <span className="text-slate-600 text-xs self-center">Max 4 scenarios</span>}
       </div>
 
       {/* Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {all.map((s, i) => (
-          <ScenarioCard key={s.id} scenario={s} color={COLORS[i % COLORS.length]}
+          <ScenarioCard key={s.id} scenario={s} color={colorFor(i)}
             isBaseline={i === 0} currentAge={currentAge}
             onChange={next => save(scenarios.map(x => x.id === next.id ? next : x))}
             onDelete={() => save(scenarios.filter(x => x.id !== s.id))} />
