@@ -654,7 +654,7 @@ export default function RetirementPage() {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="py-3 rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:scale-[1.02] hover:glow-cyan disabled:opacity-50"
+              className="mt-auto py-3 rounded-xl font-semibold text-white text-sm transition-all duration-300 hover:scale-[1.02] hover:glow-cyan disabled:opacity-50"
               style={{ background: saved ? 'linear-gradient(135deg, #00d4ff, #00b894)' : 'linear-gradient(135deg, #00d4ff, #7c3aed)' }}
             >
               {saving ? 'Saving…' : saved ? '✓ Saved!' : 'Save changes'}
