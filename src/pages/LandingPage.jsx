@@ -1,6 +1,6 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts'
 
 const portfolioData = [
   { year: '2025', conservative: 12000,  moderate: 12000,  aggressive: 12000  },
@@ -74,7 +74,15 @@ function CheckIcon({ color }) {
 
 export default function LandingPage() {
   const [searchParams] = useSearchParams()
-  const scrollRef = useRef(null)
+  const scrollRef   = useRef(null)
+  const chartWrapRef = useRef(null)
+  const [chartWidth, setChartWidth] = useState(0)
+
+  // Measure chart container once — no ResizeObserver, so tooltip hover
+  // can never trigger a resize callback that shifts scroll position.
+  useLayoutEffect(() => {
+    if (chartWrapRef.current) setChartWidth(chartWrapRef.current.offsetWidth)
+  }, [])
 
   useEffect(() => {
     const ref = searchParams.get('ref')
@@ -209,25 +217,28 @@ export default function LandingPage() {
               </div>
             </div>
 
-            <ResponsiveContainer width="100%" height={300}>
-              <AreaChart data={portfolioData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
-                <defs>
-                  {[['gradCyan','#00d4ff'],['gradPurple','#7c3aed'],['gradPink','#e040fb']].map(([id,c]) => (
-                    <linearGradient key={id} id={id} x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%"  stopColor={c} stopOpacity={0.3} />
-                      <stop offset="95%" stopColor={c} stopOpacity={0}   />
-                    </linearGradient>
-                  ))}
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                <XAxis dataKey="year" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
-                <YAxis tickFormatter={v => `$${(v/1000).toFixed(0)}k`} tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
-                <Tooltip content={<CustomTooltip />} isAnimationActive={false} cursor={{ stroke: 'rgba(255,255,255,0.08)', strokeWidth: 1 }} />
-                <Area type="monotone" dataKey="conservative" name="Conservative" stroke="#00d4ff" strokeWidth={2} fill="url(#gradCyan)"   dot={false} isAnimationActive={false} />
-                <Area type="monotone" dataKey="moderate"     name="Moderate"     stroke="#7c3aed" strokeWidth={2} fill="url(#gradPurple)" dot={false} isAnimationActive={false} />
-                <Area type="monotone" dataKey="aggressive"   name="Aggressive"   stroke="#e040fb" strokeWidth={2} fill="url(#gradPink)"   dot={false} isAnimationActive={false} />
-              </AreaChart>
-            </ResponsiveContainer>
+            {/* Fixed-width wrapper measured once — no ResizeObserver inside */}
+            <div ref={chartWrapRef} style={{ width: '100%', height: 300 }}>
+              {chartWidth > 0 && (
+                <AreaChart width={chartWidth} height={300} data={portfolioData} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
+                  <defs>
+                    {[['gradCyan','#00d4ff'],['gradPurple','#7c3aed'],['gradPink','#e040fb']].map(([id,c]) => (
+                      <linearGradient key={id} id={id} x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%"  stopColor={c} stopOpacity={0.3} />
+                        <stop offset="95%" stopColor={c} stopOpacity={0}   />
+                      </linearGradient>
+                    ))}
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+                  <XAxis dataKey="year" tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
+                  <YAxis tickFormatter={v => `$${(v/1000).toFixed(0)}k`} tick={{ fill: '#64748b', fontSize: 12 }} axisLine={false} tickLine={false} />
+                  <Tooltip content={<CustomTooltip />} isAnimationActive={false} cursor={{ stroke: 'rgba(255,255,255,0.08)', strokeWidth: 1 }} />
+                  <Area type="monotone" dataKey="conservative" name="Conservative" stroke="#00d4ff" strokeWidth={2} fill="url(#gradCyan)"   dot={false} isAnimationActive={false} />
+                  <Area type="monotone" dataKey="moderate"     name="Moderate"     stroke="#7c3aed" strokeWidth={2} fill="url(#gradPurple)" dot={false} isAnimationActive={false} />
+                  <Area type="monotone" dataKey="aggressive"   name="Aggressive"   stroke="#e040fb" strokeWidth={2} fill="url(#gradPink)"   dot={false} isAnimationActive={false} />
+                </AreaChart>
+              )}
+            </div>
           </div>
         </section>
 
