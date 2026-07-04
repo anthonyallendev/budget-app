@@ -301,7 +301,10 @@ export default function AppLayout({ children }) {
     <div className="min-h-screen bg-space-900 text-white">
       {/* Header */}
       <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 glass border-b border-cyan-glow/10">
-        <span className="text-2xl font-bold text-gradient">Retirely</span>
+        <span className="flex items-center gap-2">
+          <span className="text-2xl font-bold text-gradient">Retirely</span>
+          <img src="/favicon.svg" alt="" className="w-6 h-6" style={{ filter: 'drop-shadow(0 0 6px rgba(0,212,255,0.35))' }} />
+        </span>
         <button
           onClick={() => setOpen(true)}
           className="p-2 rounded-lg text-slate-400 hover:text-cyan-400 hover:bg-white/5 transition-colors"
