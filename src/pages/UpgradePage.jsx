@@ -20,12 +20,14 @@ const FREE_FEATURES = [
 
 const PREMIUM_FEATURES = [
   'Everything in Free',
-  'Bank sync — US, UK & Canada (Plaid)',
-  'Bank sync — Australia (Basiq)',
-  'Automatic transaction import',
-  'CSV transaction export',
-  '12-month history charts & trends',
-  'Financial summary PDF report',
+  '✨ AI monthly money report — your month explained in plain English',
+  '"Will my money last?" — Monte Carlo retirement simulator',
+  'Scenario Planner — compare what-if retirement plans',
+  'Age Pension estimator (Australia)',
+  'Subscription audit — spot recurring charges & price rises',
+  'Household mode — budget together with your partner',
+  'Bank sync & auto-import — AU, US, UK & Canada',
+  '12-month reports, PDF statements & CSV export',
   'Priority support',
 ]
 
@@ -86,7 +88,7 @@ export default function UpgradePage() {
           <p className="text-slate-400 text-lg">
             {isPremium
               ? 'Manage your subscription below.'
-              : 'Unlock bank sync, 12-month reports, CSV export, and more.'}
+              : 'Unlock AI money reports, the Monte Carlo simulator, Age Pension estimates, bank sync, and more.'}
           </p>
         </div>
 
