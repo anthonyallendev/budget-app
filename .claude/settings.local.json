@@ -1,6 +1,5 @@
 {
   "permissions": {
-    "defaultMode": "bypassPermissions",
     "allow": [
       "Bash(git init *)",
       "Bash(git add *)",
@@ -21,7 +20,24 @@
       "Bash(npm run *)",
       "WebSearch",
       "WebFetch",
-      "Bash(curl *)"
+      "Bash(curl *)",
+      "Read(//home/anthony/**)",
+      "Read(//home/anthony/fermiware-site/**)",
+      "Read(//home/anthony/infinite-scaffolding/**)",
+      "Read(//home/anthony/Desktop/youtube-videos/**)",
+      "Bash",
+      "Edit",
+      "Write",
+      "Read",
+      "Glob",
+      "Grep"
+    ],
+    "defaultMode": "bypassPermissions",
+    "additionalDirectories": [
+      "/home/anthony/fermiware-site/src",
+      "/home/anthony/infinite-scaffolding/css",
+      "/home/anthony/infinite-scaffolding",
+      "/home/anthony/OneDrive/JMS"
     ]
   }
 }

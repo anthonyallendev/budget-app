@@ -659,7 +659,7 @@ export default function AboutPage() {
       </section>
 
       <footer className="relative z-10 text-center text-slate-600 text-sm py-8 border-t border-white/5">
-        © {new Date().getFullYear()} Retirely — <Link to="/about" className="hover:text-slate-400 transition-colors">About</Link> · <Link to="/" className="hover:text-slate-400 transition-colors">Home</Link>
+        © {new Date().getFullYear()} Fermiware Pty Ltd, trading as Retirely — <Link to="/about" className="hover:text-slate-400 transition-colors">About</Link> · <Link to="/" className="hover:text-slate-400 transition-colors">Home</Link>
       </footer>
     </div>
   )

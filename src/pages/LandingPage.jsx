@@ -356,7 +356,7 @@ export default function LandingPage() {
         </section>
 
         <footer className="relative z-10 text-center text-slate-600 text-sm py-8 border-t border-white/5">
-          © {new Date().getFullYear()} Retirely — All rights reserved ·{' '}
+          © {new Date().getFullYear()} Fermiware Pty Ltd (ABN 78 699 924 475), trading as Retirely ·{' '}
           <Link to="/about"   className="hover:text-slate-400 transition-colors">About</Link> ·{' '}
           <Link to="/privacy" className="hover:text-slate-400 transition-colors">Privacy & Terms</Link>
         </footer>

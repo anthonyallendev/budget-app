@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
-const LAST_UPDATED = '4 July 2026'
+const LAST_UPDATED = '6 July 2026'
 const CONTACT_EMAIL = 'privacy@retirely.money'
 const COMPANY = 'Retirely'
+const LEGAL_ENTITY = 'Fermiware Pty Ltd (ABN 78 699 924 475)'
 const DOMAIN = 'retirely.money'
 
 function Section({ id, title, children }) {
@@ -61,7 +62,7 @@ function PrivacyContent() {
     <>
       <Section id="pp-intro" title="1. Introduction">
         <p>
-          {COMPANY} ("we", "us", "our") operates the personal finance platform available at {DOMAIN} (the "Service").
+          {COMPANY} is operated by {LEGAL_ENTITY} ("we", "us", "our"), an Australian company, and is available at {DOMAIN} (the "Service").
           This Privacy Policy explains how we collect, use, store, and protect your personal information when you use our Service.
         </p>
         <p>
@@ -388,6 +389,7 @@ function PrivacyContent() {
         <p>For any privacy-related questions, requests, or concerns, please contact us:</p>
         <div className="mt-3 glass rounded-xl p-4" style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
           <p className="text-white font-semibold">{COMPANY}</p>
+          <p className="text-slate-500 text-xs">{LEGAL_ENTITY}</p>
           <p className="text-cyan-400 mt-1">{CONTACT_EMAIL}</p>
           <p className="text-slate-500 text-xs mt-2">We aim to respond to all privacy enquiries within 30 days.</p>
         </div>
@@ -403,7 +405,7 @@ function TermsContent() {
     <>
       <Section id="tc-intro" title="1. Acceptance of Terms">
         <p>
-          These Terms and Conditions ("Terms") govern your access to and use of the {COMPANY} platform at {DOMAIN} (the "Service"), operated by {COMPANY} ("we", "us", "our").
+          These Terms and Conditions ("Terms") govern your access to and use of the {COMPANY} platform at {DOMAIN} (the "Service"), operated by {LEGAL_ENTITY}, trading as {COMPANY} ("we", "us", "our").
         </p>
         <p>
           By creating an account, accessing the Service, or clicking "I agree", you confirm that you have read, understood, and agree to be bound by these Terms and our Privacy Policy. If you do not agree, you must not use the Service.
@@ -551,7 +553,7 @@ function TermsContent() {
 
       <Section id="tc-ip" title="8. Intellectual Property">
         <p>
-          The Service and all its content, features, and functionality — including but not limited to the software, design, text, graphics, and logos — are owned by {COMPANY} and are protected by copyright and other intellectual property laws.
+          The Service and all its content, features, and functionality — including but not limited to the software, design, text, graphics, and logos — are owned by {LEGAL_ENTITY} and are protected by copyright and other intellectual property laws.
         </p>
         <p>
           You are granted a limited, non-exclusive, non-transferable licence to access and use the Service for your personal, non-commercial use. You may not reproduce, distribute, modify, or create derivative works of any part of the Service without our prior written consent.
@@ -711,6 +713,7 @@ function TermsContent() {
         <p>If you have any questions about these Terms, please contact us:</p>
         <div className="mt-3 glass rounded-xl p-4" style={{ borderColor: 'rgba(0,212,255,0.15)' }}>
           <p className="text-white font-semibold">{COMPANY}</p>
+          <p className="text-slate-500 text-xs">{LEGAL_ENTITY}</p>
           <p className="text-cyan-400 mt-1">{CONTACT_EMAIL}</p>
         </div>
       </Section>
@@ -869,7 +872,7 @@ export default function PrivacyPolicyPage() {
       </div>
 
       <footer className="relative z-10 text-center text-slate-600 text-sm py-8 border-t border-white/5">
-        © {new Date().getFullYear()} Retirely ·{' '}
+        © {new Date().getFullYear()} Fermiware Pty Ltd, trading as Retirely ·{' '}
         <Link to="/about" className="hover:text-slate-400 transition-colors">About</Link> ·{' '}
         <Link to="/privacy" className="hover:text-slate-400 transition-colors">Privacy & Terms</Link> ·{' '}
         <Link to="/" className="hover:text-slate-400 transition-colors">Home</Link>
