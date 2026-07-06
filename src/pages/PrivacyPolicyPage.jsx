@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const LAST_UPDATED = '6 July 2026'
-const CONTACT_EMAIL = 'privacy@retirely.money'
+const CONTACT_EMAIL = 'info@fermiware.com.au'
 const COMPANY = 'Retirely'
 const LEGAL_ENTITY = 'Fermiware Pty Ltd (ABN 78 699 924 475)'
 const DOMAIN = 'retirely.money'
