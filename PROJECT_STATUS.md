@@ -1,6 +1,6 @@
 # Retirely — Project Status
 
-_Last updated: 7 July 2026_
+_Last updated: 8 July 2026_
 
 ## The business
 
@@ -48,7 +48,7 @@ features (streaks, health score, weekly check-in).
 | Vercel (hosting) | Live at retirely.money · ⚠️ **12/12 serverless functions used (Hobby limit)** — new endpoints must be consolidated into existing `[action].js` files |
 | Supabase (DB + auth) | Live · all migrations run (premium features + household premium, 4 Jul 2026) |
 | Anthropic (AI reports) | Live · `ANTHROPIC_API_KEY` in all Vercel envs · $20 credits purchased 6 Jul 2026 (~cents per report) |
-| Stripe (payments) | **Test mode — live activation in progress** (see below) |
+| Stripe (payments) | **LIVE** — real subscriptions active, verified end-to-end (see below) |
 | Plaid (bank sync US/UK/CA) | Live |
 | Basiq (bank sync AU) | Sandbox only — live access pending from Basiq |
 | Resend (email) | Live · sends from hello@retirely.money (domain verified) |
@@ -63,25 +63,25 @@ Repo: github.com/anthonyallendev/budget-app · Vite + React + Tailwind v4 + Rech
 - Logo: header/favicon is the purple lightning bolt (came from the starter template —
   re-check before trademark filing). An original mark is saved at `public/retirely-mark.svg`.
 
-## Stripe live activation — current step
+## Stripe — LIVE (activated 8 July 2026)
 
-1. ✅ Activation form: business type Pty Ltd, ABN, accurate product description
-2. ✅ Business bank account created
-3. **→ NEXT: connect the bank account in Stripe's activation flow** (BSB + account
-   number in the payout details step), set statement descriptor `RETIRELY.MONEY`, submit
-4. Then paste the live secret key (`sk_live_...`) to Claude, who will:
-   create live product/prices ($9/mo, $79/yr AUD) → create live webhook at
-   `retirely.money/api/stripe/webhook` → update the four `STRIPE_*` env vars in
-   Vercel **Production only** (Preview stays on test keys) → redeploy → verify
-5. After that: save customer portal settings once in live mode (one click);
-   enable Stripe Connect in live mode later for referral cash payouts
+- Live product "Retirely Premium": $9/mo + $79/yr AUD, webhook, Customer Portal
+  all created and verified end-to-end (checkout session + portal session both
+  tested successfully against the live API, throwaway test data cleaned up after).
+- All four `STRIPE_*` env vars set on Vercel **Production**.
+- ⚠️ **Known gap:** Preview environment currently has **no** Stripe env vars — they
+  were accidentally wiped while switching Production to live (Vercel stored each
+  var as one record spanning both environments, not per-environment). Low
+  priority since Preview isn't used for Stripe testing, but if needed: get a
+  fresh Stripe **test-mode** secret key and recreate test product/prices/webhook.
+- Still open: enable Stripe Connect in live mode for referral cash payouts
+  (no urgency — no live referral credits exist yet).
 
 ## Roadmap (in rough order)
 
-1. **Finish Stripe live mode** → Retirely takes real money
-2. **Test inbox** — confirm info@fermiware.com.au receives mail (it's the legal contact)
-3. **Basiq live access** — chase Basiq support; AU bank sync is the flagship premium feature for the home market
-4. **Trademark** — IP Australia (~$330/class) for "Retirely"; decide on logo (bolt is template-derived)
-5. **GST registration** — only when approaching $75k turnover
-6. **React Native mobile app** — after web is complete (note: engagement data currently in
+1. **Test inbox** — confirm info@fermiware.com.au receives mail (it's the legal contact)
+2. **Basiq live access** — chase Basiq support; AU bank sync is the flagship premium feature for the home market
+3. **Trademark** — IP Australia (~$330/class) for "Retirely"; decide on logo (bolt is template-derived)
+4. **GST registration** — only when approaching $75k turnover
+5. **React Native mobile app** — after web is complete (note: engagement data currently in
    localStorage won't carry over; migrate to Supabase first)
