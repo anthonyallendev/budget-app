@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import AppLayout from '../components/AppLayout'
+import { useMigratedFeatureData } from '../hooks/useMigratedFeatureData'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 
 const inputStyle = {
@@ -177,20 +178,10 @@ function DebtCard({ debt, onDelete }) {
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
-function loadDebts() {
-  try { return JSON.parse(localStorage.getItem('savedDebts')) || [] } catch { return [] }
-}
-
-function saveDebts(debts) {
-  localStorage.setItem('savedDebts', JSON.stringify(debts))
-}
-
 export default function DebtPayoffPage() {
-  const [debts,    setDebts]    = useState(loadDebts)
+  const { data: debts, save: setDebts } = useMigratedFeatureData('savedDebts', 'savedDebts', [])
   const [showForm, setShowForm] = useState(false)
   const [form,     setForm]     = useState(EMPTY_FORM)
-
-  useEffect(() => { saveDebts(debts) }, [debts])
 
   function set(k, v) { setForm(f => ({ ...f, [k]: v })) }
 
@@ -198,13 +189,13 @@ export default function DebtPayoffPage() {
     e.preventDefault()
     if (!form.balance || !form.rate || !form.payment) return
     const newDebt = { ...form, id: Date.now().toString() }
-    setDebts(d => [...d, newDebt])
+    setDebts([...debts, newDebt])
     setForm(EMPTY_FORM)
     setShowForm(false)
   }
 
   function deleteDebt(id) {
-    setDebts(d => d.filter(x => x.id !== id))
+    setDebts(debts.filter(x => x.id !== id))
   }
 
   const minPay = form.balance && form.rate ? minPayment(parseFloat(form.balance), parseFloat(form.rate)) : null

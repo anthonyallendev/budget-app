@@ -1,3 +1,6 @@
+import { useEffect, useRef } from 'react'
+import { useMigratedFeatureData } from '../hooks/useMigratedFeatureData'
+
 const LEVELS = [
   { days: 365, emoji: '👑', label: 'Legendary',     sub: '1 year streak'   },
   { days: 180, emoji: '🚀', label: 'Unstoppable',   sub: '6 month streak'  },
@@ -15,27 +18,29 @@ function getLevel(days) {
   return LEVELS.find(l => days >= l.days) || null
 }
 
-function loadStreak() {
-  try { return JSON.parse(localStorage.getItem('checkInStreak')) || {} } catch { return {} }
-}
-
-function updateStreak() {
+// Returns the updated streak for "today", or null if today's visit is
+// already recorded (no change needed).
+function computeUpdatedStreak(data) {
   const today = new Date().toISOString().split('T')[0]
-  const data  = loadStreak()
-
-  if (data.lastVisit === today) return data  // already checked in today
+  if (data.lastVisit === today) return null
 
   const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0]
   const streak = data.lastVisit === yesterday ? (data.streak || 0) + 1 : 1
   const longest = Math.max(streak, data.longest || 0)
-
-  const updated = { lastVisit: today, streak, longest }
-  localStorage.setItem('checkInStreak', JSON.stringify(updated))
-  return updated
+  return { lastVisit: today, streak, longest }
 }
 
 export default function CheckInStreak() {
-  const data  = updateStreak()
+  const { data, save, loading } = useMigratedFeatureData('checkInStreak', 'checkInStreak', {})
+  const triedRef = useRef(false)
+
+  useEffect(() => {
+    if (loading || triedRef.current) return
+    triedRef.current = true
+    const updated = computeUpdatedStreak(data)
+    if (updated) save(updated)
+  }, [loading, data, save])
+
   const level = getLevel(data.streak || 0)
   if (!level) return null
 

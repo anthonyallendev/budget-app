@@ -1,17 +1,17 @@
 import { supabase } from './supabase'
+import { readMigratedFeatureData } from '../hooks/useMigratedFeatureData'
 
-function getStreakDays() {
-  try {
-    const d = JSON.parse(localStorage.getItem('checkInStreak') || '{}')
-    return parseInt(d.streak || 0)
-  } catch { return 0 }
+// checkInStreak / healthScoreHistory moved from localStorage to Supabase
+// (user_feature_data) — read via the same migrated-feature-data path so this
+// stays correct whether or not a given user has been backfilled yet.
+async function getStreakDays() {
+  const d = await readMigratedFeatureData('checkInStreak', 'checkInStreak', {})
+  return parseInt(d.streak || 0)
 }
 
-function getHealthScore() {
-  try {
-    const history = JSON.parse(localStorage.getItem('healthScoreHistory') || '[]')
-    return history.length > 0 ? (history[history.length - 1].score || 0) : 0
-  } catch { return 0 }
+async function getHealthScore() {
+  const history = await readMigratedFeatureData('healthScoreHistory', 'healthScoreHistory', [])
+  return history.length > 0 ? (history[history.length - 1].score || 0) : 0
 }
 
 async function getSavingsPct(userId) {
@@ -44,9 +44,11 @@ export async function publishLeaderboardScore(force = false) {
     .from('profiles').select('username').eq('id', user.id).single()
   if (!profile?.username) return
 
-  const streak  = getStreakDays()
-  const health  = getHealthScore()
-  const savings = await getSavingsPct(user.id)
+  const [streak, health, savings] = await Promise.all([
+    getStreakDays(),
+    getHealthScore(),
+    getSavingsPct(user.id),
+  ])
 
   await supabase.from('leaderboard_scores').upsert({
     user_id:         user.id,

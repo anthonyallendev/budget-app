@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import AppLayout from '../components/AppLayout'
+import { useMigratedFeatureData } from '../hooks/useMigratedFeatureData'
 
 const inputStyle = {
   background: 'rgba(6,11,26,0.8)',
@@ -58,36 +59,32 @@ export function daysUntilBill(bill) {
   return Math.round((next - today) / (1000 * 60 * 60 * 24))
 }
 
-function loadBills() {
+// getBills reads localStorage directly (unchanged) rather than the
+// Supabase-backed hook below, since it's called synchronously from elsewhere
+// (e.g. UpcomingBillsWidget on the Dashboard) — it stays fresh because the
+// component's save() below always mirrors writes to this same localStorage key.
+export function getBills() {
   try { return JSON.parse(localStorage.getItem('bills')) || [] } catch { return [] }
-}
-
-export function getBills() { return loadBills() }
-
-function saveBillsToStorage(bills) {
-  localStorage.setItem('bills', JSON.stringify(bills))
 }
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
 
 export default function BillsPage() {
-  const [bills,    setBills]    = useState(loadBills)
+  const { data: bills, save: setBills } = useMigratedFeatureData('bills', 'bills', [])
   const [showForm, setShowForm] = useState(false)
   const [form,     setForm]     = useState(EMPTY)
-
-  useEffect(() => { saveBillsToStorage(bills) }, [bills])
 
   function set(k, v) { setForm(f => ({ ...f, [k]: v })) }
 
   function handleAdd(e) {
     e.preventDefault()
     if (!form.name || !form.amount) return
-    setBills(b => [...b, { ...form, id: Date.now().toString() }])
+    setBills([...bills, { ...form, id: Date.now().toString() }])
     setForm(EMPTY)
     setShowForm(false)
   }
 
-  function deleteBill(id) { setBills(b => b.filter(x => x.id !== id)) }
+  function deleteBill(id) { setBills(bills.filter(x => x.id !== id)) }
 
   const sorted = [...bills].sort((a, b) => (daysUntilBill(a) ?? 999) - (daysUntilBill(b) ?? 999))
   const monthlyTotal = bills.reduce((s, b) => {

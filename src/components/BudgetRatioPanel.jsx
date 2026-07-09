@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useMigratedFeatureData } from '../hooks/useMigratedFeatureData'
 
 const DEFAULTS = { needs: 50, wants: 30, savings: 20 }
 
@@ -8,17 +8,8 @@ const BUCKETS = [
   { key: 'savings', label: 'Savings', color: '#e040fb', desc: 'Investments, super, emergency fund'    },
 ]
 
-function load() {
-  try { return JSON.parse(localStorage.getItem('budgetRatio')) || DEFAULTS }
-  catch { return DEFAULTS }
-}
-
 export default function BudgetRatioPanel() {
-  const [ratios, setRatios] = useState(load)
-
-  useEffect(() => {
-    localStorage.setItem('budgetRatio', JSON.stringify(ratios))
-  }, [ratios])
+  const { data: ratios, save: setRatios } = useMigratedFeatureData('budgetRatio', 'budgetRatio', DEFAULTS)
 
   function handleChange(key, raw) {
     const val = Math.min(100, Math.max(0, Number(raw)))

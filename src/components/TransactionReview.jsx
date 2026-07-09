@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
+import { useMigratedFeatureData } from '../hooks/useMigratedFeatureData'
 
 const CATEGORIES = {
   expense: ['Housing', 'Food & Dining', 'Transport', 'Shopping', 'Entertainment', 'Health', 'Utilities', 'Education', 'Other'],
@@ -8,13 +9,13 @@ const CATEGORIES = {
 
 const STORAGE_KEY = 'txReviewedIds'
 
+// getUnreviewedCount reads localStorage directly (unchanged) rather than the
+// Supabase-backed hook below, since it's called synchronously from elsewhere
+// (e.g. a badge count on the Transactions page) — it stays fresh because the
+// component's save() below always mirrors writes to this same localStorage key.
 function getReviewedIds() {
   try { return new Set(JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')) }
   catch { return new Set() }
-}
-
-function persistReviewed(ids) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify([...ids]))
 }
 
 function fmt(n) {
@@ -40,7 +41,8 @@ export function getUnreviewedCount(transactions) {
 }
 
 export default function TransactionReview({ transactions, onUpdate, onClose }) {
-  const [reviewedIds, setReviewedIds] = useState(getReviewedIds)
+  const { data: reviewedIdsArray, save: saveReviewedIds } = useMigratedFeatureData(STORAGE_KEY, STORAGE_KEY, [])
+  const reviewedIds = useMemo(() => new Set(reviewedIdsArray), [reviewedIdsArray])
   const [index, setIndex] = useState(0)
   const [editingCategory, setEditingCategory] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState('')
@@ -70,10 +72,7 @@ export default function TransactionReview({ transactions, onUpdate, onClose }) {
   }, [queue.length])
 
   function markAndAdvance(id) {
-    const updated = new Set(reviewedIds)
-    updated.add(id)
-    setReviewedIds(updated)
-    persistReviewed(updated)
+    saveReviewedIds([...reviewedIds, id])
     setIndex(0)
   }
 

@@ -1,16 +1,9 @@
 import { useState, useEffect } from 'react'
 import { supabase } from '../lib/supabase'
+import { readMigratedFeatureData, writeMigratedFeatureData } from '../hooks/useMigratedFeatureData'
 
-function loadDismissed() {
-  try { return JSON.parse(localStorage.getItem('dismissedMilestones')) || [] } catch { return [] }
-}
-function saveDismissed(list) {
-  localStorage.setItem('dismissedMilestones', JSON.stringify(list.slice(-50)))
-}
-
-function detectMilestones({ goals = [], netWorth = null, netWorthHistory = [], debts = [] }) {
+function detectMilestones({ goals = [], netWorth = null, netWorthHistory = [], debts = [], dismissed = [] }) {
   const milestones = []
-  const dismissed  = loadDismissed()
 
   for (const g of goals) {
     const pct = g.target > 0 ? (g.saved / g.target) * 100 : 0
@@ -73,22 +66,26 @@ export default function MilestoneBanner({ transactions = [] }) {
       const liabs   = entries.filter(e => e.type === 'liability').reduce((s, e) => s + (parseFloat(e.value) || 0), 0)
       const netWorth = assets - liabs
 
-      const debts = loadDebts()
+      const [debts, dismissed] = await Promise.all([
+        readMigratedFeatureData('savedDebts', 'savedDebts', []),
+        readMigratedFeatureData('dismissedMilestones', 'dismissedMilestones', []),
+      ])
 
       const found = detectMilestones({
         goals:          goalsRes.data || [],
         netWorth,
         netWorthHistory: snapRes.data || [],
         debts,
+        dismissed,
       })
       setMilestones(found.slice(0, 2))
     }
     check()
   }, [])
 
-  function dismiss(key) {
-    const d = loadDismissed()
-    saveDismissed([...d, key])
+  async function dismiss(key) {
+    const d = await readMigratedFeatureData('dismissedMilestones', 'dismissedMilestones', [])
+    writeMigratedFeatureData('dismissedMilestones', 'dismissedMilestones', [...d, key].slice(-50))
     setMilestones(m => m.filter(x => x.key !== key))
   }
 
@@ -112,8 +109,4 @@ export default function MilestoneBanner({ transactions = [] }) {
       ))}
     </div>
   )
-}
-
-function loadDebts() {
-  try { return JSON.parse(localStorage.getItem('savedDebts')) || [] } catch { return [] }
 }

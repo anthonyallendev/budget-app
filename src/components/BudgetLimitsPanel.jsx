@@ -1,14 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useMigratedFeatureData } from '../hooks/useMigratedFeatureData'
 
 const EXPENSE_CATEGORIES = [
   'Housing', 'Food & Dining', 'Transport', 'Shopping',
   'Entertainment', 'Health', 'Utilities', 'Education', 'Other',
 ]
-
-function load() {
-  try { return JSON.parse(localStorage.getItem('budgetLimits')) || {} }
-  catch { return {} }
-}
 
 function getSpentThisMonth(transactions) {
   const now = new Date()
@@ -39,13 +35,9 @@ function ProgressBar({ pct }) {
 }
 
 export default function BudgetLimitsPanel({ transactions }) {
-  const [limits, setLimits] = useState(load)
+  const { data: limits, save: setLimits } = useMigratedFeatureData('budgetLimits', 'budgetLimits', {})
   const [editing, setEditing] = useState(null)
   const [draft, setDraft] = useState('')
-
-  useEffect(() => {
-    localStorage.setItem('budgetLimits', JSON.stringify(limits))
-  }, [limits])
 
   const spent = getSpentThisMonth(transactions)
 
@@ -57,7 +49,7 @@ export default function BudgetLimitsPanel({ transactions }) {
   function saveEdit(cat) {
     const val = parseFloat(draft)
     if (!isNaN(val) && val > 0) {
-      setLimits(l => ({ ...l, [cat]: val }))
+      setLimits({ ...limits, [cat]: val })
     } else if (draft === '') {
       const next = { ...limits }
       delete next[cat]

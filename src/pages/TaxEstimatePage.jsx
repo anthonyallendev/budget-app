@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
 import AppLayout from '../components/AppLayout'
+import { useMigratedFeatureData } from '../hooks/useMigratedFeatureData'
 
 // Tax brackets by country (2024-25 financial year approximations)
 const TAX_CONFIGS = {
@@ -90,18 +90,13 @@ function fmt(n, symbol) {
   return `${symbol}${Math.round(n).toLocaleString()}`
 }
 
-function loadSaved() {
-  try { return JSON.parse(localStorage.getItem('taxEstimate')) || {} } catch { return {} }
-}
-
 export default function TaxEstimatePage() {
-  const saved = loadSaved()
-  const [salary,  setSalary]  = useState(saved.salary  || '')
-  const [country, setCountry] = useState(saved.country || 'Australia')
+  const { data: saved, save: setSaved } = useMigratedFeatureData('taxEstimate', 'taxEstimate', {})
+  const salary  = saved.salary  || ''
+  const country = saved.country || 'Australia'
 
-  useEffect(() => {
-    localStorage.setItem('taxEstimate', JSON.stringify({ salary, country }))
-  }, [salary, country])
+  function setSalary(val)  { setSaved({ salary: val, country }) }
+  function setCountry(val) { setSaved({ salary, country: val }) }
 
   const cfg    = TAX_CONFIGS[country]
   const income = parseFloat(salary) || 0

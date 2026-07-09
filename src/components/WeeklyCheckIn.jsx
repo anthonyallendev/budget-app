@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
+import { useMigratedFeatureData } from '../hooks/useMigratedFeatureData'
 
 const QUESTIONS = [
   { key: 'budget',  label: 'Did you stick to your budget this week?',       options: ['Yes ✅', 'Mostly 😅', 'Not really 😬'] },
@@ -7,14 +8,6 @@ const QUESTIONS = [
 ]
 
 const MOOD_COLORS = { 'Great 😊': '#00d4ff', 'Okay 😐': '#f59e0b', 'Stressed 😰': '#e040fb', default: '#7c3aed' }
-
-function loadHistory() {
-  try { return JSON.parse(localStorage.getItem('checkInHistory')) || [] } catch { return [] }
-}
-
-function saveHistory(history) {
-  localStorage.setItem('checkInHistory', JSON.stringify(history.slice(-26)))
-}
 
 function weekKey() {
   const d = new Date()
@@ -28,8 +21,8 @@ export default function WeeklyCheckIn() {
   const [answers,   setAnswers]   = useState({})
   const [step,      setStep]      = useState(0)
   const [done,      setDone]      = useState(false)
-  const [history,   setHistory]   = useState(loadHistory)
   const [showChart, setShowChart] = useState(false)
+  const { data: history, save: saveHistory } = useMigratedFeatureData('checkInHistory', 'checkInHistory', [])
 
   const thisWeek   = weekKey()
   const alreadyDone = history.some(h => h.week === thisWeek)
@@ -41,8 +34,7 @@ export default function WeeklyCheckIn() {
       setStep(s => s + 1)
     } else {
       const entry = { week: thisWeek, date: new Date().toLocaleDateString('en-AU', { day:'numeric', month:'short' }), ...next }
-      const updated = [...history.filter(h => h.week !== thisWeek), entry]
-      setHistory(updated)
+      const updated = [...history.filter(h => h.week !== thisWeek), entry].slice(-26)
       saveHistory(updated)
       setDone(true)
     }

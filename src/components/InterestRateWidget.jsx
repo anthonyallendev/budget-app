@@ -1,10 +1,5 @@
 import { useState } from 'react'
-
-const RATES_KEY = 'interestRateWidget'
-
-function loadData() {
-  try { return JSON.parse(localStorage.getItem(RATES_KEY)) || {} } catch { return {} }
-}
+import { useMigratedFeatureData } from '../hooks/useMigratedFeatureData'
 
 const DEFAULT = {
   rba:       4.35,
@@ -15,14 +10,12 @@ const DEFAULT = {
 }
 
 export default function InterestRateWidget() {
-  const saved = loadData()
-  const [rates, setRates] = useState({ ...DEFAULT, ...saved })
+  const { data: saved, save: setRates } = useMigratedFeatureData('interestRateWidget', 'interestRateWidget', {})
+  const rates = { ...DEFAULT, ...saved }
   const [editing, setEditing] = useState(false)
 
   function set(k, v) {
-    const next = { ...rates, [k]: v }
-    setRates(next)
-    localStorage.setItem(RATES_KEY, JSON.stringify(next))
+    setRates({ ...rates, [k]: v })
   }
 
   function RateBadge({ label, value, type }) {

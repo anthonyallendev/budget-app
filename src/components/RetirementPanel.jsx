@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useMigratedFeatureData } from '../hooks/useMigratedFeatureData'
 
 const COUNTRIES = [
   { name: 'Australia',     preservationAge: 60  },
@@ -14,11 +14,6 @@ const COUNTRIES = [
 
 const DEFAULTS = { currentAge: '', annualSalary: '', country: 'Australia' }
 
-function load() {
-  try { return JSON.parse(localStorage.getItem('retirementProfile')) || DEFAULTS }
-  catch { return DEFAULTS }
-}
-
 function calcRetirementAge(currentAge, annualSalary, preservationAge, totalSavings) {
   const age = Number(currentAge)
   const salary = Number(annualSalary)
@@ -30,14 +25,10 @@ function calcRetirementAge(currentAge, annualSalary, preservationAge, totalSavin
 }
 
 export default function RetirementPanel({ transactions }) {
-  const [profile, setProfile] = useState(load)
-
-  useEffect(() => {
-    localStorage.setItem('retirementProfile', JSON.stringify(profile))
-  }, [profile])
+  const { data: profile, save } = useMigratedFeatureData('retirementProfile', 'retirementProfile', DEFAULTS)
 
   function set(key, val) {
-    setProfile(p => ({ ...p, [key]: val }))
+    save({ ...profile, [key]: val })
   }
 
   const country = COUNTRIES.find(c => c.name === profile.country) || COUNTRIES[0]

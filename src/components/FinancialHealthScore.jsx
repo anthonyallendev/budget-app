@@ -1,14 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
+import { useMigratedFeatureData } from '../hooks/useMigratedFeatureData'
 
 function getWeekKey() {
   const d = new Date()
   const jan1 = new Date(d.getFullYear(), 0, 1)
   const week = Math.ceil(((d - jan1) / 86400000 + jan1.getDay() + 1) / 7)
   return `${d.getFullYear()}-W${week}`
-}
-
-function loadHistory() {
-  try { return JSON.parse(localStorage.getItem('healthScoreHistory')) || [] } catch { return [] }
 }
 
 function computeScore(transactions) {
@@ -88,17 +85,19 @@ function scoreLabel(s) {
 }
 
 export default function FinancialHealthScore({ transactions = [] }) {
-  const [history, setHistory] = useState(loadHistory)
+  const { data: history, save: saveHistory, loading } = useMigratedFeatureData('healthScoreHistory', 'healthScoreHistory', [])
 
   const result  = computeScore(transactions)
   const weekKey = getWeekKey()
 
   useEffect(() => {
-    if (!result) return
-    const updated = [...history.filter(h => h.week !== weekKey), { week: weekKey, score: result.score }]
-    setHistory(updated)
-    localStorage.setItem('healthScoreHistory', JSON.stringify(updated.slice(-26)))
-  }, [transactions.length])
+    if (loading || !result) return
+    const alreadyCurrent = history.some(h => h.week === weekKey && h.score === result.score)
+    if (alreadyCurrent) return
+    const updated = [...history.filter(h => h.week !== weekKey), { week: weekKey, score: result.score }].slice(-26)
+    saveHistory(updated)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [transactions.length, loading])
 
   if (!result) return null
 

@@ -1,3 +1,11 @@
+import { readMigratedFeatureData, writeMigratedFeatureData } from '../hooks/useMigratedFeatureData'
+
+async function logStatementDownload(key) {
+  const log = await readMigratedFeatureData('statementDownloads', 'statementDownloads', {})
+  log[key] = new Date().toISOString()
+  await writeMigratedFeatureData('statementDownloads', 'statementDownloads', log)
+}
+
 function fmt(n, always = false) {
   if (n == null && !always) return '—'
   const abs = Math.abs(n || 0)
@@ -158,10 +166,7 @@ export function generateMonthlyStatement(transactions, year, month, profile) {
 
   openPrintWindow(html)
 
-  // Track in localStorage
-  const log = JSON.parse(localStorage.getItem('statementDownloads') || '{}')
-  log[`${year}-${String(month + 1).padStart(2, '0')}`] = new Date().toISOString()
-  localStorage.setItem('statementDownloads', JSON.stringify(log))
+  logStatementDownload(`${year}-${String(month + 1).padStart(2, '0')}`)
 }
 
 // ── Annual (Financial Year) statement ────────────────────────────────────────
@@ -277,10 +282,7 @@ export function generateAnnualStatement(transactions, fyKey, fyLabel, startDate,
 
   openPrintWindow(html)
 
-  // Track in localStorage
-  const log = JSON.parse(localStorage.getItem('statementDownloads') || '{}')
-  log[fyKey] = new Date().toISOString()
-  localStorage.setItem('statementDownloads', JSON.stringify(log))
+  logStatementDownload(fyKey)
 }
 
 // ── Period helpers ────────────────────────────────────────────────────────────
